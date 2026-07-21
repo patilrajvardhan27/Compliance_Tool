@@ -1,0 +1,2554 @@
+
+
+                                   ***     ***     *   *   ***   ****     ***      ***   *   *
+                                    *       *      *   *    *    *   *   *       *       *   *
+                                    *       *      *****    *    ****     ***    *       *****
+                                 *  *    *  *      *   *    *    *  *        *   *       *   *
+                                  **      **       *   *   ***   *   *    ***      ***   *   *
+
+                                      ****     ***    *****          ***       *** 
+                                      *   *   *   *   *             *   *     *   *
+                                      *   *   *   *   *****   ***      *         * 
+                                      *   *   *   *   *              **        **  
+                                      ****     ***    *****         *****  *  *****
+
+
+                                  B U I L D I N G  E N E R G Y  A N A L Y S I S  P R O G R A M
+
+
+                                                         DEVELOPED BY
+
+                                  E. O. LAWRENCE BERKELEY LABORATORY/UNIVERSITY OF CALIFORNIA
+                                                              AND         
+                                          JAMES J. HIRSCH & ASSOCIATES, CAMARILLO, CA
+
+
+                                                    WITH MAJOR SUPPORT FROM
+
+                                               UNITED STATES DEPARTMENT OF ENERGY
+                                  ASSISTANT SECRETARY FOR ENERGY EFFICIENCY AND RENEWABLE ENERGY
+                                                 OFFICE OF BUILDING TECHNOLOGIES
+                                                   OFFICE OF BUILDING SYSTEMS
+                                                              AND         
+                                                ELECTRIC POWER RESEARCH INSTITUTE
+                                                     CUSTOMER SYSTEMS GROUP
+
+                                                   AND ADDITIONAL SUPPORT FROM
+
+                                  SOUTHERN CALIFORNIA EDISON CO., PACIFIC GAS AND ELECTRIC CO.
+                             U.S. ENVIRONMENTAL PROTECTION AGENCY, BRITISH COLUMBIA BUILDINGS CORP.
+
+                                   COPYRIGHT (c) 1997 REGENTS OF THE UNIVERSITY OF CALIFORNIA,
+                                     E. O. LAWRENCE BERKELEY LABORATORY AND JAMES J. HIRSCH.
+                                                       ALL RIGHTS RESERVED.
+
+
+                       *************************   L E G A L   N O T I C E   ***************************
+                       *                                                                               *
+                       *    THIS PROGRAM WAS PREPARED AS AN ACCOUNT OF WORK SPONSORED BY THE UNITED    *
+                       *    STATES GOVERNMENT AND OTHERS. NEITHER THE UNITED STATES NOR THE DEPART-    *
+                       *    MENT OF  ENERGY,  NOR JAMES J. HIRSCH,  NOR OTHER SPONSORS,  NOR ANY OF    *
+                       *    THEIR EMPLOYEES, NOR ANY OF THEIR CONTRACTORS, SUBCONTRACTORS, OR THEIR    *
+                       *    EMPLOYEES MAKES ANY  WARRANTY, EXPRESS OR IMPLIED, OR ASSUMES ANY LEGAL    *
+                       *    LIABILITY OR  RESPONSIBILITY FOR  THE ACCURACY, COMPLETENESS OR USEFUL-    *
+                       *    NESS OF ANY DATA OR RESULTS  PRESENTED, APPARATUS, INFORMATION, PRODUCT    *
+                       *    OR PROCESS  DISCLOSED,  OR REPRESENTS  THAT ITS USE  WOULD NOT INFRINGE    *
+                       *    PRIVATELY OWNED RIGHTS.                                                    *
+                       *                                                                               *
+                       *********************************************************************************
+                                     FIRST RELEASED IN 1997  version : DOE-2.2-47h2
+
+                                   This JJHirsch DOE-2.2 was released in May 2010.
+             Copyright (c) UC/LBNL (pending USDOE approval) and James J. Hirsch, 1996-2010.  All Rights Reserved.
+     *   1 * INPUT ..
+                     B D L   P R O C E S S O R   I N P U T   D A T A
+
+                            1/19/2017     1:30:46  BDL RUN   1
+
+
+
+
+     #   2 # ##def Ground[Name]
+     #   3 #   UNDERGROUND-WALL
+     #   4 #     CONSTRUCTION     = Name  $"Ground Floor"
+     #   5 #     LOCATION         = BOTTOM
+     #   6 #     ..
+     #   7 # ##enddef
+     #   8 # ##def Condition[Name]
+     #   9 #   INTERIOR-WALL
+     #  10 #     CONSTRUCTION     = Name  $"Conditioned Floor"
+     #  11 #     INT-WALL-TYPE    = ADIABATIC
+     #  12 #     LOCATION         = BOTTOM
+     #  13 #     ..
+     #  14 # ##enddef
+     #  15 # ##def Uncondition[Name]
+     #  16 #   EXTERIOR-WALL
+     #  17 #     CONSTRUCTION     = Name  $"Unconditioned Floor"
+     #  18 #     LOCATION         = BOTTOM
+     #  19 #     ..
+     #  20 # ##enddef
+     *  21 * $ ---------------------------------------------------------
+     *  22 * $              Abort, Diagnostics
+     *  23 * $ ---------------------------------------------------------
+     *  24 * $ ---------------------------------------------------------
+     *  25 * $              Global Parameters
+     *  26 * $ ---------------------------------------------------------
+     *  27 * $ ---------------------------------------------------------
+     *  28 * $              Title, Run Periods, Design Days, Holidays
+     *  29 * $ ---------------------------------------------------------
+     *  30 * TITLE
+     *  31 *    LINE-1           = *Office_Building*
+     *  32 *    ..
+     *  33 * "Entire Year" = RUN-PERIOD-PD
+     *  34 *    BEGIN-MONTH      = 1
+     *  35 *    BEGIN-DAY        = 1
+     *  36 *    BEGIN-YEAR       = 2017
+     *  37 *    END-MONTH        = 12
+     *  38 *    END-DAY          = 31
+     *  39 *    END-YEAR         = 2017
+     *  40 *    ..
+     *  41 * "TUNISIA" = HOLIDAYS
+     *  42 *    TYPE             = ALTERNATE
+     *  43 *    MONTHS           = ( 1, 3, 3, 4, 5, 7, 8, 8, 11 )
+     *  44 *    DAYS             = ( 1, 20, 21, 9, 1, 25, 13, 31, 10 )
+     *  45 *    ..
+     *  46 * $ ---------------------------------------------------------
+     *  47 * $              Compliance Data
+     *  48 * $ ---------------------------------------------------------
+     *  49 * $ ---------------------------------------------------------
+     *  50 * $              Site and Building Data
+     *  51 * $ ---------------------------------------------------------
+     *  52 * "Site Data" = SITE-PARAMETERS
+     *  53 *    ..
+     *  54 * "Building Data" = BUILD-PARAMETERS
+     *  55 *    AZIMUTH          = 0.0
+     *  56 *    HOLIDAYS         = "TUNISIA"
+     *  57 *    ..
+     *  58 * $ ---------------------------------------------------------
+     *  59 * $              Materials / Layers / Constructions
+     *  60 * $ ---------------------------------------------------------
+     *  61 * "polystyrene 2cm" = MATERIAL
+     *  62 *    TYPE             = PROPERTIES
+     *  63 *    THICKNESS        = 0.0656
+     *  64 *    CONDUCTIVITY     = 0.011556  $0.02
+     *  65 *    DENSITY          = 1.8
+     *  66 *    SPECIFIC-HEAT    = 0.29
+     *  67 *    ..
+     *  68 * "polystyrene 4cm" = MATERIAL
+     *  69 *    TYPE             = PROPERTIES
+     *  70 *    THICKNESS        = 0.1312
+     *  71 *    CONDUCTIVITY     = 0.011556  $0.02
+     *  72 *    DENSITY          = 1.8
+     *  73 *    SPECIFIC-HEAT    = 0.29
+     *  74 *    ..
+     *  75 * "polystyrene 6cm" = MATERIAL
+     *  76 *    TYPE             = PROPERTIES
+     *  77 *    THICKNESS        = 0.1968
+     *  78 *    CONDUCTIVITY     = 0.011556  $0.02
+     *  79 *    DENSITY          = 1.8
+     *  80 *    SPECIFIC-HEAT    = 0.29
+     *  81 *    ..
+     *  82 * "Mineral wool R30" = MATERIAL
+     *  83 *    TYPE             = PROPERTIES
+     *  84 *    THICKNESS        = 0.806
+     *  85 *    CONDUCTIVITY     = 0.025
+     *  86 *    DENSITY          = 0.6
+     *  87 *    SPECIFIC-HEAT    = 0.2
+     *  88 *    ..
+     *  89 * "Earth(Soil)" = MATERIAL
+     *  90 *    TYPE             = PROPERTIES
+     *  91 *    THICKNESS        = 1.5
+     *  92 *    CONDUCTIVITY     = 0.5
+     *  93 *    DENSITY          = 85
+     *  94 *    SPECIFIC-HEAT    = 0.2
+     *  95 *    ..
+     *  96 * "HW Concrete 12" = MATERIAL
+     *  97 *    TYPE             = PROPERTIES
+     *  98 *    THICKNESS        = 1
+     *  99 *    CONDUCTIVITY     = 0.3
+     * 100 *    DENSITY          = 100
+     * 101 *    SPECIFIC-HEAT    = 0.2
+     * 102 *    ..
+     * 103 * "Etanchite 5" = MATERIAL
+     * 104 *    TYPE             = PROPERTIES
+     * 105 *    THICKNESS        = 0.016
+     * 106 *    CONDUCTIVITY     = 0.405
+     * 107 *    DENSITY          = 131.1
+     * 108 *    SPECIFIC-HEAT    = 0.248
+     * 109 *    ..
+     * 110 * "Enduit Ext 25" = MATERIAL
+     * 111 *    TYPE             = PROPERTIES
+     * 112 *    THICKNESS        = 0.082
+     * 113 *    CONDUCTIVITY     = 0.809
+     * 114 *    DENSITY          = 131.1
+     * 115 *    SPECIFIC-HEAT    = 0.258
+     * 116 *    ..
+     * 117 * "Enduit Interieur 20" = MATERIAL
+     * 118 *    TYPE             = PROPERTIES
+     * 119 *    THICKNESS        = 0.065
+     * 120 *    CONDUCTIVITY     = 0.665
+     * 121 *    DENSITY          = 118.6
+     * 122 *    SPECIFIC-HEAT    = 0.258
+     * 123 *    ..
+     * 124 * "Beton 100" = MATERIAL
+     * 125 *    TYPE             = PROPERTIES
+     * 126 *    THICKNESS        = 0.328
+     * 127 *    CONDUCTIVITY     = 0.809
+     * 128 *    DENSITY          = 143.6
+     * 129 *    SPECIFIC-HEAT    = 0.229
+     * 130 *    ..
+     * 131 * "Beton Arme 50" = MATERIAL
+     * 132 *    TYPE             = PROPERTIES
+     * 133 *    THICKNESS        = 0.164
+     * 134 *    CONDUCTIVITY     = 1.012
+     * 135 *    DENSITY          = 149.8
+     * 136 *    SPECIFIC-HEAT    = 0.229
+     * 137 *    ..
+     * 138 * "Brique 12" = MATERIAL
+     * 139 *    TYPE             = PROPERTIES
+     * 140 *    THICKNESS        = 0.656
+     * 141 *    CONDUCTIVITY     = 0.272
+     * 142 *    DENSITY          = 43.7
+     * 143 *    SPECIFIC-HEAT    = 0.224
+     * 144 *    ..
+     * 145 * "Brique platiere 65" = MATERIAL
+     * 146 *    TYPE             = PROPERTIES
+     * 147 *    THICKNESS        = 0.213
+     * 148 *    CONDUCTIVITY     = 0.272
+     * 149 *    DENSITY          = 43.7
+     * 150 *    SPECIFIC-HEAT    = 0.224
+     * 151 *    ..
+     * 152 * "Corps Creux Terre Cuite" = MATERIAL
+     * 153 *    TYPE             = PROPERTIES
+     * 154 *    THICKNESS        = 0.525
+     * 155 *    CONDUCTIVITY     = 0.543
+     * 156 *    DENSITY          = 51
+     * 157 *    SPECIFIC-HEAT    = 0.215
+     * 158 *    ..
+     * 159 * "AIR LAYER" = MATERIAL
+     * 160 *    TYPE             = RESISTANCE
+     * 161 *    RESISTANCE       = 0.026
+     * 162 *    ..
+     * 163 * "Mortier de pose 30" = MATERIAL
+     * 164 *    TYPE             = PROPERTIES
+     * 165 *    THICKNESS        = 0.098
+     * 166 *    CONDUCTIVITY     = 0.809
+     * 167 *    DENSITY          = 131.1
+     * 168 *    SPECIFIC-HEAT    = 0.258
+     * 169 *    ..
+     * 170 * "Lit de sable" = MATERIAL
+     * 171 *    TYPE             = PROPERTIES
+     * 172 *    THICKNESS        = 0.164
+     * 173 *    CONDUCTIVITY     = 0.404
+     * 174 *    DENSITY          = 112.37
+     * 175 *    SPECIFIC-HEAT    = 0.191
+     * 176 *    ..
+     * 177 * "Carreaux mosaiques" = MATERIAL
+     * 178 *    TYPE             = PROPERTIES
+     * 179 *    THICKNESS        = 0.065
+     * 180 *    CONDUCTIVITY     = 0.983
+     * 181 *    DENSITY          = 143.58
+     * 182 *    SPECIFIC-HEAT    = 0.229
+     * 183 *    ..
+     * 184 * $ ---------------------------------------------------------
+     * 185 * $              Building Layers
+     * 186 * $ ---------------------------------------------------------
+     * 187 * "EWall Cons Layers-NoInsu" = LAYERS
+     * 188 *    MATERIAL         = ( "Enduit Ext 25", "Brique 12",
+     * 189 *           "AIR LAYER", "Brique platiere 65", "Enduit Interieur 20" )
+     * 190 *    ..
+     * 191 * "EWall Cons Layers-Outside-2cm" = LAYERS
+     * 192 *    MATERIAL         = ( "polystyrene 2cm", "Enduit Ext 25", "Brique 12",
+     * 193 *           "AIR LAYER", "Brique platiere 65", "Enduit Interieur 20" )
+     * 194 *    ..
+     * 195 * "EWall Cons Layers-Outside-4cm" = LAYERS
+     * 196 *    MATERIAL         = ( "polystyrene 4cm", "Enduit Ext 25", "Brique 12",
+     * 197 *           "AIR LAYER", "Brique platiere 65", "Enduit Interieur 20" )
+     * 198 *    ..
+     * 199 * "EWall Cons Layers-Outside-6cm" = LAYERS
+     * 200 *    MATERIAL         = ( "polystyrene 6cm", "Enduit Ext 25", "Brique 12",
+     * 201 *           "AIR LAYER", "Brique platiere 65", "Enduit Interieur 20" )
+     * 202 *    ..
+     * 203 * "EWall Cons Layers-Middle-2cm" = LAYERS
+     * 204 *    MATERIAL         = ( "Enduit Ext 25", "Brique 12", "polystyrene 2cm",
+     * 205 *            "Brique platiere 65", "Enduit Interieur 20" )
+     * 206 *    ..
+     * 207 * "EWall Cons Layers-Middle-4cm" = LAYERS
+     * 208 *    MATERIAL         = ( "Enduit Ext 25", "Brique 12", "polystyrene 4cm",
+     * 209 *            "Brique platiere 65", "Enduit Interieur 20" )
+     * 210 *    ..
+     * 211 * "EWall Cons Layers-Middle-6cm" = LAYERS
+     * 212 *    MATERIAL         = ( "Enduit Ext 25", "Brique 12", "polystyrene 6cm",
+     * 213 *            "Brique platiere 65", "Enduit Interieur 20" )
+     * 214 *    ..
+     * 215 * "EWall Cons Layers-Inside-2cm" = LAYERS
+     * 216 *    MATERIAL         = ( "Enduit Ext 25", "Brique 12", "AIR LAYER",
+     * 217 *            "Brique platiere 65", "Enduit Interieur 20", "polystyrene 2cm" )
+     * 218 *    ..
+     * 219 * "EWall Cons Layers-Inside-4cm" = LAYERS
+     * 220 *    MATERIAL         = ( "Enduit Ext 25", "Brique 12", "AIR LAYER",
+     * 221 *            "Brique platiere 65", "Enduit Interieur 20", "polystyrene 4cm" )
+     * 222 *    ..
+     * 223 * "EWall Cons Layers-Inside-6cm" = LAYERS
+     * 224 *    MATERIAL         = ( "Enduit Ext 25", "Brique 12", "AIR LAYER",
+     * 225 *            "Brique platiere 65", "Enduit Interieur 20", "polystyrene 6cm" )
+     * 226 *    ..
+     * 227 * "Roof Cons Layers-NoInsu" = LAYERS
+     * 228 *    MATERIAL         = ( "Etanchite 5", "Mortier de pose 30", "Beton 100",
+     * 229 *            "Beton Arme 50", "Corps Creux Terre Cuite", "Enduit Interieur 20" )
+     * 230 *    ..
+     * 231 * "Roof Cons Layers-Outside-2cm" = LAYERS
+     * 232 *    MATERIAL         = ( "polystyrene 2cm", "Etanchite 5", "Mortier de pose 30",
+     * 233 *            "Beton 100", "Beton Arme 50", "Corps Creux Terre Cuite",
+     * 234 *            "Enduit Interieur 20" )
+     * 235 *    ..
+     * 236 * "Roof Cons Layers-Outside-4cm" = LAYERS
+     * 237 *    MATERIAL         = ( "polystyrene 4cm", "Etanchite 5", "Mortier de pose 30",
+     * 238 *            "Beton 100", "Beton Arme 50", "Corps Creux Terre Cuite",
+     * 239 *            "Enduit Interieur 20" )
+     * 240 *    ..
+     * 241 * "Roof Cons Layers-Outside-6cm" = LAYERS
+     * 242 *    MATERIAL         = ( "polystyrene 6cm", "Etanchite 5", "Mortier de pose 30",
+     * 243 *            "Beton 100", "Beton Arme 50", "Corps Creux Terre Cuite",
+     * 244 *            "Enduit Interieur 20" )
+     * 245 *    ..
+     * 246 * "Roof Cons Layers-Inside-2cm" = LAYERS
+     * 247 *    MATERIAL         = ( "Etanchite 5", "Mortier de pose 30", "Beton 100",
+     * 248 *            "Beton Arme 50", "Corps Creux Terre Cuite", "Enduit Interieur 20",
+     * 249 *            "polystyrene 2cm" )
+     * 250 *    ..
+     * 251 * "Roof Cons Layers-Inside-4cm" = LAYERS
+     * 252 *    MATERIAL         = ( "Etanchite 5", "Mortier de pose 30", "Beton 100",
+     * 253 *            "Beton Arme 50", "Corps Creux Terre Cuite", "Enduit Interieur 20",
+     * 254 *            "polystyrene 4cm" )
+     * 255 *    ..
+     * 256 * "Roof Cons Layers-Inside-6cm" = LAYERS
+     * 257 *    MATERIAL         = ( "Etanchite 5", "Mortier de pose 30", "Beton 100",
+     * 258 *            "Beton Arme 50", "Corps Creux Terre Cuite", "Enduit Interieur 20",
+     * 259 *            "polystyrene 6cm" )
+     * 260 *    ..
+     * 261 * "Roof Cons Layers-Middle-2cm" = LAYERS
+     * 262 *    MATERIAL         = ( "Etanchite 5", "Mortier de pose 30", "Beton 100",
+     * 263 *            "polystyrene 2cm", "Beton Arme 50", "Corps Creux Terre Cuite",
+     * 264 *            "Enduit Interieur 20" )
+     * 265 *    ..
+     * 266 * "Roof Cons Layers-Middle-4cm" = LAYERS
+     * 267 *    MATERIAL         = ( "Etanchite 5", "Mortier de pose 30", "Beton 100",
+     * 268 *            "polystyrene 4cm", "Beton Arme 50", "Corps Creux Terre Cuite",
+     * 269 *            "Enduit Interieur 20" )
+     * 270 *    ..
+     * 271 * "Roof Cons Layers-Middle-6cm" = LAYERS
+     * 272 *    MATERIAL         = ( "Etanchite 5", "Mortier de pose 30", "Beton 100",
+     * 273 *            "polystyrene 6cm", "Beton Arme 50", "Corps Creux Terre Cuite",
+     * 274 *            "Enduit Interieur 20" )
+     * 275 *    ..
+     * 276 * "Flr Cons Layers" = LAYERS
+     * 277 *    MATERIAL         = ( "Enduit Interieur 20", "Corps Creux Terre Cuite",
+     * 278 *          "Beton Arme 50", "Lit de sable", "Mortier de pose 30",
+     * 279 *          "Carreaux mosaiques" )
+     * 280 *    ..
+     * 281 * "IWall Cons Layers" = LAYERS
+     * 282 *    MATERIAL         = ( "Enduit Interieur 20", "Brique platiere 65",
+     * 283 *          "Enduit Interieur 20" )
+     * 284 *    ..
+     * 285 * "Underground" = LAYERS
+     * 286 *    MATERIAL         = ( "Mineral wool R30", "Earth(Soil)", "HW Concrete 12" )
+     * 287 *    ..
+     * 288 * $ ---------------------------------------------------------
+     * 289 * $              Building Constructions
+     * 290 * $ ---------------------------------------------------------
+     * 291 * "Mur Pas d’Isolation" = CONSTRUCTION
+     * 292 *    TYPE             = LAYERS
+     * 293 *    ABSORPTANCE      = 0.6
+     * 294 *    ROUGHNESS        = 4
+     * 295 *    LAYERS           = "EWall Cons Layers-NoInsu"
+     * 296 *    ..
+     * 297 * "Mur Isolation-Extérieure-2cm" = CONSTRUCTION
+     * 298 *    TYPE             = LAYERS
+     * 299 *    ABSORPTANCE      = 0.6
+     * 300 *    ROUGHNESS        = 4
+     * 301 *    LAYERS           = "EWall Cons Layers-Outside-2cm"
+     * 302 *    ..
+     * 303 * "Mur Isolation-Extérieure-4cm" = CONSTRUCTION
+     * 304 *    TYPE             = LAYERS
+     * 305 *    ABSORPTANCE      = 0.6
+     * 306 *    ROUGHNESS        = 4
+     * 307 *    LAYERS           = "EWall Cons Layers-Outside-4cm"
+     * 308 *    ..
+     * 309 * "Mur Isolation-Extérieure-6cm" = CONSTRUCTION
+     * 310 *    TYPE             = LAYERS
+     * 311 *    ABSORPTANCE      = 0.6
+     * 312 *    ROUGHNESS        = 4
+     * 313 *    LAYERS           = "EWall Cons Layers-Outside-6cm"
+     * 314 *    ..
+     * 315 * "Mur Isolation-Intérieure-2cm" = CONSTRUCTION
+     * 316 *    TYPE             = LAYERS
+     * 317 *    ABSORPTANCE      = 0.6
+     * 318 *    ROUGHNESS        = 4
+     * 319 *    LAYERS           = "EWall Cons Layers-Middle-2cm"
+     * 320 *    ..
+     * 321 * "Mur Isolation-Intérieure-4cm" = CONSTRUCTION
+     * 322 *    TYPE             = LAYERS
+     * 323 *    ABSORPTANCE      = 0.6
+     * 324 *    ROUGHNESS        = 4
+     * 325 *    LAYERS           = "EWall Cons Layers-Middle-4cm"
+     * 326 *    ..
+     * 327 * "Mur Isolation-Intérieure-6cm" = CONSTRUCTION
+     * 328 *    TYPE             = LAYERS
+     * 329 *    ABSORPTANCE      = 0.6
+     * 330 *    ROUGHNESS        = 4
+     * 331 *    LAYERS           = "EWall Cons Layers-Middle-6cm"
+     * 332 *    ..
+     * 333 * "Mur Isolation-Milieu-2cm" = CONSTRUCTION
+     * 334 *    TYPE             = LAYERS
+     * 335 *    ABSORPTANCE      = 0.6
+     * 336 *    ROUGHNESS        = 4
+     * 337 *    LAYERS           = "EWall Cons Layers-Inside-2cm"
+     * 338 *    ..
+     * 339 * "Mur Isolation-Milieu-4cm" = CONSTRUCTION
+     * 340 *    TYPE             = LAYERS
+     * 341 *    ABSORPTANCE      = 0.6
+     * 342 *    ROUGHNESS        = 4
+     * 343 *    LAYERS           = "EWall Cons Layers-Inside-4cm"
+     * 344 *    ..
+     * 345 * "Mur Isolation-Milieu-6cm" = CONSTRUCTION
+     * 346 *    TYPE             = LAYERS
+     * 347 *    ABSORPTANCE      = 0.6
+     * 348 *    ROUGHNESS        = 4
+     * 349 *    LAYERS           = "EWall Cons Layers-Inside-6cm"
+     * 350 *    ..
+     * 351 * "Toit Pas d’Isolation" = CONSTRUCTION
+     * 352 *    TYPE             = LAYERS
+     * 353 *    ABSORPTANCE      = 0.6
+     * 354 *    ROUGHNESS        = 4
+     * 355 *    LAYERS           = "Roof Cons Layers-NoInsu"
+     * 356 *    ..
+     * 357 * "Toit Isolation-Extérieure-2cm" = CONSTRUCTION
+     * 358 *    TYPE             = LAYERS
+     * 359 *    ABSORPTANCE      = 0.6
+     * 360 *    ROUGHNESS        = 4
+     * 361 *    LAYERS           = "Roof Cons Layers-Outside-2cm"
+     * 362 *    ..
+     * 363 * "Toit Isolation-Extérieure-4cm" = CONSTRUCTION
+     * 364 *    TYPE             = LAYERS
+     * 365 *    ABSORPTANCE      = 0.6
+     * 366 *    ROUGHNESS        = 4
+     * 367 *    LAYERS           = "Roof Cons Layers-Outside-4cm"
+     * 368 *    ..
+     * 369 * "Toit Isolation-Extérieure-6cm" = CONSTRUCTION
+     * 370 *    TYPE             = LAYERS
+     * 371 *    ABSORPTANCE      = 0.6
+     * 372 *    ROUGHNESS        = 4
+     * 373 *    LAYERS           = "Roof Cons Layers-Outside-6cm"
+     * 374 *    ..
+     * 375 * "Toit Isolation-Intérieure-2cm" = CONSTRUCTION
+     * 376 *    TYPE             = LAYERS
+     * 377 *    ABSORPTANCE      = 0.6
+     * 378 *    ROUGHNESS        = 4
+     * 379 *    LAYERS           = "Roof Cons Layers-Middle-2cm"
+     * 380 *    ..
+     * 381 * "Toit Isolation-Intérieure-4cm" = CONSTRUCTION
+     * 382 *    TYPE             = LAYERS
+     * 383 *    ABSORPTANCE      = 0.6
+     * 384 *    ROUGHNESS        = 4
+     * 385 *    LAYERS           = "Roof Cons Layers-Middle-4cm"
+     * 386 *    ..
+     * 387 * "Toit Isolation-Intérieure-6cm" = CONSTRUCTION
+     * 388 *    TYPE             = LAYERS
+     * 389 *    ABSORPTANCE      = 0.6
+     * 390 *    ROUGHNESS        = 4
+     * 391 *    LAYERS           = "Roof Cons Layers-Middle-6cm"
+     * 392 *    ..
+     * 393 * "Toit Isolation-Milieu-2cm" = CONSTRUCTION
+     * 394 *    TYPE             = LAYERS
+     * 395 *    ABSORPTANCE      = 0.6
+     * 396 *    ROUGHNESS        = 4
+     * 397 *    LAYERS           = "Roof Cons Layers-Inside-2cm"
+     * 398 *    ..
+     * 399 * "Toit Isolation-Milieu-4cm" = CONSTRUCTION
+     * 400 *    TYPE             = LAYERS
+     * 401 *    ABSORPTANCE      = 0.6
+     * 402 *    ROUGHNESS        = 4
+     * 403 *    LAYERS           = "Roof Cons Layers-Inside-4cm"
+     * 404 *    ..
+     * 405 * "Toit Isolation-Milieu-6cm" = CONSTRUCTION
+     * 406 *    TYPE             = LAYERS
+     * 407 *    ABSORPTANCE      = 0.6
+     * 408 *    ROUGHNESS        = 4
+     * 409 *    LAYERS           = "Roof Cons Layers-Inside-6cm"
+     * 410 *    ..
+     * 411 * "Flr Construction" = CONSTRUCTION
+     * 412 *    TYPE             = LAYERS
+     * 413 *    LAYERS           = "Flr Cons Layers"
+     * 414 *    ..
+     * 415 * "Ceilg Construction" = CONSTRUCTION
+     * 416 *    TYPE             = LAYERS
+     * 417 *    LAYERS           = "Flr Cons Layers"
+     * 418 *    ..
+     * 419 * "IWall Construction" = CONSTRUCTION
+     * 420 *    TYPE             = LAYERS
+     * 421 *    LAYERS           = "IWall Cons Layers"
+     * 422 *    ..
+     * 423 * $ ---------------------------------------------------------
+     * 424 * $              Building Construction Etc
+     * 425 * $ ---------------------------------------------------------
+     * 426 * "Uncondition" = LAYERS
+     * 427 *    MATERIAL         = ( "Mineral wool R30",
+     * 428 *          "Enduit Interieur 20", "Corps Creux Terre Cuite",
+     * 429 *          "Beton Arme 50", "Lit de sable", "Mortier de pose 30",
+     * 430 *          "Carreaux mosaiques" )
+     * 431 *    ..
+     * 432 * "GroundFloor" = CONSTRUCTION
+     * 433 *    TYPE             = LAYERS
+     * 434 *    LAYERS           = "Underground"
+     * 435 *    ..
+     * 436 * "First level Floor" = CONSTRUCTION
+     * 437 *    TYPE             = LAYERS
+     * 438 *   LAYERS           = "Underground"
+     * 439 *    ..
+     * 440 * "ConditionFloor" = CONSTRUCTION
+     * 441 *    TYPE             = LAYERS
+     * 442 *    LAYERS           = "Flr Cons Layers"
+     * 443 *    ..
+     * 444 * "UnconditionFloor" = CONSTRUCTION
+     * 445 *    TYPE             = LAYERS
+     * 446 *    LAYERS           = "Uncondition"
+     * 447 *    ..
+     * 448 * $ ---------------------------------------------------------
+     * 449 * $              Building User Mat, Layer, Construction
+     * 450 * $ ---------------------------------------------------------
+     * 451 * "layertest1" = LAYERS
+     * 452 *    MATERIAL    = (
+     * 453 *            "polystyrene 2cm"
+     * 454 *           ,"polystyrene 4cm"
+     * 455 *           )
+     * 456 *    ..
+     * 457 * "layertest2" = LAYERS
+     * 458 *    MATERIAL    = (
+     * 459 *            "HW Concrete 12"
+     * 460 *           )
+     * 461 *    ..
+     * 462 * "walltest1" = CONSTRUCTION
+     * 463 *    TYPE            = LAYERS
+     * 464 *    LAYERS          = "layertest1"
+     * 465 *    ABSORPTANCE     = 0.6
+     * 466 *    ROUGHNESS       = 4
+     * 467 *    ..
+     * 468 * "walltest2" = CONSTRUCTION
+     * 469 *    TYPE            = LAYERS
+     * 470 *    LAYERS          = "layertest2"
+     * 471 *    ABSORPTANCE     = 0.6
+     * 472 *    ROUGHNESS       = 4
+     * 473 *    ..
+     * 474 * $ ---------------------------------------------------------
+     * 475 * $            Default  Glass Type
+     * 476 * $ ---------------------------------------------------------
+     * 477 * "Simple Claire" = GLASS-TYPE
+     * 478 *    TYPE            = SHADING-COEF
+     * 479 *    SHADING-COEF    = 0.95
+     * 480 *    GLASS-CONDUCT   = 1.0899995144499999
+     * 481 *    VIS-TRANS       = 0.9
+     * 482 *    ..
+     * 483 * "Simple Bronze" = GLASS-TYPE
+     * 484 *    TYPE            = SHADING-COEF
+     * 485 *    SHADING-COEF    = 0.71
+     * 486 *    GLASS-CONDUCT   = 1.0899995144499999
+     * 487 *    VIS-TRANS       = 0.9
+     * 488 *    ..
+     * 489 * "Simple faible-e" = GLASS-TYPE
+     * 490 *    TYPE            = SHADING-COEF
+     * 491 *    SHADING-COEF    = 0.84
+     * 492 *    GLASS-CONDUCT   = 0.75002829033
+     * 493 *    VIS-TRANS       = 0.9
+     * 494 *    ..
+     * 495 * "Double Claire" = GLASS-TYPE
+     * 496 *    TYPE            = SHADING-COEF
+     * 497 *    SHADING-COEF    = 0.81
+     * 498 *    GLASS-CONDUCT   = 0.5599933895599999
+     * 499 *    VIS-TRANS       = 0.9
+     * 500 *    ..
+     * 501 * "Double Bronze" = GLASS-TYPE
+     * 502 *    TYPE            = SHADING-COEF
+     * 503 *    SHADING-COEF    = 0.57
+     * 504 *    GLASS-CONDUCT   = 0.5599933895599999
+     * 505 *    VIS-TRANS       = 0.9
+     * 506 *    ..
+     * 507 * "Double faible-e" = GLASS-TYPE
+     * 508 *    TYPE            = SHADING-COEF
+     * 509 *    SHADING-COEF    = 0.48
+     * 510 *    GLASS-CONDUCT   = 0.28999244967
+     * 511 *    VIS-TRANS       = 0.9
+     * 512 *    ..
+     * 513 * $ ---------------------------------------------------------
+     * 514 * $             User Glass Type
+     * 515 * $ ---------------------------------------------------------
+     * 516 * $ ---------------------------------------------------------
+     * 517 * $             Combined Glass Type
+     * 518 * $ ---------------------------------------------------------
+     * 519 * "Combined South Glass" = GLASS-TYPE
+     * 520 *    TYPE            = SHADING-COEF
+     * 521 *    SHADING-COEF    = 0.9499999999999998
+     * 522 *    GLASS-CONDUCT   = 1.0899995144499999
+     * 523 *    VIS-TRANS       = 0.8999999999999999
+     * 524 *    ..
+     * 525 * "Combined North Glass" = GLASS-TYPE
+     * 526 *    TYPE            = SHADING-COEF
+     * 527 *    SHADING-COEF    = 0.84
+     * 528 *    GLASS-CONDUCT   = 0.75002829033
+     * 529 *    VIS-TRANS       = 0.8999999999999999
+     * 530 *    ..
+     * 531 * "Combined East Glass" = GLASS-TYPE
+     * 532 *    TYPE            = SHADING-COEF
+     * 533 *    SHADING-COEF    = 0.9499999999999998
+     * 534 *    GLASS-CONDUCT   = 1.0899995144499999
+     * 535 *    VIS-TRANS       = 0.8999999999999999
+     * 536 *    ..
+     * 537 * "Combined West Glass" = GLASS-TYPE
+     * 538 *    TYPE            = SHADING-COEF
+     * 539 *    SHADING-COEF    = 0.84
+     * 540 *    GLASS-CONDUCT   = 0.75002829033
+     * 541 *    VIS-TRANS       = 0.8999999999999999
+     * 542 *    ..
+     * 543 * $ ---------------------------------------------------------
+     * 544 * $              Day Schedules
+     * 545 * $ ---------------------------------------------------------
+     * 546 * "Bldg Occup D1" = DAY-SCHEDULE-PD
+     * 547 *    TYPE             = FRACTION
+     * 548 *    VALUES           = ( 1, &D, &D, &D, &D, 0.9, 0.9, 0.9, 0.2, 0, 0.6, 0.6, 0,
+     * 549 *          0, 0, 0.6, &D, 0.6, 0.1, 0.1, 0.7, 0.7, 0.7, 0.9 )
+     * 550 *    ..
+     * 551 * "Bldg Occup D2" = DAY-SCHEDULE-PD
+     * 552 *    TYPE             = FRACTION
+     * 553 *    VALUES           = ( 1, &D, &D, &D, &D, 0.9, 0.9, 0.9, 0.3, 0, 0.4, 0.4, 0,
+     * 554 *          0, 0.2, 0.5, 0.5, &D, 0.1, 0.1, 0.2, 0.2, 0.2, 0.5 )
+     * 555 *    ..
+     * 556 * "Inf D1" = DAY-SCHEDULE-PD
+     * 557 *    TYPE             = FRACTION
+     * 558 *    VALUES           = ( 0.3, &D, &D, &D, &D, &D, &D, &D, 1, 1, &D, 1, 0.5, &D,
+     * 559 *          &D, &D, &D, &D, &D, &D, &D, 1 )
+     * 560 *    ..
+     * 561 * "Bldg Lght D1" = DAY-SCHEDULE-PD
+     * 562 *    TYPE             = FRACTION
+     * 563 *    VALUES           = ( 0.05, 0.05, &D, &D, 0.05, 0.5, 0.5, 0.5, 0, 0, 0.2,
+     * 564 *          &D, 0, 0, 0, 0.2, 0.2, &D, 0.1, 0.1, 0.8, 0.8, 0.8, 0.2 )
+     * 565 *    ..
+     * 566 * "Bldg Lght D2" = DAY-SCHEDULE-PD
+     * 567 *    TYPE             = FRACTION
+     * 568 *    VALUES           = ( 0.05, 0.05, &D, &D, &D, 0.4, 0.4, 0.4, 0, 0, 0.2, 0.2,
+     * 569 *          0, 0, &D, 0.3, 0.3, 0.3, 0.1, 0.1, 0.4, 0.4, 0.4, 0.2 )
+     * 570 *    ..
+     * 571 * "Inf D2" = DAY-SCHEDULE-PD
+     * 572 *    TYPE             = FRACTION
+     * 573 *    VALUES           = ( 0.5, 0.3, &D, &D, &D, &D, 0.5, &D, &D, 1, &D, &D, &D,
+     * 574 *          &D, &D, &D, &D, &D, 0.5 )
+     * 575 *    ..
+     * 576 * "Corr Occup D1" = DAY-SCHEDULE-PD
+     * 577 *    TYPE             = FRACTION
+     * 578 *    VALUES           = ( 0.1, &D, 0, &D, &D, &D, 0.1, 0.1, 0.5, 0.5, &D, &D,
+     * 579 *          0.3, &D, &D, 0.3, 0.3, 0.3, &D, 0.3, 0.3, 0.5, 0.5 )
+     * 580 *    ..
+     * 581 * "Corr Occup D2" = DAY-SCHEDULE-PD
+     * 582 *    TYPE             = FRACTION
+     * 583 *    VALUES           = ( 0.3, 0.1, 0.1, &D, &D, &D, 0.2, 0.3, 0.3, 0.4, &D, &D,
+     * 584 *          &D, &D, &D, &D, &D, 0.4, 0.3, &D, 0.3, 0.3, 0.3 )
+     * 585 *    ..
+     * 586 * "EL1 Bldg Occup Sun" = DAY-SCHEDULE-PD
+     * 587 *    TYPE             = FRACTION
+     * 588 *    VALUES           = ( 0.5584, &D, &D, &D, &D, &D, &D, &D, 0.4, &D, &D,
+     * 589 *          0.2416, &D, 0.16, &D, &D, 0.2416, 0.3184, &D, 0.4816, &D, 0.64 )
+     * 590 *    ..
+     * 591 * "Corr Lght D1" = DAY-SCHEDULE-PD
+     * 592 *    TYPE             = FRACTION
+     * 593 *    VALUES           = ( 0.7, 0.7, 0.7, 0.7, &D, 0.7, 0.7, 0.3, 0.3, 0.1, 0.1,
+     * 594 *          0.1, 0.1, &D, 0.1, 0.1, &D, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7 )
+     * 595 *    ..
+     * 596 * "Corr Lght D2" = DAY-SCHEDULE-PD
+     * 597 *    TYPE             = FRACTION
+     * 598 *    VALUES           = ( 0.7, &D, 0.7, 0.7, &D, &D, 0.7, 0.1, 0.1, 0.1, 0.1,
+     * 599 *          0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.7, &D, &D, 0.7, 0.7 )
+     * 600 *    ..
+     * 601 * "EL1 Bldg InsLt Sun" = DAY-SCHEDULE-PD
+     * 602 *    TYPE             = FRACTION
+     * 603 *    VALUES           = ( 0.2234, &D, 0.15, &D, &D, &D, 0.2234, 0.3487, 0.3962,
+     * 604 *          0.3228, &D, &D, 0.2753, 0.15, &D, &D, &D, &D, 0.366, 0.5086, 0.582,
+     * 605 *          0.4394, 0.366, 0.2234 )
+     * 606 *    ..
+     * 607 * "EL1 Bldg Misc WD" = DAY-SCHEDULE-PD
+     * 608 *    TYPE             = FRACTION
+     * 609 *    VALUES           = ( 0.1632, &D, 0.08, &D, &D, 0.1632, 0.3232, 0.4, 0.3232,
+     * 610 *          &D, 0.24, 0.1632, &D, &D, &D, &D, &D, &D, 0.4832, 0.6432, 0.72,
+     * 611 *          0.6432, 0.4832, 0.24 )
+     * 612 *    ..
+     * 613 * "EL1 Bldg Misc Sat" = DAY-SCHEDULE-PD
+     * 614 *    TYPE             = FRACTION
+     * 615 *    VALUES           = ( 0.1616, &D, 0.08, &D, &D, &D, 0.2384, &D, 0.32, &D,
+     * 616 *          0.2384, 0.1616, &D, &D, &D, &D, &D, &D, 0.4784, 0.56, &D, &D,
+     * 617 *          0.4784, 0.2384 )
+     * 618 *    ..
+     * 619 * "EL1 Bldg Misc Sun" = DAY-SCHEDULE-PD
+     * 620 *    TYPE             = FRACTION
+     * 621 *    VALUES           = ( 0.2416, &D, 0.16, &D, &D, &D, 0.2416, 0.3184, &D,
+     * 622 *          0.2416, &D, &D, &D, 0.16, &D, &D, &D, &D, 0.4, 0.5584, 0.64, 0.4816,
+     * 623 *          0.4, 0.2416 )
+     * 624 *    ..
+     * 625 * "EL1 Bldg Misc HDD" = DAY-SCHEDULE-PD
+     * 626 *    TYPE             = FRACTION
+     * 627 *    VALUES           = ( 0 )
+     * 628 *    ..
+     * 629 * "DHW D1" = DAY-SCHEDULE-PD
+     * 630 *    TYPE             = FRACTION
+     * 631 *    VALUES           = ( 0, 0, 0, 0, 0, 0.2, 0.2, 0.2, 0, 0, 0, 0, 0, 0, 0,
+     * 632 *          0.1, 0.1, 0.1, 0, 0, 0, 0.05, 0.05, 0 )
+     * 633 *    ..
+     * 634 * "DHW D2" = DAY-SCHEDULE-PD
+     * 635 *    TYPE             = FRACTION
+     * 636 *    VALUES           = ( 0, 0, 0, 0, 0, 0.2, 0.15, 0.15, 0, 0, 0, 0, 0, 0, 0,
+     * 637 *          0.1, 0.05, 0.05, 0, 0, 0, 0.05, 0.05, 0 )
+     * 638 *    ..
+     * 639 * "DHW D3" = DAY-SCHEDULE-PD
+     * 640 *    TYPE             = FRACTION
+     * 641 *    VALUES           = ( 0, 0, 0, 0, 0, 0.2, 0.15, 0.1, 0, 0, 0, 0, 0, 0, 0,
+     * 642 *          0.05, 0.05, 0.05, 0, 0, 0, 0, 0.05, 0 )
+     * 643 *    ..
+     * 644 * "DHW Eqp NRes HDD" = DAY-SCHEDULE-PD
+     * 645 *    TYPE             = FRACTION
+     * 646 *    VALUES           = ( 0 )
+     * 647 *    ..
+     * 648 * "ZG1-S1 (SUM) P-Inf WD" = DAY-SCHEDULE-PD
+     * 649 *    TYPE             = MULTIPLIER
+     * 650 *    VALUES           = ( 1, &D, &D, &D, &D, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+     * 651 *          1, 1, 1, 1, 1, 1, 1 )
+     * 652 *    ..
+     * 653 * "ZG1-S1 (SUM) P-Inf WEH" = DAY-SCHEDULE-PD
+     * 654 *    TYPE             = MULTIPLIER
+     * 655 *    VALUES           = ( 1, &D, &D, &D, &D, &D, 1.0312, 1.0718, 1.0312, &D, 1,
+     * 656 *          &D, &D, &D, &D, &D, &D, &D, 1.0312, &D, 1 )
+     * 657 *    ..
+     * 658 * "ZG1-S1 (SUM) P-Inf HDD" = DAY-SCHEDULE-PD
+     * 659 *    TYPE             = MULTIPLIER
+     * 660 *    VALUES           = ( 1 )
+     * 661 *    ..
+     * 662 * "ZG1-S1 (SUM) C-Inf All" = DAY-SCHEDULE-PD
+     * 663 *    TYPE             = FRACTION
+     * 664 *    VALUES           = ( 1 )
+     * 665 *    ..
+     * 666 * "ZG7-S1 (SUM) P-Inf WD" = DAY-SCHEDULE-PD
+     * 667 *    TYPE             = MULTIPLIER
+     * 668 *    VALUES           = ( 1, &D, &D, &D, &D, 1, 1, 1, 1, 1, 1, 1, 1, &D, 1, 1,
+     * 669 *          1, 1, 1, 1, 1, 1, 1, 1 )
+     * 670 *    ..
+     * 671 * "ZG7-S1 (SUM) P-Inf Sat" = DAY-SCHEDULE-PD
+     * 672 *    TYPE             = MULTIPLIER
+     * 673 *    VALUES           = ( 1.1084, 1, &D, &D, &D, 1.1084, 1.25, 1.1132, 1.1084,
+     * 674 *          &D, 1, &D, &D, &D, &D, &D, 1.1084, 1.19, 1.0316, 1, 1.0316, &D, 1,
+     * 675 *          1.1084 )
+     * 676 *    ..
+     * 677 * "ZG7-S1 (SUM) P-Inf Sun" = DAY-SCHEDULE-PD
+     * 678 *    TYPE             = MULTIPLIER
+     * 679 *    VALUES           = ( 1.0316, 1, &D, &D, &D, &D, &D, 1.1084, &D, 1, 1.1084,
+     * 680 *          &D, 1.0316, &D, 1, 1.0316, 1.1084, 1.0268, 1.1132, &D, 1.1084, &D,
+     * 681 *          1, 1.0316 )
+     * 682 *    ..
+     * 683 * "Cust 1 Elec Seas1 Day" = DAY-SCHEDULE-PD
+     * 684 *    TYPE             = FLAG
+     * 685 *    VALUES           = ( 1 )
+     * 686 *    ..
+     * 687 * "Custom Gas Seas1 Day" = DAY-SCHEDULE-PD
+     * 688 *    TYPE             = FLAG
+     * 689 *    VALUES           = ( 1 )
+     * 690 *    ..
+     * 691 * "Cool D2" = DAY-SCHEDULE-PD
+     * 692 *    TYPE             = TEMPERATURE
+     * 693 *    VALUES           = ( 75 )
+     * 694 *    ..
+     * 695 * "Cool D1" = DAY-SCHEDULE-PD
+     * 696 *    TYPE             = TEMPERATURE
+     * 697 *    VALUES           = ( 98 )
+     * 698 *    ..
+     * 699 * "Heat D1" = DAY-SCHEDULE-PD
+     * 700 *    TYPE             = TEMPERATURE
+     * 701 *    VALUES           = ( 72 )
+     * 702 *    ..
+     * 703 * "Heat D2" = DAY-SCHEDULE-PD
+     * 704 *    TYPE             = TEMPERATURE
+     * 705 *    VALUES           = ( 39 )
+     * 706 *    ..
+     * 707 * "AVAIL D" = DAY-SCHEDULE-PD
+     * 708 *    TYPE             = ON/OFF
+     * 709 *    VALUES           = ( 1 )
+     * 710 *    ..
+     * 711 * "NOT AVAIL D" = DAY-SCHEDULE-PD
+     * 712 *    TYPE             = ON/OFF
+     * 713 *    VALUES           = ( 0 )
+     * 714 *    ..
+     * 715 * $ ---------------------------------------------------------
+     * 716 * $              Week Schedules
+     * 717 * $ ---------------------------------------------------------
+     * 718 * "Bldg Occup Wk1" = WEEK-SCHEDULE-PD
+     * 719 *    TYPE             = FRACTION
+     * 720 *    DAY-SCHEDULES    = ( "Bldg Occup D1", &D, &D, &D, &D, "Bldg Occup D1", &D,
+     * 721 *          &D, "Bldg Occup D1" )
+     * 722 *    ..
+     * 723 * "Bldg Lght Wk1" = WEEK-SCHEDULE-PD
+     * 724 *    TYPE             = FRACTION
+     * 725 *    DAY-SCHEDULES    = ( "Bldg Lght D1", &D, &D, &D, &D, "Bldg Lght D1", &D,
+     * 726 *          &D, "Bldg Lght D1" )
+     * 727 *    ..
+     * 728 * "Corr Occup Wk1" = WEEK-SCHEDULE-PD
+     * 729 *    TYPE             = FRACTION
+     * 730 *    DAY-SCHEDULES    = ( "Corr Occup D1", &D, &D, &D, &D, "Corr Occup D1",
+     * 731 *          "Corr Occup D1", &D, "Corr Occup D1", "Corr Occup D1" )
+     * 732 *    ..
+     * 733 * "Corr Lght Wk1" = WEEK-SCHEDULE-PD
+     * 734 *    TYPE             = FRACTION
+     * 735 *    DAY-SCHEDULES    = ( "Corr Lght D1", &D, &D, &D, &D, "Corr Lght D1",
+     * 736 *          "Corr Lght D1", &D, "Corr Lght D1" )
+     * 737 *    ..
+     * 738 * "EL1 Bldg Misc Wk" = WEEK-SCHEDULE-PD
+     * 739 *    TYPE             = FRACTION
+     * 740 *    DAY-SCHEDULES    = ( "EL1 Bldg Misc WD", &D, &D, &D, &D,
+     * 741 *          "EL1 Bldg Misc Sat", "EL1 Bldg Misc Sun", &D, "EL1 Bldg Misc HDD" )
+     * 742 *    ..
+     * 743 * "DHW Wk1" = WEEK-SCHEDULE-PD
+     * 744 *    TYPE             = FRACTION
+     * 745 *    DAY-SCHEDULES    = ( "DHW D1", &D, &D, &D, &D, "DHW D1", "DHW D1",
+     * 746 *          "DHW D1", "DHW D1" )
+     * 747 *    ..
+     * 748 * "ZG1-S1 (SUM) P-Inf Wk" = WEEK-SCHEDULE-PD
+     * 749 *    TYPE             = MULTIPLIER
+     * 750 *    DAY-SCHEDULES    = ( "ZG1-S1 (SUM) P-Inf WD", &D, &D, &D, &D,
+     * 751 *          "ZG1-S1 (SUM) P-Inf WD", &D, &D, "ZG1-S1 (SUM) P-Inf WD" )
+     * 752 *    ..
+     * 753 * "ZG1-S1 (SUM) C-Inf Wk" = WEEK-SCHEDULE-PD
+     * 754 *    TYPE             = FRACTION
+     * 755 *    DAY-SCHEDULES    = ( "ZG1-S1 (SUM) C-Inf All" )
+     * 756 *    ..
+     * 757 * "ZG7-S1 (SUM) P-Inf Wk" = WEEK-SCHEDULE-PD
+     * 758 *    TYPE             = MULTIPLIER
+     * 759 *    DAY-SCHEDULES    = ( "ZG7-S1 (SUM) P-Inf WD", &D, &D, &D, &D,
+     * 760 *          "ZG1-S1 (SUM) P-Inf WD", "ZG1-S1 (SUM) P-Inf WD", &D,
+     * 761 *          "ZG1-S1 (SUM) P-Inf WD", "ZG1-S1 (SUM) P-Inf WD" )
+     * 762 *    ..
+     * 763 * "Cust 1 Elec Seas1 Week" = WEEK-SCHEDULE-PD
+     * 764 *    TYPE             = FLAG
+     * 765 *    DAY-SCHEDULES    = ( "Cust 1 Elec Seas1 Day" )
+     * 766 *    ..
+     * 767 * "Custom Gas Seas1 Week" = WEEK-SCHEDULE-PD
+     * 768 *    TYPE             = FLAG
+     * 769 *    DAY-SCHEDULES    = ( "Custom Gas Seas1 Day" )
+     * 770 *    ..
+     * 771 * "Bldg Occup W2" = WEEK-SCHEDULE-PD
+     * 772 *    TYPE             = FRACTION
+     * 773 *    DAY-SCHEDULES    = ( "Bldg Occup D2", &D, &D, &D, &D, "Bldg Occup D2" )
+     * 774 *    ..
+     * 775 * "Corr Occup W2" = WEEK-SCHEDULE-PD
+     * 776 *    TYPE             = FRACTION
+     * 777 *    DAY-SCHEDULES    = ( "Corr Occup D2", &D, &D, &D, &D, "Corr Occup D2" )
+     * 778 *    ..
+     * 779 * "Bldg Lght W2" = WEEK-SCHEDULE-PD
+     * 780 *    TYPE             = FRACTION
+     * 781 *    DAY-SCHEDULES    = ( "Bldg Lght D2", &D, &D, &D, &D, "Bldg Lght D2", &D,
+     * 782 *          &D, "Bldg Lght D2" )
+     * 783 *    ..
+     * 784 * "Corr Lght WK2" = WEEK-SCHEDULE-PD
+     * 785 *    TYPE             = FRACTION
+     * 786 *    DAY-SCHEDULES    = ( "Corr Lght D2", &D, &D, &D, &D, "Corr Lght D2" )
+     * 787 *    ..
+     * 788 * "Cool WK1" = WEEK-SCHEDULE-PD
+     * 789 *    TYPE             = TEMPERATURE
+     * 790 *    DAY-SCHEDULES    = ( "Cool D1", &D, &D, &D, &D, "Cool D1" )
+     * 791 *    ..
+     * 792 * "Cool WK2" = WEEK-SCHEDULE-PD
+     * 793 *    TYPE             = TEMPERATURE
+     * 794 *    DAY-SCHEDULES    = ( "Cool D2", &D, &D, &D, &D, "Cool D2" )
+     * 795 *    ..
+     * 796 * "Heat WK1" = WEEK-SCHEDULE-PD
+     * 797 *    TYPE             = TEMPERATURE
+     * 798 *    DAY-SCHEDULES    = ( "Heat D1", &D, &D, &D, &D, "Heat D1" )
+     * 799 *    ..
+     * 800 * "Heat WK2" = WEEK-SCHEDULE-PD
+     * 801 *    TYPE             = TEMPERATURE
+     * 802 *    DAY-SCHEDULES    = ( "Heat D2", &D, &D, &D, &D, "Heat D2" )
+     * 803 *    ..
+     * 804 * "DHW Wk2" = WEEK-SCHEDULE-PD
+     * 805 *    TYPE             = FRACTION
+     * 806 *    DAY-SCHEDULES    = ( "DHW D2", &D, &D, &D, &D, "DHW D2" )
+     * 807 *    ..
+     * 808 * "DHW Wk3" = WEEK-SCHEDULE-PD
+     * 809 *    TYPE             = FRACTION
+     * 810 *    DAY-SCHEDULES    = ( "DHW D3", &D, &D, &D, &D, "DHW D3" )
+     * 811 *    ..
+     * 812 * "Inf Wk1" = WEEK-SCHEDULE-PD
+     * 813 *    TYPE             = FRACTION
+     * 814 *    DAY-SCHEDULES    = ( "Inf D1", &D, &D, &D, &D, "Inf D1" )
+     * 815 *    ..
+     * 816 * "Inf Wk2" = WEEK-SCHEDULE-PD
+     * 817 *    TYPE             = FRACTION
+     * 818 *    DAY-SCHEDULES    = ( "Inf D2", &D, &D, &D, &D, "Inf D2" )
+     * 819 *    ..
+     * 820 * "AVAIL W" = WEEK-SCHEDULE-PD
+     * 821 *    TYPE             = ON/OFF
+     * 822 *    DAY-SCHEDULES    = ( "AVAIL D", &D, &D, &D, &D, "AVAIL D" )
+     * 823 *    ..
+     * 824 * "NOT AVAIL W" = WEEK-SCHEDULE-PD
+     * 825 *    TYPE             = ON/OFF
+     * 826 *    DAY-SCHEDULES    = ( "NOT AVAIL D", &D, &D, &D, &D, "NOT AVAIL D" )
+     * 827 *    ..
+     * 828 * $ ---------------------------------------------------------
+     * 829 * $              Annual Schedules
+     * 830 * $ ---------------------------------------------------------
+     * 831 * "Bldg Occup Sch" = SCHEDULE-PD
+     * 832 *    TYPE             = FRACTION
+     * 833 *    MONTH            = ( 5, 10, 12 )
+     * 834 *    DAY              = ( 31, 14, 31 )
+     * 835 *    WEEK-SCHEDULES   = ( "Bldg Occup Wk1", "Bldg Occup W2", "Bldg Occup Wk1" )
+     * 836 *    ..
+     * 837 * "Bldg Lght Sch" = SCHEDULE-PD
+     * 838 *    TYPE             = FRACTION
+     * 839 *    MONTH            = ( 5, 10, 12 )
+     * 840 *    DAY              = ( 31, 14, 31 )
+     * 841 *    WEEK-SCHEDULES   = ( "Bldg Lght Wk1", "Bldg Lght W2", "Bldg Lght Wk1" )
+     * 842 *    ..
+     * 843 * "Corr Occup Sch" = SCHEDULE-PD
+     * 844 *    TYPE             = FRACTION
+     * 845 *    MONTH            = ( 5, 10, 12 )
+     * 846 *    DAY              = ( 31, 14, 31 )
+     * 847 *    WEEK-SCHEDULES   = ( "Corr Occup Wk1", "Corr Occup W2", "Corr Occup Wk1" )
+     * 848 *    ..
+     * 849 * "Corr Lght Sch" = SCHEDULE-PD
+     * 850 *    TYPE             = FRACTION
+     * 851 *    MONTH            = ( 5, 10, 12 )
+     * 852 *    DAY              = ( 31, 14, 31 )
+     * 853 *    WEEK-SCHEDULES   = ( "Corr Lght Wk1", "Corr Lght WK2", "Corr Lght Wk1" )
+     * 854 *    ..
+     * 855 * "DHW Sch" = SCHEDULE-PD
+     * 856 *    TYPE             = FRACTION
+     * 857 *    MONTH            = ( 3, 5, 10, 12, 12 )
+     * 858 *    DAY              = ( 14, 31, 14, 14, 31 )
+     * 859 *    WEEK-SCHEDULES   = ( "DHW Wk1", "DHW Wk2", "DHW Wk3", "DHW Wk2", "DHW Wk1" )
+     * 860 *    ..
+     * 861 * "ZG1-S1 (SUM) P-Inf Sch" = SCHEDULE-PD
+     * 862 *    TYPE             = MULTIPLIER
+     * 863 *    MONTH            = ( 12 )
+     * 864 *    DAY              = ( 31 )
+     * 865 *    WEEK-SCHEDULES   = ( "ZG1-S1 (SUM) P-Inf Wk" )
+     * 866 *    ..
+     * 867 * "ZG1-S1 (SUM) C-Inf Sch" = SCHEDULE-PD
+     * 868 *    TYPE             = FRACTION
+     * 869 *    MONTH            = ( 12 )
+     * 870 *    DAY              = ( 31 )
+     * 871 *    WEEK-SCHEDULES   = ( "ZG1-S1 (SUM) C-Inf Wk" )
+     * 872 *    ..
+     * 873 * "ZG7-S1 (SUM) P-Inf Sch" = SCHEDULE-PD
+     * 874 *    TYPE             = MULTIPLIER
+     * 875 *    MONTH            = ( 12 )
+     * 876 *    DAY              = ( 31 )
+     * 877 *    WEEK-SCHEDULES   = ( "ZG7-S1 (SUM) P-Inf Wk" )
+     * 878 *    ..
+     * 879 * "Cust 1 Elec Season Sched" = SCHEDULE-PD
+     * 880 *    TYPE             = FLAG
+     * 881 *    MONTH            = ( 12 )
+     * 882 *    DAY              = ( 31 )
+     * 883 *    WEEK-SCHEDULES   = ( "Cust 1 Elec Seas1 Week" )
+     * 884 *    ..
+     * 885 * "Custom Gas Season Sched" = SCHEDULE-PD
+     * 886 *    TYPE             = FLAG
+     * 887 *    MONTH            = ( 12 )
+     * 888 *    DAY              = ( 31 )
+     * 889 *    WEEK-SCHEDULES   = ( "Custom Gas Seas1 Week" )
+     * 890 *    ..
+     * 891 * "Cool sch" = SCHEDULE-PD
+     * 892 *    TYPE             = TEMPERATURE
+     * 893 *    MONTH            = ( 4, 10, 12 )
+     * 894 *    DAY              = ( 30, 31, 31 )
+     * 895 *    WEEK-SCHEDULES   = ( "Cool WK1", "Cool WK2", "Cool WK1" )
+     * 896 *    ..
+     * 897 * "Heat sch" = SCHEDULE-PD
+     * 898 *    TYPE             = TEMPERATURE
+     * 899 *    MONTH            = ( 3, 10, 12 )
+     * 900 *    DAY              = ( 31, 31, 31 )
+     * 901 *    WEEK-SCHEDULES   = ( "Heat WK1", "Heat WK2", "Heat WK1" )
+     * 902 *    ..
+     * 903 * "Infiltration sch" = SCHEDULE-PD
+     * 904 *    TYPE             = FRACTION
+     * 905 *    MONTH            = ( 5, 10, 12 )
+     * 906 *    DAY              = ( 31, 14, 31 )
+     * 907 *    WEEK-SCHEDULES   = ( "Inf Wk1", "Inf Wk2", "Inf Wk1" )
+     * 908 *    ..
+     * 909 * "Cool avail" = SCHEDULE-PD
+     * 910 *    TYPE             = ON/OFF
+     * 911 *    MONTH            = ( 4, 10, 12 )
+     * 912 *    DAY              = ( 30, 31, 31 )
+     * 913 *    WEEK-SCHEDULES   = ( "NOT AVAIL W", "AVAIL W", "NOT AVAIL W" )
+     * 914 *    ..
+     * 915 * "Heat avail" = SCHEDULE-PD
+     * 916 *    TYPE             = ON/OFF
+     * 917 *    MONTH            = ( 3, 10, 12 )
+     * 918 *    DAY              = ( 31, 31, 31 )
+     * 919 *    WEEK-SCHEDULES   = ( "AVAIL W", "NOT AVAIL W", "AVAIL W" )
+     * 920 *    ..
+     * 921 * "Sys1 (VAVS) Fans D1-1" = DAY-SCHEDULE-PD
+     * 922 *    TYPE              = ON/OFF/FLAG
+     * 923 *    VALUES            = ( 0, &D, &D, &D, &D, &D, &D, 1, &D, &D, &D, &D, &D, &D,
+     * 924 *                         &D, &D, &D, &D, 0 )
+     * 925 *    ..
+     * 926 * "Sys1 (VAVS) Fans D1-2" = DAY-SCHEDULE-PD
+     * 927 *    TYPE              = ON/OFF/FLAG
+     * 928 *    VALUES            = ( 0 )
+     * 929 *    ..
+     * 930 * "Sys1 (VAVS) Fans W1"  = WEEK-SCHEDULE-PD
+     * 931 *    TYPE             = ON/OFF/FLAG
+     * 932 *    DAY-SCHEDULES    = ( "Sys1 (VAVS) Fans D1-1", &D, &D, &D, &D,
+     * 933 *                         "Sys1 (VAVS) Fans D1-2" )
+     * 934 *    ..
+     * 935 * "Sys1 (VAVS) Fan Sch"  = SCHEDULE-PD
+     * 936 *    TYPE             = ON/OFF/FLAG
+     * 937 *    MONTH            = ( 12 )
+     * 938 *    DAY              = ( 31 )
+     * 939 *    WEEK-SCHEDULES   = ( "Sys1 (VAVS) Fans W1" )
+     * 940 *    ..
+     * 941 * $ ---------------------------------------------------------
+     * 942 * $              Polygons
+     * 943 * $ ---------------------------------------------------------
+     * 944 * "EL1 Floor Polygon" = POLYGON
+     * 945 *    V1               = ( 0, 0 )
+     * 946 *    V2               = ( 65.6168, 0 )
+     * 947 *    V3               = ( 65.6168, 65.6168 )
+     * 948 *    V4               = ( 0, 65.6168 )
+     * 949 *    ..
+     * 950 * "EL1 Space Polygon 1" = POLYGON
+     * 951 *    V1               = ( 0, 0 )
+     * 952 *    V2               = ( 65.6168, 0 )
+     * 953 *    V3               = ( 56.00744211988072, 9.609357880119273 )
+     * 954 *    V4               = ( 9.609357880119273, 9.609357880119273 )
+     * 955 *    ..
+     * 956 * "EL1 Space Polygon 2" = POLYGON
+     * 957 *    V1               = ( 0, 0 )
+     * 958 *    V2               = ( 65.6168, 0 )
+     * 959 *    V3               = ( 56.00744211988072, 9.609357880119273 )
+     * 960 *    V4               = ( 9.609357880119273, 9.609357880119273 )
+     * 961 *    ..
+     * 962 * "EL1 Space Polygon 3" = POLYGON
+     * 963 *    V1               = ( 0, 0 )
+     * 964 *    V2               = ( 65.6168, 0 )
+     * 965 *    V3               = ( 56.00744211988072, 9.609357880119273 )
+     * 966 *    V4               = ( 9.609357880119273, 9.609357880119273 )
+     * 967 *    ..
+     * 968 * "EL1 Space Polygon 4" = POLYGON
+     * 969 *    V1               = ( 0, 0 )
+     * 970 *    V2               = ( 65.6168, 0 )
+     * 971 *    V3               = ( 56.00744211988072, 9.609357880119273 )
+     * 972 *    V4               = ( 9.609357880119273, 9.609357880119273 )
+     * 973 *    ..
+     * 974 * "EL1 Space Polygon 5" = POLYGON
+     * 975 *    V1               = ( 0, 0 )
+     * 976 *    V2               = ( 46.39808423976145, 0 )
+     * 977 *    V3               = ( 46.39808423976145, 46.39808423976145 )
+     * 978 *    V4               = ( 0, 46.39808423976145 )
+     * 979 *    ..
+     * 980 * "EL2 Floor Polygon" = POLYGON
+     * 981 *    V1               = ( 0, 0 )
+     * 982 *    V2               = ( 65.6168, 0 )
+     * 983 *    V3               = ( 65.6168, 65.6168 )
+     * 984 *    V4               = ( 0, 65.6168 )
+     * 985 *    ..
+     * 986 * "EL2 Space Polygon 1" = POLYGON
+     * 987 *    V1               = ( 0, 0 )
+     * 988 *    V2               = ( 65.6168, 0 )
+     * 989 *    V3               = ( 56.00744211988072, 9.609357880119273 )
+     * 990 *    V4               = ( 9.609357880119273, 9.609357880119273 )
+     * 991 *    ..
+     * 992 * "EL2 Space Polygon 2" = POLYGON
+     * 993 *    V1               = ( 0, 0 )
+     * 994 *    V2               = ( 65.6168, 0 )
+     * 995 *    V3               = ( 56.00744211988072, 9.609357880119273 )
+     * 996 *    V4               = ( 9.609357880119273, 9.609357880119273 )
+     * 997 *    ..
+     * 998 * "EL2 Space Polygon 3" = POLYGON
+     * 999 *    V1               = ( 0, 0 )
+     *1000 *    V2               = ( 65.6168, 0 )
+     *1001 *    V3               = ( 56.00744211988072, 9.609357880119273 )
+     *1002 *    V4               = ( 9.609357880119273, 9.609357880119273 )
+     *1003 *    ..
+     *1004 * "EL2 Space Polygon 4" = POLYGON
+     *1005 *    V1               = ( 0, 0 )
+     *1006 *    V2               = ( 65.6168, 0 )
+     *1007 *    V3               = ( 56.00744211988072, 9.609357880119273 )
+     *1008 *    V4               = ( 9.609357880119273, 9.609357880119273 )
+     *1009 *    ..
+     *1010 * "EL2 Space Polygon 5" = POLYGON
+     *1011 *    V1               = ( 0, 0 )
+     *1012 *    V2               = ( 46.39808423976145, 0 )
+     *1013 *    V3               = ( 46.39808423976145, 46.39808423976145 )
+     *1014 *    V4               = ( 0, 46.39808423976145 )
+     *1015 *    ..
+     *1016 * "EL3 Floor Polygon" = POLYGON
+     *1017 *    V1               = ( 0, 0 )
+     *1018 *    V2               = ( 65.6168, 0 )
+     *1019 *    V3               = ( 65.6168, 65.6168 )
+     *1020 *    V4               = ( 0, 65.6168 )
+     *1021 *    ..
+     *1022 * "EL3 Space Polygon 1" = POLYGON
+     *1023 *    V1               = ( 0, 0 )
+     *1024 *    V2               = ( 65.6168, 0 )
+     *1025 *    V3               = ( 56.00744211988072, 9.609357880119273 )
+     *1026 *    V4               = ( 9.609357880119273, 9.609357880119273 )
+     *1027 *    ..
+     *1028 * "EL3 Space Polygon 2" = POLYGON
+     *1029 *    V1               = ( 0, 0 )
+     *1030 *    V2               = ( 65.6168, 0 )
+     *1031 *    V3               = ( 56.00744211988072, 9.609357880119273 )
+     *1032 *    V4               = ( 9.609357880119273, 9.609357880119273 )
+     *1033 *    ..
+     *1034 * "EL3 Space Polygon 3" = POLYGON
+     *1035 *    V1               = ( 0, 0 )
+     *1036 *    V2               = ( 65.6168, 0 )
+     *1037 *    V3               = ( 56.00744211988072, 9.609357880119273 )
+     *1038 *    V4               = ( 9.609357880119273, 9.609357880119273 )
+     *1039 *    ..
+     *1040 * "EL3 Space Polygon 4" = POLYGON
+     *1041 *    V1               = ( 0, 0 )
+     *1042 *    V2               = ( 65.6168, 0 )
+     *1043 *    V3               = ( 56.00744211988072, 9.609357880119273 )
+     *1044 *    V4               = ( 9.609357880119273, 9.609357880119273 )
+     *1045 *    ..
+     *1046 * "EL3 Space Polygon 5" = POLYGON
+     *1047 *    V1               = ( 0, 0 )
+     *1048 *    V2               = ( 46.39808423976145, 0 )
+     *1049 *    V3               = ( 46.39808423976145, 46.39808423976145 )
+     *1050 *    V4               = ( 0, 46.39808423976145 )
+     *1051 *    ..
+     *1052 * "EL1 Space Polygon 1 - Smirro" = POLYGON
+     *1053 *    V1               = ( 0, 0 )
+     *1054 *    V2               = ( 9.609357880119273, 9.609357880119273 )
+     *1055 *    V3               = ( 9.609357880119273, 56.00744211988072 )
+     *1056 *    V4               = ( 0, 65.6168 )
+     *1057 *    ..
+     *1058 * "EL1 Space Polygon 2 - Smirro" = POLYGON
+     *1059 *    V1               = ( 0, 0 )
+     *1060 *    V2               = ( 9.609357880119273, 9.609357880119273 )
+     *1061 *    V3               = ( 9.609357880119273, 56.00744211988072 )
+     *1062 *    V4               = ( 0, 65.6168 )
+     *1063 *    ..
+     *1064 * "EL1 Space Polygon 5 - Smirro" = POLYGON
+     *1065 *    V1               = ( 0, 0 )
+     *1066 *    V2               = ( 46.39808423976145, 0 )
+     *1067 *    V3               = ( 46.39808423976145, 46.39808423976145 )
+     *1068 *    V4               = ( 0, 46.39808423976145 )
+     *1069 *    ..
+     *1070 *  
+     *1071 *  
+     *1072 *  
+     *1073 * $ *********************************************************
+     *1074 * $ **                                                     **
+     *1075 * $ **      Floors / Spaces / Walls / Windows / Doors      **
+     *1076 * $ **                                                     **
+     *1077 * $ *********************************************************
+     *1078 * "EL1 Ground Flr" = FLOOR
+     *1079 *    AZIMUTH          = 360
+     *1080 *    POLYGON          = "EL1 Floor Polygon"
+     *1081 *    SHAPE            = POLYGON
+     *1082 *    FLOOR-HEIGHT     = 9.84252
+     *1083 *    SPACE-HEIGHT     = 9.84252
+     *1084 *    C-DIAGRAM-DATA   = *Bldg Envelope & Loads 1 Diag Data*
+     *1085 *    ..
+     *1086 * "EL1 South Perim Spc (G.S1)" = SPACE
+     *1087 *    SHAPE            = POLYGON
+     *1088 *    FURNITURE-TYPE   = HEAVY
+     *1089 *    ZONE-TYPE        = CONDITIONED
+     *1090 *    PEOPLE-SCHEDULE  = "Bldg Occup Sch"
+     *1091 *    LIGHTING-SCHEDUL = ( "Bldg Lght Sch" )
+     *1092 *    EQUIP-SCHEDULE   = ( "Bldg Occup Sch" )
+     *1093 *    INF-SCHEDULE     = "ZG1-S1 (SUM) P-Inf Sch"
+     *1094 *    INF-METHOD       = AIR-CHANGE
+     *1095 *    AIR-CHANGES/HR   = 1
+     *1096 *    PEOPLE-HG-LAT    = 207.143
+     *1097 *    PEOPLE-HG-SENS   = 250
+     *1098 *    LIGHTING-W/AREA  = ( 1.5 )
+     *1099 *    EQUIPMENT-W/AREA = ( 0.9 )
+     *1100 *    AREA/PERSON      = 250
+     *1101 *    POLYGON          = "EL1 Space Polygon 1"
+     *1102 *    LOCATION         = FLOOR-V1
+     *1103 *    C-ACTIVITY-DESC  = *Office (Open Plan)*
+     *1104 *    ..
+     *1105 * "EL1 South Wall (G.SW1.E1)" = EXTERIOR-WALL
+     *1106 *    CONSTRUCTION     = "walltest1"
+     *1107 *    LOCATION         = SPACE-V1
+     *1108 *    SHADING-SURFACE  = YES
+     *1109 *    ..
+     *1110 * "EL1 South Window" = WINDOW
+     *1111 *    GLASS-TYPE    = "Combined South Glass"
+     *1112 *    MULTIPLIER    = 1.0
+     *1113 *    FRAME-WIDTH   = 0.0
+     *1114 *    X             = 22.439120606826798
+     *1115 *    Y             = 0.250000008
+     *1116 *    HEIGHT        = 9.342519983999999
+     *1117 *    WIDTH         = 20.7385587863464
+     *1118 *    OVERHANG-D    = 0.9842519999999999
+     *1119 *    FRAME-CONDUCT = 3.079
+     *1120 *    ..
+     *   1 * $LIBRARY-ENTRY Dirt Depre Windows              SCHEDULE-PD     Dirt Dep Schd
+     *   2 *  TYPE=FRACTION
+     *   3 *    WEEK-SCHEDULES = ("Dirt Win WK")  MONTH=(12) DAY=(31)  ..
+     *   1 * $LIBRARY-ENTRY Dirt Win WK                     WEEK-SCHEDULE-PDDirt Dep Schd
+     *   2 *  TYPE=FRACTION
+     *   3 *    DAY-SCHEDULES    =
+     *   4 *    ( "Dirt Win DY", "Dirt Win DY" "Dirt Win DY", "Dirt Win DY"
+     *   5 *      "Dirt Win DY", "Dirt Win DY" "Dirt Win DY", "Dirt Win DY"
+     *   6 *      "Dirt Win DY", "Dirt Win DY")  ..
+     *   1 * $LIBRARY-ENTRY Dirt Win DY                     DAY-SCHEDULE-PD Dirt Dep Schd
+     *   2 * $Apartment Building Lighting
+     *   3 *  TYPE=FRACTION
+     *   4 * $Hr Ending:  1    2    3    4    5    6    7    8    9   10   11   12
+     *   5 *  VALUES= (1.00   &D   &D   &D   &D   &D   &D   &D   &D   &D   &D   &D
+     *   6 *             &D   &D   &D   &D   &D   &D   &D   &D   &D   &D   &D   &D)  ..
+     *1121 * "EL1 NE Wall (G.S1.I1)" = INTERIOR-WALL
+     *1122 *    NEXT-TO          = "EL1 East Perim Spc (G.E2)"
+     *1123 *    CONSTRUCTION     = "IWall Construction"
+     *1124 *    LOCATION         = SPACE-V2
+     *1125 *    ..
+     *1126 * "EL1 North Wall (G.S1.I2)" = INTERIOR-WALL
+     *1127 *    NEXT-TO          = "EL1 Core Spc (G.C5)"
+     *1128 *    CONSTRUCTION     = "IWall Construction"
+     *1129 *    LOCATION         = SPACE-V3
+     *1130 *    ..
+     *1131 * "EL1 NW Wall (G.S1.I3)" = INTERIOR-WALL
+     *1132 *    NEXT-TO          = "EL1 West Perim Spc (G.W4)"
+     *1133 *    CONSTRUCTION     = "IWall Construction"
+     *1134 *    LOCATION         = SPACE-V4
+     *1135 *    ..
+     *1136 * "EL1 Flr (G.S1.U1)" = Ground[GroundFloor] ..
+   .1*   3 *   UNDERGROUND-WALL
+   .1*   4 *     CONSTRUCTION     = GroundFloor  $"Ground Floor"
+   .1*   5 *     LOCATION         = BOTTOM
+   .1*   6 *     ..
+     *1137 * "EL1 East Perim Spc (G.E2)" = SPACE
+     *1138 *    SHAPE            = POLYGON
+     *1139 *    FURNITURE-TYPE   = HEAVY
+     *1140 *    ZONE-TYPE        = CONDITIONED
+     *1141 *    PEOPLE-SCHEDULE  = "Bldg Occup Sch"
+     *1142 *    LIGHTING-SCHEDUL = ( "Bldg Lght Sch" )
+     *1143 *    EQUIP-SCHEDULE   = ( "Bldg Occup Sch" )
+     *1144 *    INF-SCHEDULE     = "ZG1-S1 (SUM) P-Inf Sch"
+     *1145 *    INF-METHOD       = AIR-CHANGE
+     *1146 *    AIR-CHANGES/HR   = 1
+     *1147 *    PEOPLE-HG-LAT    = 207.143
+     *1148 *    PEOPLE-HG-SENS   = 250
+     *1149 *    LIGHTING-W/AREA  = ( 1.5 )
+     *1150 *    EQUIPMENT-W/AREA = ( 0.9 )
+     *1151 *    AREA/PERSON      = 250
+     *1152 *    POLYGON          = "EL1 Space Polygon 1"
+     *1153 *    LOCATION         = FLOOR-V2
+     *1154 *    ..
+     *1155 * "EL1 East Wall (G.E2.E2)" = EXTERIOR-WALL
+     *1156 *    CONSTRUCTION     = "Mur Pas d’Isolation"
+     *1157 *    LOCATION         = SPACE-V1
+     *1158 *    SHADING-SURFACE  = YES
+     *1159 *    ..
+     *1160 * "EL1 East Window" = WINDOW
+     *1161 *    GLASS-TYPE    = "Combined East Glass"
+     *1162 *    MULTIPLIER    = 1.0
+     *1163 *    FRAME-WIDTH   = 0.0
+     *1164 *    X             = 22.439120606826798
+     *1165 *    Y             = 0.250000008
+     *1166 *    HEIGHT        = 9.342519983999999
+     *1167 *    WIDTH         = 20.7385587863464
+     *1168 *    OVERHANG-D    = 0.9842519999999999
+     *1169 *    FRAME-CONDUCT = 3.079
+     *1170 *    ..
+     *1171 * "EL1 NW Wall (G.E2.I4)" = INTERIOR-WALL
+     *1172 *    NEXT-TO          = "EL1 North Perim Spc (G.N3)"
+     *1173 *    CONSTRUCTION     = "IWall Construction"
+     *1174 *    LOCATION         = SPACE-V2
+     *1175 *    ..
+     *1176 * "EL1 West Wall (G.E2.I5)" = INTERIOR-WALL
+     *1177 *    NEXT-TO          = "EL1 Core Spc (G.C5)"
+     *1178 *    CONSTRUCTION     = "IWall Construction"
+     *1179 *    LOCATION         = SPACE-V3
+     *1180 *    ..
+     *1181 * "EL1 Flr (G.E2.U2)" = Ground[GroundFloor] ..
+   .1*   3 *   UNDERGROUND-WALL
+   .1*   4 *     CONSTRUCTION     = GroundFloor  $"Ground Floor"
+   .1*   5 *     LOCATION         = BOTTOM
+   .1*   6 *     ..
+     *1182 * "EL1 North Perim Spc (G.N3)" = SPACE
+     *1183 *    SHAPE            = POLYGON
+     *1184 *    FURNITURE-TYPE   = HEAVY
+     *1185 *    ZONE-TYPE        = CONDITIONED
+     *1186 *    PEOPLE-SCHEDULE  = "Bldg Occup Sch"
+     *1187 *    LIGHTING-SCHEDUL = ( "Bldg Lght Sch" )
+     *1188 *    EQUIP-SCHEDULE   = ( "Bldg Occup Sch" )
+     *1189 *    INF-SCHEDULE     = "ZG1-S1 (SUM) P-Inf Sch"
+     *1190 *    INF-METHOD       = AIR-CHANGE
+     *1191 *    AIR-CHANGES/HR   = 1
+     *1192 *    PEOPLE-HG-LAT    = 207.143
+     *1193 *    PEOPLE-HG-SENS   = 250
+     *1194 *    LIGHTING-W/AREA  = ( 1.5 )
+     *1195 *    EQUIPMENT-W/AREA = ( 0.9 )
+     *1196 *    AREA/PERSON      = 250
+     *1197 *    POLYGON          = "EL1 Space Polygon 3"
+     *1198 *    LOCATION         = FLOOR-V3
+     *1199 *    ..
+     *1200 * "EL1 North Wall (G.N3.E3)" = EXTERIOR-WALL
+     *1201 *    CONSTRUCTION     = "walltest2"
+     *1202 *    LOCATION         = SPACE-V1
+     *1203 *    SHADING-SURFACE  = YES
+     *1204 *    ..
+     *1205 * "EL1 North Window" = WINDOW
+     *1206 *    GLASS-TYPE    = "Combined North Glass"
+     *1207 *    MULTIPLIER    = 1.0
+     *1208 *    FRAME-WIDTH   = 0.0
+     *1209 *    X             = 22.439120606826798
+     *1210 *    Y             = 0.250000008
+     *1211 *    HEIGHT        = 9.342519983999999
+     *1212 *    WIDTH         = 20.7385587863464
+     *1213 *    OVERHANG-D    = 0.9842519999999999
+     *1214 *    FRAME-CONDUCT = 3.079
+     *1215 *    ..
+     *1216 * "EL1 SW Wall (G.N3.I6)" = INTERIOR-WALL
+     *1217 *    NEXT-TO          = "EL1 West Perim Spc (G.W4)"
+     *1218 *    CONSTRUCTION     = "IWall Construction"
+     *1219 *    LOCATION         = SPACE-V2
+     *1220 *    ..
+     *1221 * "EL1 South Wall (G.N3.I7)" = INTERIOR-WALL
+     *1222 *    NEXT-TO          = "EL1 Core Spc (G.C5)"
+     *1223 *    CONSTRUCTION     = "IWall Construction"
+     *1224 *    LOCATION         = SPACE-V3
+     *1225 *    ..
+     *1226 * "EL1 Flr (G.N3.U3)" = Ground[GroundFloor] ..
+   .1*   3 *   UNDERGROUND-WALL
+   .1*   4 *     CONSTRUCTION     = GroundFloor  $"Ground Floor"
+   .1*   5 *     LOCATION         = BOTTOM
+   .1*   6 *     ..
+     *1227 * "EL1 West Perim Spc (G.W4)" = SPACE
+     *1228 *    SHAPE            = POLYGON
+     *1229 *    FURNITURE-TYPE   = HEAVY
+     *1230 *    ZONE-TYPE        = CONDITIONED
+     *1231 *    PEOPLE-SCHEDULE  = "Bldg Occup Sch"
+     *1232 *    LIGHTING-SCHEDUL = ( "Bldg Lght Sch" )
+     *1233 *    EQUIP-SCHEDULE   = ( "Bldg Occup Sch" )
+     *1234 *    INF-SCHEDULE     = "ZG1-S1 (SUM) P-Inf Sch"
+     *1235 *    INF-METHOD       = AIR-CHANGE
+     *1236 *    AIR-CHANGES/HR   = 1
+     *1237 *    PEOPLE-HG-LAT    = 207.143
+     *1238 *    PEOPLE-HG-SENS   = 250
+     *1239 *    LIGHTING-W/AREA  = ( 1.5 )
+     *1240 *    EQUIPMENT-W/AREA = ( 0.9 )
+     *1241 *    AREA/PERSON      = 250
+     *1242 *    POLYGON          = "EL1 Space Polygon 4"
+     *1243 *    LOCATION         = FLOOR-V4
+     *1244 *    ..
+     *1245 * "EL1 West Wall (G.W4.E4)" = EXTERIOR-WALL
+     *1246 *    CONSTRUCTION     = "Mur Pas d’Isolation"
+     *1247 *    LOCATION         = SPACE-V1
+     *1248 *    SHADING-SURFACE  = YES
+     *1249 *    ..
+     *1250 * "EL1 West Window" = WINDOW
+     *1251 *    GLASS-TYPE    = "Combined West Glass"
+     *1252 *    MULTIPLIER    = 1.0
+     *1253 *    FRAME-WIDTH   = 0.0
+     *1254 *    X             = 22.439120606826798
+     *1255 *    Y             = 0.250000008
+     *1256 *    HEIGHT        = 9.342519983999999
+     *1257 *    WIDTH         = 20.7385587863464
+     *1258 *    OVERHANG-D    = 0.9842519999999999
+     *1259 *    FRAME-CONDUCT = 3.079
+     *1260 *    ..
+     *1261 * "EL1 East Wall (G.W4.I8)" = INTERIOR-WALL
+     *1262 *    NEXT-TO          = "EL1 Core Spc (G.C5)"
+     *1263 *    CONSTRUCTION     = "IWall Construction"
+     *1264 *    LOCATION         = SPACE-V3
+     *1265 *    ..
+     *1266 * "EL1 Flr (G.W4.U4)" = Ground[GroundFloor] ..
+   .1*   3 *   UNDERGROUND-WALL
+   .1*   4 *     CONSTRUCTION     = GroundFloor  $"Ground Floor"
+   .1*   5 *     LOCATION         = BOTTOM
+   .1*   6 *     ..
+     *1267 * "EL1 Core Spc (G.C5)" = SPACE
+     *1268 *    X                = 9.609357880119273
+     *1269 *    Y                = 9.609357880119273
+     *1270 *    SHAPE            = POLYGON
+     *1271 *    FURNITURE-TYPE   = HEAVY
+     *1272 *    ZONE-TYPE        = UNCONDITIONED
+     *1273 *    PEOPLE-SCHEDULE  = "Corr Occup Sch"
+     *1274 *    LIGHTING-SCHEDUL = ( "Corr Lght Sch" )
+     *1275 *    EQUIP-SCHEDULE   = ( "Corr Occup Sch" )
+     *1276 *    INF-SCHEDULE     = "Infiltration sch"
+     *1277 *    INF-METHOD       = AIR-CHANGE
+     *1278 *    AIR-CHANGES/HR   = 1
+     *1279 *    PEOPLE-HG-LAT    = 207.143
+     *1280 *    PEOPLE-HG-SENS   = 250
+     *1281 *    LIGHTING-W/AREA  = ( 1 )
+     *1282 *    EQUIPMENT-W/AREA = ( 0 )
+     *1283 *    AREA/PERSON      = 250
+     *1284 *    POLYGON          = "EL1 Space Polygon 5"
+     *1285 *    ..
+     *1286 * "EL1 Flr (G.C5.U5)" = Ground[GroundFloor] ..
+   .1*   3 *   UNDERGROUND-WALL
+   .1*   4 *     CONSTRUCTION     = GroundFloor  $"Ground Floor"
+   .1*   5 *     LOCATION         = BOTTOM
+   .1*   6 *     ..
+     *1287 * "EL2 Ground Flr" = FLOOR
+     *1288 *    MULTIPLIER       = 1.0
+     *1289 *    Z                = 9.84252
+     *1290 *    AZIMUTH          = 360
+     *1291 *    POLYGON          = "EL2 Floor Polygon"
+     *1292 *    SHAPE            = POLYGON
+     *1293 *    FLOOR-HEIGHT     = 9.84252
+     *1294 *    SPACE-HEIGHT     = 9.84252
+     *1295 *    C-DIAGRAM-DATA   = *EL2 Bldg Envelope & Loads 1 Diag Data*
+     *1296 *    ..
+     *1297 * "EL2 South Perim Spc (G.S1)" = SPACE
+     *1298 *    SHAPE            = POLYGON
+     *1299 *    FURNITURE-TYPE   = HEAVY
+     *1300 *    ZONE-TYPE        = CONDITIONED
+     *1301 *    PEOPLE-SCHEDULE  = "Bldg Occup Sch"
+     *1302 *    LIGHTING-SCHEDUL = ( "Bldg Lght Sch" )
+     *1303 *    EQUIP-SCHEDULE   = ( "Bldg Occup Sch" )
+     *1304 *    INF-SCHEDULE     = "ZG1-S1 (SUM) P-Inf Sch"
+     *1305 *    INF-METHOD       = AIR-CHANGE
+     *1306 *    AIR-CHANGES/HR   = 1
+     *1307 *    PEOPLE-HG-LAT    = 207.143
+     *1308 *    PEOPLE-HG-SENS   = 250
+     *1309 *    LIGHTING-W/AREA  = ( 1.5 )
+     *1310 *    EQUIPMENT-W/AREA = ( 0.9 )
+     *1311 *    AREA/PERSON      = 250
+     *1312 *    POLYGON          = "EL2 Space Polygon 1"
+     *1313 *    LOCATION         = FLOOR-V1
+     *1314 *    ..
+     *1315 * "EL2 South Wall (G.S1.E1)" = EXTERIOR-WALL
+     *1316 *    CONSTRUCTION     = "walltest1"
+     *1317 *    LOCATION         = SPACE-V1
+     *1318 *    SHADING-SURFACE  = YES
+     *1319 *    ..
+     *1320 * "EL2 South Window" = WINDOW
+     *1321 *    GLASS-TYPE    = "Combined South Glass"
+     *1322 *    MULTIPLIER    = 1.0
+     *1323 *    FRAME-WIDTH   = 0.0
+     *1324 *    X             = 22.439120606826798
+     *1325 *    Y             = 0.250000008
+     *1326 *    HEIGHT        = 9.342519983999999
+     *1327 *    WIDTH         = 20.7385587863464
+     *1328 *    OVERHANG-D    = 0.9842519999999999
+     *1329 *    FRAME-CONDUCT = 3.079
+     *1330 *    ..
+     *1331 * "EL2 Flr (G.S1.I1)" = INTERIOR-WALL
+     *1332 *    CONSTRUCTION     = "Flr Construction"
+     *1333 *    INT-WALL-TYPE    = ADIABATIC
+     *1334 *    LOCATION         = BOTTOM
+     *1335 *    ..
+     *1336 * "EL2 NE Wall (G.S1.I2)" = INTERIOR-WALL
+     *1337 *    NEXT-TO          = "EL2 East Perim Spc (G.E2)"
+     *1338 *    CONSTRUCTION     = "IWall Construction"
+     *1339 *    LOCATION         = SPACE-V2
+     *1340 *    ..
+     *1341 * "EL2 North Wall (G.S1.I3)" = INTERIOR-WALL
+     *1342 *    NEXT-TO          = "EL2 Core Spc (G.C5)"
+     *1343 *    CONSTRUCTION     = "IWall Construction"
+     *1344 *    LOCATION         = SPACE-V3
+     *1345 *    ..
+     *1346 * "EL2 NW Wall (G.S1.I4)" = INTERIOR-WALL
+     *1347 *    NEXT-TO          = "EL2 West Perim Spc (G.W4)"
+     *1348 *    CONSTRUCTION     = "IWall Construction"
+     *1349 *    LOCATION         = SPACE-V4
+     *1350 *    ..
+     *1351 * "EL2 East Perim Spc (G.E2)" = SPACE
+     *1352 *    SHAPE            = POLYGON
+     *1353 *    FURNITURE-TYPE   = HEAVY
+     *1354 *    ZONE-TYPE        = CONDITIONED
+     *1355 *    PEOPLE-SCHEDULE  = "Bldg Occup Sch"
+     *1356 *    LIGHTING-SCHEDUL = ( "Bldg Lght Sch" )
+     *1357 *    EQUIP-SCHEDULE   = ( "Bldg Occup Sch" )
+     *1358 *    INF-SCHEDULE     = "ZG1-S1 (SUM) P-Inf Sch"
+     *1359 *    INF-METHOD       = AIR-CHANGE
+     *1360 *    AIR-CHANGES/HR   = 1
+     *1361 *    PEOPLE-HG-LAT    = 207.143
+     *1362 *    PEOPLE-HG-SENS   = 250
+     *1363 *    LIGHTING-W/AREA  = ( 1.5 )
+     *1364 *    EQUIPMENT-W/AREA = ( 0.9 )
+     *1365 *    AREA/PERSON      = 250
+     *1366 *    POLYGON          = "EL2 Space Polygon 2"
+     *1367 *    LOCATION         = FLOOR-V2
+     *1368 *    ..
+     *1369 * "EL2 East Wall (G.E2.E2)" = EXTERIOR-WALL
+     *1370 *    CONSTRUCTION     = "Mur Pas d’Isolation"
+     *1371 *    LOCATION         = SPACE-V1
+     *1372 *    SHADING-SURFACE  = YES
+     *1373 *    ..
+     *1374 * "EL2 East Window" = WINDOW
+     *1375 *    GLASS-TYPE    = "Combined East Glass"
+     *1376 *    MULTIPLIER    = 1.0
+     *1377 *    FRAME-WIDTH   = 0.0
+     *1378 *    X             = 22.439120606826798
+     *1379 *    Y             = 0.250000008
+     *1380 *    HEIGHT        = 9.342519983999999
+     *1381 *    WIDTH         = 20.7385587863464
+     *1382 *    OVERHANG-D    = 0.9842519999999999
+     *1383 *    FRAME-CONDUCT = 3.079
+     *1384 *    ..
+     *1385 * "EL2 Flr (G.E2.I5)" = INTERIOR-WALL
+     *1386 *    CONSTRUCTION     = "Flr Construction"
+     *1387 *    INT-WALL-TYPE    = ADIABATIC
+     *1388 *    LOCATION         = BOTTOM
+     *1389 *    ..
+     *1390 * "EL2 NW Wall (G.E2.I6)" = INTERIOR-WALL
+     *1391 *    NEXT-TO          = "EL2 North Perim Spc (G.N3)"
+     *1392 *    CONSTRUCTION     = "IWall Construction"
+     *1393 *    LOCATION         = SPACE-V2
+     *1394 *    ..
+     *1395 * "EL2 West Wall (G.E2.I7)" = INTERIOR-WALL
+     *1396 *    NEXT-TO          = "EL2 Core Spc (G.C5)"
+     *1397 *    CONSTRUCTION     = "IWall Construction"
+     *1398 *    LOCATION         = SPACE-V3
+     *1399 *    ..
+     *1400 * "EL2 North Perim Spc (G.N3)" = SPACE
+     *1401 *    SHAPE            = POLYGON
+     *1402 *    FURNITURE-TYPE   = HEAVY
+     *1403 *    ZONE-TYPE        = CONDITIONED
+     *1404 *    PEOPLE-SCHEDULE  = "Bldg Occup Sch"
+     *1405 *    LIGHTING-SCHEDUL = ( "Bldg Lght Sch" )
+     *1406 *    EQUIP-SCHEDULE   = ( "Bldg Occup Sch" )
+     *1407 *    INF-SCHEDULE     = "ZG1-S1 (SUM) P-Inf Sch"
+     *1408 *    INF-METHOD       = AIR-CHANGE
+     *1409 *    AIR-CHANGES/HR   = 1
+     *1410 *    PEOPLE-HG-LAT    = 207.143
+     *1411 *    PEOPLE-HG-SENS   = 250
+     *1412 *    LIGHTING-W/AREA  = ( 1.5 )
+     *1413 *    EQUIPMENT-W/AREA = ( 0.9 )
+     *1414 *    AREA/PERSON      = 250
+     *1415 *    POLYGON          = "EL2 Space Polygon 3"
+     *1416 *    LOCATION         = FLOOR-V3
+     *1417 *    ..
+     *1418 * "EL2 North Wall (G.N3.E3)" = EXTERIOR-WALL
+     *1419 *    CONSTRUCTION     = "walltest2"
+     *1420 *    LOCATION         = SPACE-V1
+     *1421 *    SHADING-SURFACE  = YES
+     *1422 *    ..
+     *1423 * "EL2 North Window" = WINDOW
+     *1424 *    GLASS-TYPE    = "Combined North Glass"
+     *1425 *    MULTIPLIER    = 1.0
+     *1426 *    FRAME-WIDTH   = 0.0
+     *1427 *    X             = 22.439120606826798
+     *1428 *    Y             = 0.250000008
+     *1429 *    HEIGHT        = 9.342519983999999
+     *1430 *    WIDTH         = 20.7385587863464
+     *1431 *    OVERHANG-D    = 0.9842519999999999
+     *1432 *    FRAME-CONDUCT = 3.079
+     *1433 *    ..
+     *1434 * "EL2 Flr (G.N3.I8)" = INTERIOR-WALL
+     *1435 *    CONSTRUCTION     = "Flr Construction"
+     *1436 *    INT-WALL-TYPE    = ADIABATIC
+     *1437 *    LOCATION         = BOTTOM
+     *1438 *    ..
+     *1439 * "EL2 SW Wall (G.N3.I9)" = INTERIOR-WALL
+     *1440 *    NEXT-TO          = "EL2 West Perim Spc (G.W4)"
+     *1441 *    CONSTRUCTION     = "IWall Construction"
+     *1442 *    LOCATION         = SPACE-V2
+     *1443 *    ..
+     *1444 * "EL2 South Wall (G.N3.I10)" = INTERIOR-WALL
+     *1445 *    NEXT-TO          = "EL2 Core Spc (G.C5)"
+     *1446 *    CONSTRUCTION     = "IWall Construction"
+     *1447 *    LOCATION         = SPACE-V3
+     *1448 *    ..
+     *1449 * "EL2 West Perim Spc (G.W4)" = SPACE
+     *1450 *    SHAPE            = POLYGON
+     *1451 *    FURNITURE-TYPE   = HEAVY
+     *1452 *    ZONE-TYPE        = CONDITIONED
+     *1453 *    PEOPLE-SCHEDULE  = "Bldg Occup Sch"
+     *1454 *    LIGHTING-SCHEDUL = ( "Bldg Lght Sch" )
+     *1455 *    EQUIP-SCHEDULE   = ( "Bldg Occup Sch" )
+     *1456 *    INF-SCHEDULE     = "ZG1-S1 (SUM) P-Inf Sch"
+     *1457 *    INF-METHOD       = AIR-CHANGE
+     *1458 *    AIR-CHANGES/HR   = 1
+     *1459 *    PEOPLE-HG-LAT    = 207.143
+     *1460 *    PEOPLE-HG-SENS   = 250
+     *1461 *    LIGHTING-W/AREA  = ( 1.5 )
+     *1462 *    EQUIPMENT-W/AREA = ( 0.9 )
+     *1463 *    AREA/PERSON      = 250
+     *1464 *    POLYGON          = "EL2 Space Polygon 4"
+     *1465 *    LOCATION         = FLOOR-V4
+     *1466 *    ..
+     *1467 * "EL2 West Wall (G.W4.E4)" = EXTERIOR-WALL
+     *1468 *    CONSTRUCTION     = "Mur Pas d’Isolation"
+     *1469 *    LOCATION         = SPACE-V1
+     *1470 *    SHADING-SURFACE  = YES
+     *1471 *    ..
+     *1472 * "EL2 West Window" = WINDOW
+     *1473 *    GLASS-TYPE    = "Combined West Glass"
+     *1474 *    MULTIPLIER    = 1.0
+     *1475 *    FRAME-WIDTH   = 0.0
+     *1476 *    X             = 22.439120606826798
+     *1477 *    Y             = 0.250000008
+     *1478 *    HEIGHT        = 9.342519983999999
+     *1479 *    WIDTH         = 20.7385587863464
+     *1480 *    OVERHANG-D    = 0.9842519999999999
+     *1481 *    FRAME-CONDUCT = 3.079
+     *1482 *    ..
+     *1483 * "EL2 Flr (G.W4.I11)" = INTERIOR-WALL
+     *1484 *    CONSTRUCTION     = "Flr Construction"
+     *1485 *    INT-WALL-TYPE    = ADIABATIC
+     *1486 *    LOCATION         = BOTTOM
+     *1487 *    ..
+     *1488 * "EL2 East Wall (G.W4.I12)" = INTERIOR-WALL
+     *1489 *    NEXT-TO          = "EL2 Core Spc (G.C5)"
+     *1490 *    CONSTRUCTION     = "IWall Construction"
+     *1491 *    LOCATION         = SPACE-V3
+     *1492 *    ..
+     *1493 * "EL2 Core Spc (G.C5)" = SPACE
+     *1494 *    X                = 9.609357880119273
+     *1495 *    Y                = 9.609357880119273
+     *1496 *    SHAPE            = POLYGON
+     *1497 *    FURNITURE-TYPE   = HEAVY
+     *1498 *    ZONE-TYPE        = UNCONDITIONED
+     *1499 *    PEOPLE-SCHEDULE  = "Corr Occup Sch"
+     *1500 *    LIGHTING-SCHEDUL = ( "Corr Lght Sch" )
+     *1501 *    EQUIP-SCHEDULE   = ( "Corr Occup Sch" )
+     *1502 *    INF-SCHEDULE     = "Infiltration sch"
+     *1503 *    INF-METHOD       = AIR-CHANGE
+     *1504 *    AIR-CHANGES/HR   = 1
+     *1505 *    PEOPLE-HG-LAT    = 207.143
+     *1506 *    PEOPLE-HG-SENS   = 250
+     *1507 *    LIGHTING-W/AREA  = ( 1 )
+     *1508 *    EQUIPMENT-W/AREA = ( 0 )
+     *1509 *    AREA/PERSON      = 250
+     *1510 *    POLYGON          = "EL2 Space Polygon 5"
+     *1511 *    ..
+     *1512 * "EL2 Flr (G.C5.I13)" = INTERIOR-WALL
+     *1513 *    CONSTRUCTION     = "Flr Construction"
+     *1514 *    INT-WALL-TYPE    = ADIABATIC
+     *1515 *    LOCATION         = BOTTOM
+     *1516 *    ..
+     *1517 * "EL3 Ground Flr" = FLOOR
+     *1518 *    Z                = 19.68504
+     *1519 *    AZIMUTH          = 360
+     *1520 *    POLYGON          = "EL3 Floor Polygon"
+     *1521 *    SHAPE            = POLYGON
+     *1522 *    FLOOR-HEIGHT     = 9.84252
+     *1523 *    SPACE-HEIGHT     = 9.84252
+     *1524 *    C-DIAGRAM-DATA   = *EL3 Bldg Envelope & Loads 1 Diag Data (Copy)*
+     *1525 *    ..
+     *1526 * "EL3 South Perim Spc (G.S1)" = SPACE
+     *1527 *    SHAPE            = POLYGON
+     *1528 *    FURNITURE-TYPE   = HEAVY
+     *1529 *    ZONE-TYPE        = CONDITIONED
+     *1530 *    PEOPLE-SCHEDULE  = "Bldg Occup Sch"
+     *1531 *    LIGHTING-SCHEDUL = ( "Bldg Lght Sch" )
+     *1532 *    EQUIP-SCHEDULE   = ( "Bldg Occup Sch" )
+     *1533 *    INF-SCHEDULE     = "ZG1-S1 (SUM) P-Inf Sch"
+     *1534 *    INF-METHOD       = AIR-CHANGE
+     *1535 *    AIR-CHANGES/HR   = 1
+     *1536 *    PEOPLE-HG-LAT    = 207.143
+     *1537 *    PEOPLE-HG-SENS   = 250
+     *1538 *    LIGHTING-W/AREA  = ( 1.5 )
+     *1539 *    EQUIPMENT-W/AREA = ( 0.9 )
+     *1540 *    AREA/PERSON      = 250
+     *1541 *    POLYGON          = "EL3 Space Polygon 1"
+     *1542 *    LOCATION         = FLOOR-V1
+     *1543 *    ..
+     *1544 * "EL3 South Wall (G.S1.E1)" = EXTERIOR-WALL
+     *1545 *    CONSTRUCTION     = "walltest1"
+     *1546 *    LOCATION         = SPACE-V1
+     *1547 *    SHADING-SURFACE  = YES
+     *1548 *    ..
+     *1549 * "EL3 South Window" = WINDOW
+     *1550 *    GLASS-TYPE    = "Combined South Glass"
+     *1551 *    MULTIPLIER    = 1.0
+     *1552 *    FRAME-WIDTH   = 0.0
+     *1553 *    X             = 22.439120606826798
+     *1554 *    Y             = 0.250000008
+     *1555 *    HEIGHT        = 9.342519983999999
+     *1556 *    WIDTH         = 20.7385587863464
+     *1557 *    OVERHANG-D    = 0.9842519999999999
+     *1558 *    FRAME-CONDUCT = 3.079
+     *1559 *    ..
+     *1560 * "EL3 Roof (G.S1.E2)" = EXTERIOR-WALL
+     *1561 *    CONSTRUCTION     = "Toit Pas d’Isolation"
+     *1562 *    LOCATION         = TOP
+     *1563 *    SHADING-SURFACE  = YES
+     *1564 *    ..
+     *1565 * "EL3 Flr (G.S1.I1)" = INTERIOR-WALL
+     *1566 *    CONSTRUCTION     = "Flr Construction"
+     *1567 *    INT-WALL-TYPE    = ADIABATIC
+     *1568 *    LOCATION         = BOTTOM
+     *1569 *    ..
+     *1570 * "EL3 NE Wall (G.S1.I2)" = INTERIOR-WALL
+     *1571 *    NEXT-TO          = "EL3 East Perim Spc (G.E2)"
+     *1572 *    CONSTRUCTION     = "IWall Construction"
+     *1573 *    LOCATION         = SPACE-V2
+     *1574 *    ..
+     *1575 * "EL3 North Wall (G.S1.I3)" = INTERIOR-WALL
+     *1576 *    NEXT-TO          = "EL3 Core Spc (G.C5)"
+     *1577 *    CONSTRUCTION     = "IWall Construction"
+     *1578 *    LOCATION         = SPACE-V3
+     *1579 *    ..
+     *1580 * "EL3 NW Wall (G.S1.I4)" = INTERIOR-WALL
+     *1581 *    NEXT-TO          = "EL3 West Perim Spc (G.W4)"
+     *1582 *    CONSTRUCTION     = "IWall Construction"
+     *1583 *    LOCATION         = SPACE-V4
+     *1584 *    ..
+     *1585 * "EL3 East Perim Spc (G.E2)" = SPACE
+     *1586 *    SHAPE            = POLYGON
+     *1587 *    FURNITURE-TYPE   = HEAVY
+     *1588 *    ZONE-TYPE        = CONDITIONED
+     *1589 *    PEOPLE-SCHEDULE  = "Bldg Occup Sch"
+     *1590 *    LIGHTING-SCHEDUL = ( "Bldg Lght Sch" )
+     *1591 *    EQUIP-SCHEDULE   = ( "Bldg Occup Sch" )
+     *1592 *    INF-SCHEDULE     = "ZG1-S1 (SUM) P-Inf Sch"
+     *1593 *    INF-METHOD       = AIR-CHANGE
+     *1594 *    AIR-CHANGES/HR   = 1
+     *1595 *    PEOPLE-HG-LAT    = 207.143
+     *1596 *    PEOPLE-HG-SENS   = 250
+     *1597 *    LIGHTING-W/AREA  = ( 1.5 )
+     *1598 *    EQUIPMENT-W/AREA = ( 0.9 )
+     *1599 *    AREA/PERSON      = 250
+     *1600 *    POLYGON          = "EL3 Space Polygon 2"
+     *1601 *    LOCATION         = FLOOR-V2
+     *1602 *    ..
+     *1603 * "EL3 East Wall (G.E2.E3)" = EXTERIOR-WALL
+     *1604 *    CONSTRUCTION     = "Mur Pas d’Isolation"
+     *1605 *    LOCATION         = SPACE-V1
+     *1606 *    SHADING-SURFACE  = YES
+     *1607 *    ..
+     *1608 * "EL3 East Window" = WINDOW
+     *1609 *    GLASS-TYPE    = "Combined East Glass"
+     *1610 *    MULTIPLIER    = 1.0
+     *1611 *    FRAME-WIDTH   = 0.0
+     *1612 *    X             = 22.439120606826798
+     *1613 *    Y             = 0.250000008
+     *1614 *    HEIGHT        = 9.342519983999999
+     *1615 *    WIDTH         = 20.7385587863464
+     *1616 *    OVERHANG-D    = 0.9842519999999999
+     *1617 *    FRAME-CONDUCT = 3.079
+     *1618 *    ..
+     *1619 * "EL3 Roof (G.E2.E4)" = EXTERIOR-WALL
+     *1620 *    CONSTRUCTION     = "Toit Pas d’Isolation"
+     *1621 *    LOCATION         = TOP
+     *1622 *    SHADING-SURFACE  = YES
+     *1623 *    ..
+     *1624 * "EL3 Flr (G.E2.I5)" = INTERIOR-WALL
+     *1625 *    CONSTRUCTION     = "Flr Construction"
+     *1626 *    INT-WALL-TYPE    = ADIABATIC
+     *1627 *    LOCATION         = BOTTOM
+     *1628 *    ..
+     *1629 * "EL3 NW Wall (G.E2.I6)" = INTERIOR-WALL
+     *1630 *    NEXT-TO          = "EL3 North Perim Spc (G.N3)"
+     *1631 *    CONSTRUCTION     = "IWall Construction"
+     *1632 *    LOCATION         = SPACE-V2
+     *1633 *    ..
+     *1634 * "EL3 West Wall (G.E2.I7)" = INTERIOR-WALL
+     *1635 *    NEXT-TO          = "EL3 Core Spc (G.C5)"
+     *1636 *    CONSTRUCTION     = "IWall Construction"
+     *1637 *    LOCATION         = SPACE-V3
+     *1638 *    ..
+     *1639 * "EL3 North Perim Spc (G.N3)" = SPACE
+     *1640 *    SHAPE            = POLYGON
+     *1641 *    FURNITURE-TYPE   = HEAVY
+     *1642 *    ZONE-TYPE        = CONDITIONED
+     *1643 *    PEOPLE-SCHEDULE  = "Bldg Occup Sch"
+     *1644 *    LIGHTING-SCHEDUL = ( "Bldg Lght Sch" )
+     *1645 *    EQUIP-SCHEDULE   = ( "Bldg Occup Sch" )
+     *1646 *    INF-SCHEDULE     = "ZG1-S1 (SUM) P-Inf Sch"
+     *1647 *    INF-METHOD       = AIR-CHANGE
+     *1648 *    AIR-CHANGES/HR   = 1
+     *1649 *    PEOPLE-HG-LAT    = 207.143
+     *1650 *    PEOPLE-HG-SENS   = 250
+     *1651 *    LIGHTING-W/AREA  = ( 1.5 )
+     *1652 *    EQUIPMENT-W/AREA = ( 0.9 )
+     *1653 *    AREA/PERSON      = 250
+     *1654 *    POLYGON          = "EL3 Space Polygon 3"
+     *1655 *    LOCATION         = FLOOR-V3
+     *1656 *    ..
+     *1657 * "EL3 North Wall (G.N3.E5)" = EXTERIOR-WALL
+     *1658 *    CONSTRUCTION     = "walltest2"
+     *1659 *    LOCATION         = SPACE-V1
+     *1660 *    SHADING-SURFACE  = YES
+     *1661 *    ..
+     *1662 * "EL3 North Window" = WINDOW
+     *1663 *    GLASS-TYPE    = "Combined North Glass"
+     *1664 *    MULTIPLIER    = 1.0
+     *1665 *    FRAME-WIDTH   = 0.0
+     *1666 *    X             = 22.439120606826798
+     *1667 *    Y             = 0.250000008
+     *1668 *    HEIGHT        = 9.342519983999999
+     *1669 *    WIDTH         = 20.7385587863464
+     *1670 *    OVERHANG-D    = 0.9842519999999999
+     *1671 *    FRAME-CONDUCT = 3.079
+     *1672 *    ..
+     *1673 * "EL3 Roof (G.N3.E6)" = EXTERIOR-WALL
+     *1674 *    CONSTRUCTION     = "Toit Pas d’Isolation"
+     *1675 *    LOCATION         = TOP
+     *1676 *    SHADING-SURFACE  = YES
+     *1677 *    ..
+     *1678 * "EL3 Flr (G.N3.I8)" = INTERIOR-WALL
+     *1679 *    CONSTRUCTION     = "Flr Construction"
+     *1680 *    INT-WALL-TYPE    = ADIABATIC
+     *1681 *    LOCATION         = BOTTOM
+     *1682 *    ..
+     *1683 * "EL3 SW Wall (G.N3.I9)" = INTERIOR-WALL
+     *1684 *    NEXT-TO          = "EL3 West Perim Spc (G.W4)"
+     *1685 *    CONSTRUCTION     = "IWall Construction"
+     *1686 *    LOCATION         = SPACE-V2
+     *1687 *    ..
+     *1688 * "EL3 South Wall (G.N3.I10)" = INTERIOR-WALL
+     *1689 *    NEXT-TO          = "EL3 Core Spc (G.C5)"
+     *1690 *    CONSTRUCTION     = "IWall Construction"
+     *1691 *    LOCATION         = SPACE-V3
+     *1692 *    ..
+     *1693 * "EL3 West Perim Spc (G.W4)" = SPACE
+     *1694 *    SHAPE            = POLYGON
+     *1695 *    FURNITURE-TYPE   = HEAVY
+     *1696 *    ZONE-TYPE        = CONDITIONED
+     *1697 *    PEOPLE-SCHEDULE  = "Bldg Occup Sch"
+     *1698 *    LIGHTING-SCHEDUL = ( "Bldg Lght Sch" )
+     *1699 *    EQUIP-SCHEDULE   = ( "Bldg Occup Sch" )
+     *1700 *    INF-SCHEDULE     = "ZG1-S1 (SUM) P-Inf Sch"
+     *1701 *    INF-METHOD       = AIR-CHANGE
+     *1702 *    AIR-CHANGES/HR   = 1
+     *1703 *    PEOPLE-HG-LAT    = 207.143
+     *1704 *    PEOPLE-HG-SENS   = 250
+     *1705 *    LIGHTING-W/AREA  = ( 1.5 )
+     *1706 *    EQUIPMENT-W/AREA = ( 0.9 )
+     *1707 *    AREA/PERSON      = 250
+     *1708 *    POLYGON          = "EL3 Space Polygon 4"
+     *1709 *    LOCATION         = FLOOR-V4
+     *1710 *    ..
+     *1711 * "EL3 West Wall (G.W4.E7)" = EXTERIOR-WALL
+     *1712 *    CONSTRUCTION     = "Mur Pas d’Isolation"
+     *1713 *    LOCATION         = SPACE-V1
+     *1714 *    SHADING-SURFACE  = YES
+     *1715 *    ..
+     *1716 * "EL3 West Window" = WINDOW
+     *1717 *    GLASS-TYPE    = "Combined West Glass"
+     *1718 *    MULTIPLIER    = 1.0
+     *1719 *    FRAME-WIDTH   = 0.0
+     *1720 *    X             = 22.439120606826798
+     *1721 *    Y             = 0.250000008
+     *1722 *    HEIGHT        = 9.342519983999999
+     *1723 *    WIDTH         = 20.7385587863464
+     *1724 *    OVERHANG-D    = 0.9842519999999999
+     *1725 *    FRAME-CONDUCT = 3.079
+     *1726 *    ..
+     *1727 * "EL3 Roof (G.W4.E8)" = EXTERIOR-WALL
+     *1728 *    CONSTRUCTION     = "Toit Pas d’Isolation"
+     *1729 *    LOCATION         = TOP
+     *1730 *    SHADING-SURFACE  = YES
+     *1731 *    ..
+     *1732 * "EL3 Flr (G.W4.I11)" = INTERIOR-WALL
+     *1733 *    CONSTRUCTION     = "Flr Construction"
+     *1734 *    INT-WALL-TYPE    = ADIABATIC
+     *1735 *    LOCATION         = BOTTOM
+     *1736 *    ..
+     *1737 * "EL3 East Wall (G.W4.I12)" = INTERIOR-WALL
+     *1738 *    NEXT-TO          = "EL3 Core Spc (G.C5)"
+     *1739 *    CONSTRUCTION     = "IWall Construction"
+     *1740 *    LOCATION         = SPACE-V3
+     *1741 *    ..
+     *1742 * "EL3 Core Spc (G.C5)" = SPACE
+     *1743 *    X                = 9.609357880119273
+     *1744 *    Y                = 9.609357880119273
+     *1745 *    SHAPE            = POLYGON
+     *1746 *    FURNITURE-TYPE   = HEAVY
+     *1747 *    ZONE-TYPE        = UNCONDITIONED
+     *1748 *    PEOPLE-SCHEDULE  = "Corr Occup Sch"
+     *1749 *    LIGHTING-SCHEDUL = ( "Corr Lght Sch" )
+     *1750 *    EQUIP-SCHEDULE   = ( "Corr Occup Sch" )
+     *1751 *    INF-SCHEDULE     = "Infiltration sch"
+     *1752 *    INF-METHOD       = AIR-CHANGE
+     *1753 *    AIR-CHANGES/HR   = 1
+     *1754 *    PEOPLE-HG-LAT    = 207.143
+     *1755 *    PEOPLE-HG-SENS   = 250
+     *1756 *    LIGHTING-W/AREA  = ( 1 )
+     *1757 *    EQUIPMENT-W/AREA = ( 0 )
+     *1758 *    AREA/PERSON      = 250
+     *1759 *    POLYGON          = "EL3 Space Polygon 5"
+     *1760 *    ..
+     *1761 * "EL3 Roof (G.C5.E9)" = EXTERIOR-WALL
+     *1762 *    CONSTRUCTION     = "Toit Pas d’Isolation"
+     *1763 *    LOCATION         = TOP
+     *1764 *    SHADING-SURFACE  = YES
+     *1765 *    ..
+     *1766 * "EL3 Flr (G.C5.I13)" = INTERIOR-WALL
+     *1767 *    CONSTRUCTION     = "Flr Construction"
+     *1768 *    INT-WALL-TYPE    = ADIABATIC
+     *1769 *    LOCATION         = BOTTOM
+     *1770 *    ..
+     *1771 * $ *********************************************************
+     *1772 * $ **                                                     **
+     *1773 * $ **                Performance Curves                   **
+     *1774 * $ **                                                     **
+     *1775 * $ *********************************************************
+     *1776 * $ *********************************************************
+     *1777 * $ **                                                     **
+     *1778 * $ **              Electric & Fuel Meters                 **
+     *1779 * $ **                                                     **
+     *1780 * $ *********************************************************
+     *1781 * $ ---------------------------------------------------------
+     *1782 * $              Electric Meters
+     *1783 * $ ---------------------------------------------------------
+     *1784 * $ ---------------------------------------------------------
+     *1785 * $              Fuel Meters
+     *1786 * $ ---------------------------------------------------------
+     *1787 * $ ---------------------------------------------------------
+     *1788 * $              Master Meters
+     *1789 * $ ---------------------------------------------------------
+     *1790 * "MASTER-METERS 1" = MASTER-METERS
+     *1791 *    MSTR-ELEC-METER  = "EM1"
+     *1792 *    MSTR-FUEL-METER  = "FM1"
+     *1793 *    ..
+     *   1 * $LIBRARY-ENTRY EM1                             ELEC-METER      PowerDOE Default
+     *   2 *   TYPE = UTILITY  ..
+     *   1 * $LIBRARY-ENTRY FM1                             FUEL-METER      PowerDOE Default
+     *   2 *  TYPE = NATURAL-GAS   ..
+     *1794 * $ *********************************************************
+     *1795 * $ **                                                     **
+     *1796 * $ **      HVAC Circulation Loops / Plant Equipment       **
+     *1797 * $ **                                                     **
+     *1798 * $ *********************************************************
+     *1799 * $ ---------------------------------------------------------
+     *1800 * $              Pumps
+     *1801 * $ ---------------------------------------------------------
+     *1802 * "CHW Loop Pump" = PUMP
+     *1803 *    LIBRARY-ENTRY "DEFAULT-CHW-PUMP"
+     *   1 * $LIBRARY-ENTRY DEFAULT-CHW-PUMP                PUMP            Starting Points
+     *   2 *  FLOW-RATIO 1.1  HEAD-RATIO 1.1      ..
+     *   1 * $LIBRARY-ENTRY Pump-Head-fFlow                 CURVE-FIT       Pumps
+     *   2 *   TYPE=QUADRATIC      COEF=( 1.35348310, 0.01593170,-0.36941440)
+     *   3 *   INPUT-TYPE COEFFICIENTS ..
+     *   1 * $LIBRARY-ENTRY Pump-Power-fFlow                CURVE-FIT       Pumps
+     *   2 *   TYPE=QUADRATIC      COEF=( 0.36977390, 0.84037500,-0.21014880)
+     *   3 *   INPUT-TYPE COEFFICIENTS ..
+     *1804 *    ..
+     *1805 * "HW Loop Pump" = PUMP
+     *1806 *    LIBRARY-ENTRY "DEFAULT-HW-PUMP"
+     *   1 * $LIBRARY-ENTRY DEFAULT-HW-PUMP                 PUMP            Starting Points
+     *   2 *  FLOW-RATIO 1.1  HEAD-RATIO 1.1      ..
+     *1807 *    ..
+     *1808 * $ ---------------------------------------------------------
+     *1809 * $              Heat Exchangers
+     *1810 * $ ---------------------------------------------------------
+     *1811 * $ ---------------------------------------------------------
+     *1812 * $              Circulation Loops
+     *1813 * $ ---------------------------------------------------------
+     *1814 * "Chilled Water Loop" = CIRCULATION-LOOP
+     *1815 *    TYPE             = CHW
+     *1816 *    LOOP-DESIGN-DT   = 10
+     *1817 *    PIPE-HEAD        = 21.6
+     *1818 *    LOOP-OPERATION   = STANDBY
+     *1819 *    DESIGN-COOL-T    = 44
+     *1820 *    COOL-SETPT-CTRL  = FIXED
+     *1821 *    LOOP-PUMP        = "CHW Loop Pump"
+     *1822 *    ..
+     *1823 * "Hot Water Loop" = CIRCULATION-LOOP
+     *1824 *    TYPE             = HW
+     *1825 *    LOOP-DESIGN-DT   = 40
+     *1826 *    PIPE-HEAD        = 21.6
+     *1827 *    LOOP-OPERATION   = STANDBY
+     *1828 *    DESIGN-HEAT-T    = 180
+     *1829 *    HEAT-SETPT-CTRL  = FIXED
+     *1830 *    LOOP-PUMP        = "HW Loop Pump"
+     *1831 *    ..
+     *1832 * "DHW Plant 1 Loop (1)" = CIRCULATION-LOOP
+     *1833 *    TYPE             = DHW
+     *1834 *    DESIGN-HEAT-T    = 135
+     *1835 *    PROCESS-FLOW     = ( 10.0804 )
+     *1836 *    PROCESS-SCH      = ( "DHW Sch" )
+     *1837 *    PROCESS-T        = ( 135 )
+     *1838 *    ..
+     *1839 * $ ---------------------------------------------------------
+     *1840 * $              Chillers
+     *1841 * $ ---------------------------------------------------------
+     *1842 * "Chiller1 (ElRecipHerm)" = CHILLER
+     *1843 *    TYPE             = ELEC-HERM-REC
+     *1844 *    ELEC-INPUT-RATIO = 0.3846
+     *1845 *    CHW-LOOP         = "Chilled Water Loop"
+     *1846 *    CHW-PUMP         = "DEFAULT-CHW-PUMP"
+     *1847 *    CONDENSER-TYPE   = AIR-COOLED
+     *1848 *    ..
+     *   1 * $LIBRARY-ENTRY DEFAULT-CHW-PUMP                PUMP            Starting Points
+     *   2 *  FLOW-RATIO 1.1  HEAD-RATIO 1.1      ..
+     *   1 * $LIBRARY-ENTRY RecipAir-Cap-fCHWT&DBT          CURVE-FIT       Herm Reciprocatg
+     *   2 *   TYPE = BI-QUADRATIC-T   INPUT-TYPE COEFFICIENTS
+     *   3 *   COEF = ( 0.57343906, 0.01919712, 0.00008835,
+     *   4 *           -0.00289082, 0.00000161,-0.00007873)  ..
+     *   1 * $LIBRARY-ENTRY RecipAir-EIR-fCHWT&DBT          CURVE-FIT       Herm Reciprocatg
+     *   2 *   TYPE = BI-QUADRATIC-T   INPUT-TYPE COEFFICIENTS
+     *   3 *   COEF = ( 0.46971083,-0.00361531, 0.00003854,
+     *   4 *            0.00628685, 0.00005077,-0.00010546)  ..
+     *   1 * $LIBRARY-ENTRY RecipAir-EIR-fPLR-2Comp/Ckt     CURVE-FIT       Herm Reciprocatg
+     *   2 *   TYPE = BI-QUADRATIC-RATIO&DT   INPUT-TYPE COEFFICIENTS
+     *   3 *   COEF = ( 0.04812248, 0.69573414, 0.23493890,
+     *   4 *            0.00045521,-0.00000119, 0.00002105)  ..
+     *1849 * $ ---------------------------------------------------------
+     *1850 * $              Boilers
+     *1851 * $ ---------------------------------------------------------
+     *1852 * "Boiler1 (HWNatDrft)" = BOILER
+     *1853 *    TYPE             = HW-BOILER
+     *1854 *    HEAT-INPUT-RATIO = 1.3333
+     *1855 *    HW-LOOP          = "Hot Water Loop"
+     *1856 *    HW-PUMP          = "DEFAULT-HW-PUMP"
+     *1857 *    ..
+     *   1 * $LIBRARY-ENTRY DEFAULT-HW-PUMP                 PUMP            Starting Points
+     *   2 *  FLOW-RATIO 1.1  HEAD-RATIO 1.1      ..
+     *   1 * $LIBRARY-ENTRY Atmospheric-Blr-HIR-fPLR        CURVE-FIT       Fuel Boilers
+     *   2 *   TYPE=QUADRATIC
+     *   3 *   INPUT-TYPE COEFFICIENTS
+     *   4 *   COEF=( 0.02699999, 1.10549998, -0.13249961) ..
+     *1858 * $ ---------------------------------------------------------
+     *1859 * $              Domestic Water Heaters
+     *1860 * $ ---------------------------------------------------------
+     *1861 * "DHW Plant 1 Wtr Htr (1)" = DW-HEATER
+     *1862 *    TYPE             = GAS
+     *1863 *    TANK-VOLUME      = 2839.42
+-CAUTION-------------------------- ======= ---------------------------------------------------
+-CAUTION--- VALUE GREATER THAN MAXIMUM OF 0.2000E+04
+     *1864 *    CAPACITY         = 3.78438
+     *1865 *    HIR-FPLR         = "DW-Gas-Pilotless-HIR-fPLR"
+     *1866 *    TANK-UA          = 118.309
+     *1867 *    LOCATION         = ZONE
+     *1868 *    ZONE-NAME        = "EL1 Core Zn (G.C5)"
+     *1869 *    DHW-LOOP         = "DHW Plant 1 Loop (1)"
+     *1870 *    C-RECOV-EFF      = 0.8
+     *1871 *    C-STBY-LOSS-FRAC = 1.33346
+     *1872 *    C-TANK-EXT-RVAL  = 12
+     *1873 *    ..
+     *   1 * $LIBRARY-ENTRY DW-Gas-Pilotless-HIR-fPLR       CURVE-FIT       Gas DW-Heater
+     *   2 *   TYPE=QUADRATIC      COEF=( 0, 0.99945700, 0.00054300)
+     *   3 *   INPUT-TYPE COEFFICIENTS ..
+     *1874 * $ ---------------------------------------------------------
+     *1875 * $              Heat Rejection
+     *1876 * $ ---------------------------------------------------------
+     *1877 * $ ---------------------------------------------------------
+     *1878 * $              Tower Free Cooling
+     *1879 * $ ---------------------------------------------------------
+     *1880 * $ ---------------------------------------------------------
+     *1881 * $              Photovoltaic Modules
+     *1882 * $ ---------------------------------------------------------
+     *1883 * $ ---------------------------------------------------------
+     *1884 * $              Electric Generators
+     *1885 * $ ---------------------------------------------------------
+     *1886 * $ ---------------------------------------------------------
+     *1887 * $              Thermal Storage
+     *1888 * $ ---------------------------------------------------------
+     *1889 * $ ---------------------------------------------------------
+     *1890 * $              Ground Loop Heat Exchangers
+     *1891 * $ ---------------------------------------------------------
+     *1892 * $ ---------------------------------------------------------
+     *1893 * $              Compliance DHW (residential dwelling units)
+     *1894 * $ ---------------------------------------------------------
+     *1895 * $ *********************************************************
+     *1896 * $ **                                                     **
+     *1897 * $ **            Steam & Chilled Water Meters             **
+     *1898 * $ **                                                     **
+     *1899 * $ *********************************************************
+     *1900 * $ ---------------------------------------------------------
+     *1901 * $              Steam Meters
+     *1902 * $ ---------------------------------------------------------
+     *1903 * $ ---------------------------------------------------------
+     *1904 * $              Chilled Water Meters
+     *1905 * $ ---------------------------------------------------------
+     *1906 * $ *********************************************************
+     *1907 * $ **                                                     **
+     *1908 * $ **               HVAC Systems / Zones                  **
+     *1909 * $ **                                                     **
+     *1910 * $ *********************************************************
+     *1911 * "Not Conditioned" = SYSTEM
+     *1912 *    TYPE             = SUM
+     *1913 *    HEAT-SOURCE      = NONE
+     *1914 *    SYSTEM-REPORTS   = NO
+     *1915 *    ..
+     *   1 * $LIBRARY-ENTRY Furnace-HIR-fPLR                CURVE-FIT       Furnace
+     *   2 *   TYPE=QUADRATIC      COEF=( 0.01861000, 1.09420900,-0.11281900)
+     *   3 *   INPUT-TYPE COEFFICIENTS ..
+     *1916 * "EL1 Core Zn (G.C5)" = ZONE
+     *1917 *    TYPE             = UNCONDITIONED
+     *1918 *    DESIGN-HEAT-T    = 72
+     *1919 *    DESIGN-COOL-T    = 75
+     *1920 *    SIZING-OPTION    = ADJUST-LOADS
+     *1921 *    SPACE            = "EL1 Core Spc (G.C5)"
+     *1922 *    ..
+     *1923 * "EL2 Core Zn (G.C5)" = ZONE
+     *1924 *    TYPE             = UNCONDITIONED
+     *1925 *    DESIGN-HEAT-T    = 72
+     *1926 *    DESIGN-COOL-T    = 75
+     *1927 *    SIZING-OPTION    = ADJUST-LOADS
+     *1928 *    SPACE            = "EL2 Core Spc (G.C5)"
+     *1929 *    ..
+     *1930 * "EL3 Core Zn (G.C5)" = ZONE
+     *1931 *    TYPE             = UNCONDITIONED
+     *1932 *    DESIGN-HEAT-T    = 72
+     *1933 *    DESIGN-COOL-T    = 75
+     *1934 *    SIZING-OPTION    = ADJUST-LOADS
+     *1935 *    SPACE            = "EL3 Core Spc (G.C5)"
+     *1936 *    ..
+     *1937 * "EL1 Sys1 (FanCoil) (G)" = SYSTEM
+     *1938 *    TYPE             = FC
+     *1939 *    HEATING-SCHEDULE = "Heat avail"
+     *1940 *    COOLING-SCHEDULE = "Cool avail"
+     *1941 *    HW-LOOP          = "Hot Water Loop"
+     *1942 *    CHW-LOOP         = "Chilled Water Loop"
+     *1943 *    ..
+     *   1 * $LIBRARY-ENTRY Small-CHW-Coil-Cap-fEWB&EDB     CURVE-FIT       CHW Coils
+     *   2 *   TYPE=BI-QUADRATIC-T COEF=( 0.50388665,-0.08691760, 0.00168467,
+     *   3 *                              0.03363036, 0.00024777,-0.00102968)
+     *   4 *   INPUT-TYPE COEFFICIENTS ..
+     *   1 * $LIBRARY-ENTRY Small-CHW-Sens-Cap-fEWB&EDB     CURVE-FIT       CHW Coils
+     *   2 *   TYPE=BI-QUADRATIC-T COEF=(-1.22805400,-0.03209560, 0.00043381,
+     *   3 *                              0.05749134, 0.00013737,-0.00056850)
+     *   4 *   INPUT-TYPE COEFFICIENTS ..
+     *   1 * $LIBRARY-ENTRY Small-CHW-Bypass-fAirFlow       CURVE-FIT       CHW Coils
+     *   2 *   TYPE=QUADRATIC      COEF=(-0.71778760, 1.90707820,-0.18929060)
+     *   3 *   INPUT-TYPE COEFFICIENTS ..
+     *   1 * $LIBRARY-ENTRY Small-CHW-Coil-Bypass-fEWB&EDB  CURVE-FIT       CHW Coils
+     *   2 *   TYPE=BI-QUADRATIC-T COEF=( 1.20494950,-0.00349630, 0.00011357,
+     *   3 *                             -0.00088670, 0.00000759,-0.00008548)
+     *   4 *   INPUT-TYPE COEFFICIENTS ..
+     *   1 * $LIBRARY-ENTRY Coil-Bypass-Factor-fPLR         CURVE-FIT       CHW Coils
+     *   2 *   TYPE=LINEAR         COEF=( 1.00000000, 0.00000000)
+     *   3 *   INPUT-TYPE COEFFICIENTS ..
+     *   1 * $LIBRARY-ENTRY HW-Coil-Cap-fFluidFlow          CURVE-FIT       HW Coils
+     *   2 *   TYPE=QUADRATIC      COEF=( 0.18012280, 1.38520160,-0.56532630)
+     *   3 *   INPUT-TYPE COEFFICIENTS ..
+     *   1 * $LIBRARY-ENTRY CHW-Coil-Cap-fEWB&EWT           CURVE-FIT       CHW Coils
+     *   2 *   TYPE=BI-QUADRATIC-T COEF=( 3.59810850,-0.14450110, 0.00201130,
+     *   3 *                              0.07764080, 0.00002550,-0.00181140)
+     *   4 *   INPUT-TYPE COEFFICIENTS ..
+     *   1 * $LIBRARY-ENTRY CHW-Coil-Cap-fAirFlow           CURVE-FIT       CHW Coils
+     *   2 *   TYPE=QUADRATIC      COEF=( 0.04880910, 1.37642420,-0.42523180)
+     *   3 *   INPUT-TYPE COEFFICIENTS ..
+     *   1 * $LIBRARY-ENTRY CHW-Coil-Cap-fFluidFlow         CURVE-FIT       CHW Coils
+     *   2 *   TYPE=QUADRATIC      COEF=( 0.21838700, 1.51145200,-0.72984150)
+     *   3 *   INPUT-TYPE COEFFICIENTS ..
+     *   1 * $LIBRARY-ENTRY HW-Coil-Cap-fdT                 CURVE-FIT       HW Coils
+     *   2 *   TYPE=QUADRATIC-DT   COEF=(-0.00467070, 1.00128790, 0.00338280)
+     *   3 *   INPUT-TYPE COEFFICIENTS OUTPUT-MIN = 0.01 ..
+     *   1 * $LIBRARY-ENTRY HW-Coil-Cap-fAirFlow            CURVE-FIT       HW Coils
+     *   2 *   TYPE=QUADRATIC      COEF=( 0.28863570, 1.02862550,-0.31726320)
+     *   3 *   INPUT-TYPE COEFFICIENTS ..
+     *1944 * "EL1 South Perim Zn (G.S1)" = ZONE
+     *1945 *    TYPE             = CONDITIONED
+     *1946 *    DESIGN-HEAT-T    = 72
+     *1947 *    HEAT-TEMP-SCH    = "Heat sch"
+     *1948 *    DESIGN-COOL-T    = 75
+     *1949 *    COOL-TEMP-SCH    = "Cool sch"
+     *1950 *    SIZING-OPTION    = ADJUST-LOADS
+     *1951 *    SPACE            = "EL1 South Perim Spc (G.S1)"
+     *1952 *    OA-FLOW/AREA     = 0.18
+     *1953 *    ..
+     *1954 * "EL1 East Perim Zn (G.E2)" = ZONE
+     *1955 *    TYPE             = CONDITIONED
+     *1956 *    DESIGN-HEAT-T    = 72
+     *1957 *    HEAT-TEMP-SCH    = "Heat sch"
+     *1958 *    DESIGN-COOL-T    = 75
+     *1959 *    COOL-TEMP-SCH    = "Cool sch"
+     *1960 *    SIZING-OPTION    = ADJUST-LOADS
+     *1961 *    SPACE            = "EL1 East Perim Spc (G.E2)"
+     *1962 *    OA-FLOW/AREA     = 0.18
+     *1963 *    ..
+     *1964 * "EL1 North Perim Zn (G.N3)" = ZONE
+     *1965 *    TYPE             = CONDITIONED
+     *1966 *    DESIGN-HEAT-T    = 72
+     *1967 *    HEAT-TEMP-SCH    = "Heat sch"
+     *1968 *    DESIGN-COOL-T    = 75
+     *1969 *    COOL-TEMP-SCH    = "Cool sch"
+     *1970 *    SIZING-OPTION    = ADJUST-LOADS
+     *1971 *    SPACE            = "EL1 North Perim Spc (G.N3)"
+     *1972 *    OA-FLOW/AREA     = 0.18
+     *1973 *    ..
+     *1974 * "EL1 West Perim Zn (G.W4)" = ZONE
+     *1975 *    TYPE             = CONDITIONED
+     *1976 *    DESIGN-HEAT-T    = 72
+     *1977 *    HEAT-TEMP-SCH    = "Heat sch"
+     *1978 *    DESIGN-COOL-T    = 75
+     *1979 *    COOL-TEMP-SCH    = "Cool sch"
+     *1980 *    SIZING-OPTION    = ADJUST-LOADS
+     *1981 *    SPACE            = "EL1 West Perim Spc (G.W4)"
+     *1982 *    OA-FLOW/AREA     = 0.18
+     *1983 *    ..
+     *1984 * "EL2 Sys1 (FanCoil) (G)" = SYSTEM
+     *1985 *    TYPE             = FC
+     *1986 *    HEATING-SCHEDULE = "Heat avail"
+     *1987 *    COOLING-SCHEDULE = "Cool avail"
+     *1988 *    HW-LOOP          = "Hot Water Loop"
+     *1989 *    CHW-LOOP         = "Chilled Water Loop"
+     *1990 *    ..
+     *1991 * "EL2 South Perim Zn (G.S1)" = ZONE
+     *1992 *    TYPE             = CONDITIONED
+     *1993 *    DESIGN-HEAT-T    = 72
+     *1994 *    HEAT-TEMP-SCH    = "Heat sch"
+     *1995 *    DESIGN-COOL-T    = 75
+     *1996 *    COOL-TEMP-SCH    = "Cool sch"
+     *1997 *    SIZING-OPTION    = ADJUST-LOADS
+     *1998 *    SPACE            = "EL2 South Perim Spc (G.S1)"
+     *1999 *    OA-FLOW/AREA     = 0.18
+     *2000 *    ..
+     *2001 * "EL2 East Perim Zn (G.E2)" = ZONE
+     *2002 *    TYPE             = CONDITIONED
+     *2003 *    DESIGN-HEAT-T    = 72
+     *2004 *    HEAT-TEMP-SCH    = "Heat sch"
+     *2005 *    DESIGN-COOL-T    = 75
+     *2006 *    COOL-TEMP-SCH    = "Cool sch"
+     *2007 *    SIZING-OPTION    = ADJUST-LOADS
+     *2008 *    SPACE            = "EL2 East Perim Spc (G.E2)"
+     *2009 *    OA-FLOW/AREA     = 0.18
+     *2010 *    ..
+     *2011 * "EL2 North Perim Zn (G.N3)" = ZONE
+     *2012 *    TYPE             = CONDITIONED
+     *2013 *    DESIGN-HEAT-T    = 72
+     *2014 *    HEAT-TEMP-SCH    = "Heat sch"
+     *2015 *    DESIGN-COOL-T    = 75
+     *2016 *    COOL-TEMP-SCH    = "Cool sch"
+     *2017 *    SIZING-OPTION    = ADJUST-LOADS
+     *2018 *    SPACE            = "EL2 North Perim Spc (G.N3)"
+     *2019 *    OA-FLOW/AREA     = 0.18
+     *2020 *    ..
+     *2021 * "EL2 West Perim Zn (G.W4)" = ZONE
+     *2022 *    TYPE             = CONDITIONED
+     *2023 *    DESIGN-HEAT-T    = 72
+     *2024 *    HEAT-TEMP-SCH    = "Heat sch"
+     *2025 *    DESIGN-COOL-T    = 75
+     *2026 *    COOL-TEMP-SCH    = "Cool sch"
+     *2027 *    SIZING-OPTION    = ADJUST-LOADS
+     *2028 *    SPACE            = "EL2 West Perim Spc (G.W4)"
+     *2029 *    OA-FLOW/AREA     = 0.18
+     *2030 *    ..
+     *2031 * "EL3 Sys1 (FanCoil) (G)" = SYSTEM
+     *2032 *    TYPE             = FC
+     *2033 *    HEATING-SCHEDULE = "Heat avail"
+     *2034 *    COOLING-SCHEDULE = "Cool avail"
+     *2035 *    HW-LOOP          = "Hot Water Loop"
+     *2036 *    CHW-LOOP         = "Chilled Water Loop"
+     *2037 *    ..
+     *2038 * "EL3 South Perim Zn (G.S1)" = ZONE
+     *2039 *    TYPE             = CONDITIONED
+     *2040 *    DESIGN-HEAT-T    = 72
+     *2041 *    HEAT-TEMP-SCH    = "Heat sch"
+     *2042 *    DESIGN-COOL-T    = 75
+     *2043 *    COOL-TEMP-SCH    = "Cool sch"
+     *2044 *    SIZING-OPTION    = ADJUST-LOADS
+     *2045 *    SPACE            = "EL3 South Perim Spc (G.S1)"
+     *2046 *    OA-FLOW/AREA     = 0.18
+     *2047 *    ..
+     *2048 * "EL3 East Perim Zn (G.E2)" = ZONE
+     *2049 *    TYPE             = CONDITIONED
+     *2050 *    DESIGN-HEAT-T    = 72
+     *2051 *    HEAT-TEMP-SCH    = "Heat sch"
+     *2052 *    DESIGN-COOL-T    = 75
+     *2053 *    COOL-TEMP-SCH    = "Cool sch"
+     *2054 *    SIZING-OPTION    = ADJUST-LOADS
+     *2055 *    SPACE            = "EL3 East Perim Spc (G.E2)"
+     *2056 *    OA-FLOW/AREA     = 0.18
+     *2057 *    ..
+     *2058 * "EL3 North Perim Zn (G.N3)" = ZONE
+     *2059 *    TYPE             = CONDITIONED
+     *2060 *    DESIGN-HEAT-T    = 72
+     *2061 *    HEAT-TEMP-SCH    = "Heat sch"
+     *2062 *    DESIGN-COOL-T    = 75
+     *2063 *    COOL-TEMP-SCH    = "Cool sch"
+     *2064 *    SIZING-OPTION    = ADJUST-LOADS
+     *2065 *    SPACE            = "EL3 North Perim Spc (G.N3)"
+     *2066 *    OA-FLOW/AREA     = 0.18
+     *2067 *    ..
+     *2068 * "EL3 West Perim Zn (G.W4)" = ZONE
+     *2069 *    TYPE             = CONDITIONED
+     *2070 *    DESIGN-HEAT-T    = 72
+     *2071 *    HEAT-TEMP-SCH    = "Heat sch"
+     *2072 *    DESIGN-COOL-T    = 75
+     *2073 *    COOL-TEMP-SCH    = "Cool sch"
+     *2074 *    SIZING-OPTION    = ADJUST-LOADS
+     *2075 *    SPACE            = "EL3 West Perim Spc (G.W4)"
+     *2076 *    OA-FLOW/AREA     = 0.18
+     *2077 *    ..
+     *2078 * $ *********************************************************
+     *2079 * $ **                                                     **
+     *2080 * $ **                Metering & Misc HVAC                 **
+     *2081 * $ **                                                     **
+     *2082 * $ *********************************************************
+     *2083 * $ ---------------------------------------------------------
+     *2084 * $              Equipment Controls
+     *2085 * $ ---------------------------------------------------------
+     *2086 * "Equipment Control 1" = EQUIP-CTRL
+     *2087 *    TYPE             = HEATING
+     *2088 *    CIRCULATION-LOOP = "Hot Water Loop"
+     *2089 *    BOILERS-1        = ( "Boiler1 (HWNatDrft)", "Boiler1 (HWNatDrft)" )
+     *2090 *    ..
+     *2091 * $ ---------------------------------------------------------
+     *2092 * $              Load Management
+     *2093 * $ ---------------------------------------------------------
+     *2094 * $ *********************************************************
+     *2095 * $ **                                                     **
+     *2096 * $ **                    Utility Rates                    **
+     *2097 * $ **                                                     **
+     *2098 * $ *********************************************************
+     *2099 * $ ---------------------------------------------------------
+     *2100 * $              Ratchets
+     *2101 * $ ---------------------------------------------------------
+     *2102 * $ ---------------------------------------------------------
+     *2103 * $              Block Charges
+     *2104 * $ ---------------------------------------------------------
+     *2105 * "Cust 1 Elec Energy Blk1" = BLOCK-CHARGE
+     *2106 *    BLOCK-SCH        = "Cust 1 Elec Season Sched"
+     *2107 *    SCH-FLAG         = 1
+     *2108 *    BLOCKS-ARE       = INCREMENTAL
+     *2109 *    BLOCK1-TYPE      = ENERGY
+     *2110 *    BLOCKS-1         = ( 1 )
+     *2111 *    COSTS-1          = ( 1 )
+     *2112 *    ..
+     *2113 * "Custom Gas Energy Blk1" = BLOCK-CHARGE
+     *2114 *    BLOCK-SCH        = "Custom Gas Season Sched"
+     *2115 *    SCH-FLAG         = 1
+     *2116 *    BLOCKS-ARE       = INCREMENTAL
+     *2117 *    BLOCK1-TYPE      = ENERGY
+     *2118 *    BLOCKS-1         = ( 1 )
+     *2119 *    COSTS-1          = ( 0.094 )
+     *2120 *    ..
+     *2121 * $ ---------------------------------------------------------
+     *2122 * $              Utility Rates
+     *2123 * $ ---------------------------------------------------------
+     *2124 * "Custom Elec Rate" = UTILITY-RATE
+     *2125 *    TYPE             = ELECTRICITY
+     *2126 *    BLOCK-CHARGES    = ( "Cust 1 Elec Energy Blk1" )
+     *2127 *    ..
+     *2128 * "Custom Gas Rate" = UTILITY-RATE
+     *2129 *    TYPE             = NATURAL-GAS
+     *2130 *    BLOCK-CHARGES    = ( "Custom Gas Energy Blk1" )
+     *2131 *    ..
+     *2132 * $ *********************************************************
+     *2133 * $ **                                                     **
+     *2134 * $ **                 Output Reporting                    **
+     *2135 * $ **                                                     **
+     *2136 * $ *********************************************************
+     *2137 * $ ---------------------------------------------------------
+     *2138 * $              Loads Non-Hourly Reporting
+     *2139 * $ ---------------------------------------------------------
+     *2140 * LOADS-REPORT
+     *2141 *    VERIFICATION     = ( ALL-VERIFICATION )
+     *2142 *    SUMMARY          = ( ALL-SUMMARY )
+     *2143 *    ..
+     *2144 * $ ---------------------------------------------------------
+     *2145 * $              Systems Non-Hourly Reporting
+     *2146 * $ ---------------------------------------------------------
+     *2147 * SYSTEMS-REPORT
+     *2148 *    VERIFICATION     = ( ALL-VERIFICATION )
+     *2149 *    SUMMARY          = ( ALL-SUMMARY )
+     *2150 *    ..
+     *2151 * $ ---------------------------------------------------------
+     *2152 * $              Plant Non-Hourly Reporting
+     *2153 * $ ---------------------------------------------------------
+     *2154 * PLANT-REPORT
+     *2155 *    VERIFICATION     = ( ALL-VERIFICATION )
+     *2156 *    SUMMARY          = ( ALL-SUMMARY )
+     *2157 *    ..
+     *2158 * $ ---------------------------------------------------------
+     *2159 * $              Economics Non-Hourly Reporting
+     *2160 * $ ---------------------------------------------------------
+     *2161 * ECONOMICS-REPORT
+     *2162 *    VERIFICATION     = ( ALL-VERIFICATION )
+     *2163 *    SUMMARY          = ( ALL-SUMMARY )
+     *2164 *    ..
+     *2165 * $ ---------------------------------------------------------
+     *2166 * $              Hourly Reporting
+     *2167 * $ ---------------------------------------------------------
+     *2168 * "Hourly Report" = HOURLY-REPORT
+     *2169 *    LIBRARY-ENTRY "Hourly Report"
+     *   1 * $LIBRARY-ENTRY Hourly Report                   HOURLY-REPORT   Hourly Reports
+     *   2 *    REPORT-SCHEDULE = "Hourly Report Schedule"
+     *   3 *    REPORT-BLOCK = ( "EM1 Hourly Report Block", "FM1 Hourly Report Block" ) ..
+     *   1 * $LIBRARY-ENTRY Hourly Report Schedule          SCHEDULE-PD     Hourly Reports
+     *   2 *    TYPE=ON/OFF
+     *   3 *    MONTH=(12) DAY=(31) WEEK-SCHEDULES  =("Hourly Report Week Sched") ..
+     *   1 * $LIBRARY-ENTRY EM1 Hourly Report Block         REPORT-BLOCK    Hourly Reports
+     *   2 *    VARIABLE-TYPE = "EM1"
+     *   3 *    VARIABLE-LIST = ( 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 20 ) ..
+     *   1 * $LIBRARY-ENTRY FM1 Hourly Report Block         REPORT-BLOCK    Hourly Reports
+     *   2 *    VARIABLE-TYPE = "FM1"
+     *   3 *    VARIABLE-LIST = ( 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 20 ) ..
+     *   1 * $LIBRARY-ENTRY Hourly Report Week Sched        WEEK-SCHEDULE-PDHourly Reports
+     *   2 *    TYPE=ON/OFF
+     *   3 *    DAY-SCHEDULES=("Hourly Report Day Sched") ..
+     *   1 * $LIBRARY-ENTRY Hourly Report Day Sched         DAY-SCHEDULE-PD Hourly Reports
+     *   2 *    TYPE=ON/OFF VALUES=(1) ..
+     *2170 *    ..
+     *2171 * $ ---------------------------------------------------------
+     *2172 * $              THE END
+     *2173 * $ ---------------------------------------------------------
+     *2174 * END ..Office_Building                                                                            1/19/2017     1:30:46  BDL  RUN 1
+                                                                                                                        
+REPORT- LV-K  WEIGHTING FACTOR SUMMARY
+----------------------------------------------------------------------------------------------------------------------------------
+
+SP NAME--   EL1 South Perim  EL1 East Perim S EL1 North Perim  EL1 West Perim S EL1 Core Spc (G. EL2 South Perim  EL2 East Perim S
+            Spc (G.S1)       pc (G.E2)        Spc (G.N3)       pc (G.W4)        C5)              Spc (G.S1)       pc (G.E2)       
+
+SOLAR
+-----
+V0           0.22720          0.15267          0.15936          0.15478          0.16286          0.18363          0.11627
+V1          -0.28127         -0.16526         -0.17255         -0.16753         -0.17511         -0.21022         -0.10866
+V2           0.06125          0.01940          0.02153          0.01967          0.01911          0.04456          0.00795
+W1           1.66593          1.68749          1.66222          1.68818          1.70838          1.59556          1.62117
+W2          -0.67493         -0.69662         -0.67325         -0.69730         -0.71615         -0.61626         -0.64030
+
+GENERAL
+LIGHTING
+--------
+V0           0.27320          0.16558          0.18137          0.17478          0.16274          0.24616          0.14484
+V1          -0.25867         -0.13928         -0.15904         -0.15085         -0.13066         -0.26134         -0.13328
+V2           0.04828          0.01530          0.02020          0.01869          0.00871          0.05638          0.01523
+W1           1.31115          1.42850          1.41001          1.42970          1.45115          1.42417          1.53303
+W2          -0.38875         -0.48424         -0.46553         -0.48510         -0.49718         -0.47206         -0.56672
+
+TASK
+LIGHTING
+--------
+V0           0.27320          0.16558          0.18137          0.17478          0.16274          0.24616          0.14484
+V1          -0.25867         -0.13928         -0.15904         -0.15085         -0.13066         -0.26134         -0.13328
+V2           0.04828          0.01530          0.02020          0.01869          0.00871          0.05638          0.01523
+W1           1.31115          1.42850          1.41001          1.42970          1.45115          1.42417          1.53303
+W2          -0.38875         -0.48424         -0.46553         -0.48510         -0.49718         -0.47206         -0.56672
+
+PEOPLE-
+EQUIPMENT
+---------
+V0           0.27320          0.16558          0.18137          0.17478          0.16274          0.24616          0.14484
+V1          -0.25867         -0.13928         -0.15904         -0.15085         -0.13066         -0.26134         -0.13328
+V2           0.04828          0.01530          0.02020          0.01869          0.00871          0.05638          0.01523
+W1           1.31115          1.42850          1.41001          1.42970          1.45115          1.42417          1.53303
+W2          -0.38875         -0.48424         -0.46553         -0.48510         -0.49718         -0.47206         -0.56672
+
+CONDUCTION
+----------
+V0           0.55545          0.48963          0.49928          0.49525          0.48820          0.53891          0.47694
+V1          -0.66740         -0.63995         -0.64485         -0.64749         -0.64396         -0.71292         -0.67687
+V2           0.18050          0.19741          0.19314          0.19982          0.19859          0.21781          0.22940
+W1           1.31115          1.42850          1.41001          1.42970          1.45115          1.42417          1.53303
+W2          -0.38875         -0.48424         -0.46553         -0.48510         -0.49718         -0.47206         -0.56672
+
+AIR
+TEMP     (BTU/HR-SQFT-F   )
+----
+G0*          1.11395          1.20385          1.21149          1.23216          0.79606          1.29220          1.36341
+G1*         -1.96421         -2.07701         -2.08806         -2.12655         -1.38720         -2.27074         -2.35922
+G2*          0.85621          0.87560          0.87992          0.89686          0.59312          0.98266          0.99692
+G3*         -0.00596         -0.00244         -0.00336         -0.00248         -0.00198         -0.00411         -0.00111
+P1          -1.57751         -1.55768         -1.55786         -1.55912         -1.59632         -1.61528         -1.59672
+P2           0.61000          0.59295          0.59088          0.59412          0.62239          0.63800          0.62189Office_Building                                                                            1/19/2017     1:30:46  BDL  RUN 1
+                                                                                                                        
+REPORT- LV-K  WEIGHTING FACTOR SUMMARY
+---------------------------------------------------------------------------------------------------------------(CONTINUED)--------
+
+SP NAME--   EL2 North Perim  EL2 West Perim S EL2 Core Spc (G. EL3 South Perim  EL3 East Perim S EL3 North Perim  EL3 West Perim S
+            Spc (G.N3)       pc (G.W4)        C5)              Spc (G.S1)       pc (G.E2)        Spc (G.N3)       pc (G.W4)       
+
+SOLAR
+-----
+V0           0.12194          0.11779          0.12136          0.15810          0.11284          0.11703          0.11414
+V1          -0.11550         -0.11008         -0.11454         -0.17175         -0.10476         -0.10963         -0.10595
+V2           0.01005          0.00805          0.00748          0.03156          0.00808          0.00943          0.00817
+W1           1.59987          1.62190          1.65430          1.57741          1.59632          1.58072          1.59682
+W2          -0.61979         -0.64091         -0.66861         -0.60029         -0.61797         -0.60293         -0.61839
+
+GENERAL
+LIGHTING
+--------
+V0           0.15975          0.15353          0.12445          0.21631          0.14056          0.15198          0.14716
+V1          -0.15057         -0.14532         -0.10712         -0.22047         -0.12442         -0.13805         -0.13325
+V2           0.02052          0.01914          0.00514          0.04316          0.01237          0.01635          0.01511
+W1           1.49332          1.53473          1.57873          1.41684          1.49733          1.47044          1.49843
+W2          -0.52962         -0.56809         -0.60120         -0.46788         -0.53695         -0.51158         -0.53780
+
+TASK
+LIGHTING
+--------
+V0           0.15975          0.15353          0.12445          0.21631          0.14056          0.15198          0.14716
+V1          -0.15057         -0.14532         -0.10712         -0.22047         -0.12442         -0.13805         -0.13325
+V2           0.02052          0.01914          0.00514          0.04316          0.01237          0.01635          0.01511
+W1           1.49332          1.53473          1.57873          1.41684          1.49733          1.47044          1.49843
+W2          -0.52962         -0.56809         -0.60120         -0.46788         -0.53695         -0.51158         -0.53780
+
+PEOPLE-
+EQUIPMENT
+---------
+V0           0.15975          0.15353          0.12445          0.21631          0.14056          0.15198          0.14716
+V1          -0.15057         -0.14532         -0.10712         -0.22047         -0.12442         -0.13805         -0.13325
+V2           0.02052          0.01914          0.00514          0.04316          0.01237          0.01635          0.01511
+W1           1.49332          1.53473          1.57873          1.41684          1.49733          1.47044          1.49843
+W2          -0.52962         -0.56809         -0.60120         -0.46788         -0.53695         -0.51158         -0.53780
+
+CONDUCTION
+----------
+V0           0.48606          0.48225          0.46479          0.52059          0.47424          0.48123          0.47828
+V1          -0.67202         -0.68490         -0.67916         -0.68497         -0.65746         -0.65536         -0.66329
+V2           0.21822          0.23232          0.23684          0.20806          0.21604          0.20863          0.21805
+W1           1.49332          1.53473          1.57873          1.41684          1.49733          1.47044          1.49844
+W2          -0.52962         -0.56809         -0.60120         -0.46788         -0.53695         -0.51158         -0.53781
+
+AIR
+TEMP     (BTU/HR-SQFT-F   )
+----
+G0*          1.38058          1.39662          0.97879          1.46705          1.54655          1.56045          1.57596
+G1*         -2.37246         -2.41733         -1.68790         -2.54942         -2.65852         -2.66991         -2.70947
+G2*          0.99385          1.02184          0.70966          1.08681          1.11368          1.11200          1.13524
+G3*         -0.00197         -0.00113         -0.00055         -0.00445         -0.00171         -0.00254         -0.00173
+P1          -1.58756         -1.59812         -1.62553         -1.58378         -1.57299         -1.56730         -1.57397
+P2           0.61210          0.62305          0.64303          0.61108          0.60188          0.59535          0.60267Office_Building                                                                            1/19/2017     1:30:46  BDL  RUN 1
+                                                                                                                        
+REPORT- LV-K  WEIGHTING FACTOR SUMMARY
+---------------------------------------------------------------------------------------------------------------(CONTINUED)--------
+
+SP NAME--   EL3 Core Spc (G.
+            C5)             
+
+SOLAR
+-----
+V0           0.11561
+V1          -0.10819
+V2           0.00842
+W1           1.60291
+W2          -0.62223
+
+GENERAL
+LIGHTING
+--------
+V0           0.12492
+V1          -0.10472
+V2           0.00514
+W1           1.51756
+W2          -0.54974
+
+TASK
+LIGHTING
+--------
+V0           0.12492
+V1          -0.10472
+V2           0.00514
+W1           1.51756
+W2          -0.54974
+
+PEOPLE-
+EQUIPMENT
+---------
+V0           0.12492
+V1          -0.10472
+V2           0.00514
+W1           1.51756
+W2          -0.54974
+
+CONDUCTION
+----------
+V0           0.46484
+V1          -0.65353
+V2           0.21669
+W1           1.51756
+W2          -0.54974
+
+AIR
+TEMP     (BTU/HR-SQFT-F   )
+----
+G0*          1.12483
+G1*         -1.92615
+G2*          0.80248
+G3*         -0.00115
+P1          -1.58749
+P2           0.61104
+-CAUTION--------------------------------------------------------------------------------------NO COOLING TOWER DEFINED, DEFAULT USED  
+     *2175 * COMPUTE ..
+     *2176 * STOP ..

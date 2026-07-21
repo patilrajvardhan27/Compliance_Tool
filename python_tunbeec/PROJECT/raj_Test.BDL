@@ -1,0 +1,62 @@
+
+
+                                   ***     ***     *   *   ***   ****     ***      ***   *   *
+                                    *       *      *   *    *    *   *   *       *       *   *
+                                    *       *      *****    *    ****     ***    *       *****
+                                 *  *    *  *      *   *    *    *  *        *   *       *   *
+                                  **      **       *   *   ***   *   *    ***      ***   *   *
+
+                                      ****     ***    *****          ***       *** 
+                                      *   *   *   *   *             *   *     *   *
+                                      *   *   *   *   *****   ***      *         * 
+                                      *   *   *   *   *              **        **  
+                                      ****     ***    *****         *****  *  *****
+
+
+                                  B U I L D I N G  E N E R G Y  A N A L Y S I S  P R O G R A M
+
+
+                                                         DEVELOPED BY
+
+                                  E. O. LAWRENCE BERKELEY LABORATORY/UNIVERSITY OF CALIFORNIA
+                                                              AND         
+                                          JAMES J. HIRSCH & ASSOCIATES, CAMARILLO, CA
+
+
+                                                    WITH MAJOR SUPPORT FROM
+
+                                               UNITED STATES DEPARTMENT OF ENERGY
+                                  ASSISTANT SECRETARY FOR ENERGY EFFICIENCY AND RENEWABLE ENERGY
+                                                 OFFICE OF BUILDING TECHNOLOGIES
+                                                   OFFICE OF BUILDING SYSTEMS
+                                                              AND         
+                                                ELECTRIC POWER RESEARCH INSTITUTE
+                                                     CUSTOMER SYSTEMS GROUP
+
+                                                   AND ADDITIONAL SUPPORT FROM
+
+                                  SOUTHERN CALIFORNIA EDISON CO., PACIFIC GAS AND ELECTRIC CO.
+                             U.S. ENVIRONMENTAL PROTECTION AGENCY, BRITISH COLUMBIA BUILDINGS CORP.
+
+                                   COPYRIGHT (c) 1997 REGENTS OF THE UNIVERSITY OF CALIFORNIA,
+                                     E. O. LAWRENCE BERKELEY LABORATORY AND JAMES J. HIRSCH.
+                                                       ALL RIGHTS RESERVED.
+
+
+                       *************************   L E G A L   N O T I C E   ***************************
+                       *                                                                               *
+                       *    THIS PROGRAM WAS PREPARED AS AN ACCOUNT OF WORK SPONSORED BY THE UNITED    *
+                       *    STATES GOVERNMENT AND OTHERS. NEITHER THE UNITED STATES NOR THE DEPART-    *
+                       *    MENT OF  ENERGY,  NOR JAMES J. HIRSCH,  NOR OTHER SPONSORS,  NOR ANY OF    *
+                       *    THEIR EMPLOYEES, NOR ANY OF THEIR CONTRACTORS, SUBCONTRACTORS, OR THEIR    *
+                       *    EMPLOYEES MAKES ANY  WARRANTY, EXPRESS OR IMPLIED, OR ASSUMES ANY LEGAL    *
+                       *    LIABILITY OR  RESPONSIBILITY FOR  THE ACCURACY, COMPLETENESS OR USEFUL-    *
+                       *    NESS OF ANY DATA OR RESULTS  PRESENTED, APPARATUS, INFORMATION, PRODUCT    *
+                       *    OR PROCESS  DISCLOSED,  OR REPRESENTS  THAT ITS USE  WOULD NOT INFRINGE    *
+                       *    PRIVATELY OWNED RIGHTS.                                                    *
+                       *                                                                               *
+                       *********************************************************************************
+                                     FIRST RELEASED IN 1997  version : DOE-2.2-47h2
+
+                                   This JJHirsch DOE-2.2 was released in May 2010.
+             Copyright (c) UC/LBNL (pending USDOE approval) and James J. Hirsch, 1996-2010.  All Rights Reserved.

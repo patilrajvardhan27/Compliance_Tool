@@ -1,0 +1,45 @@
+extWallConstEastU: 1.63
+glassType4U: 
+REPORT_CONNECTION: org.sqlite.SQLiteConnection@1cae7bcd
+extWallConstSouthU: 1.63
+JASPER_REPORT: net.sf.jasperreports.engine.JasperReport@62487ac4
+REPORT_TIME_ZONE: sun.util.calendar.ZoneInfo[id="America/Denver",offset=-25200000,dstSavings=3600000,useDaylight=true,transitions=157,lastRule=java.util.SimpleTimeZone[id=America/Denver,offset=-25200000,dstSavings=3600000,useDaylight=true,startYear=0,startMode=3,startMonth=2,startDay=8,startDayOfWeek=1,startTime=7200000,startTimeMode=0,endMode=3,endMonth=10,endDay=1,endDayOfWeek=1,endTime=7200000,endTimeMode=0]]
+logoDir: C:\Users\Benjamin Park\workspace\tunbeec_gui_exp\image
+bldgAddress: bâtiment Tunis
+cEnergy: 101.7
+extWallConstWestU: 1.63
+glassType2U: 1.3
+result: Pas Conforme
+hEnergy: 105.0
+REPORT_PARAMETERS_MAP: {extWallConstEastU=1.63, glassType4U=, REPORT_CONNECTION=org.sqlite.SQLiteConnection@1cae7bcd, extWallConstSouthU=1.63, JASPER_REPORT=net.sf.jasperreports.engine.JasperReport@62487ac4, REPORT_TIME_ZONE=sun.util.calendar.ZoneInfo[id="America/Denver",offset=-25200000,dstSavings=3600000,useDaylight=true,transitions=157,lastRule=java.util.SimpleTimeZone[id=America/Denver,offset=-25200000,dstSavings=3600000,useDaylight=true,startYear=0,startMode=3,startMonth=2,startDay=8,startDayOfWeek=1,startTime=7200000,startTimeMode=0,endMode=3,endMonth=10,endDay=1,endDayOfWeek=1,endTime=7200000,endTimeMode=0]], logoDir=C:\Users\Benjamin Park\workspace\tunbeec_gui_exp\image, bldgAddress=bâtiment Tunis, cEnergy=101.7, extWallConstWestU=1.63, glassType2U=1.3, result=Pas Conforme, hEnergy=105.0, REPORT_PARAMETERS_MAP=(this Map), aLoad=1277.3, bldgSector=Private, glassType2SC=0.84, glassType5U=, minClass=Class 5, IS_IGNORE_PAGINATION=false, glassType3SC=, glassType4SC=, glassType5SC=, roofConstU=3.17, aSrcEnergy=410.2, glassType1SC=0.95, REPORT_LOCALE=en_US, aCO2=228.5, bldgType=Bureaux, bldgLoc=TUNIS, glassType1U=1.89, bldgClass=Class 8, glassType3U=, JASPER_REPORTS_CONTEXT=net.sf.jasperreports.engine.DefaultJasperReportsContext@3462f1ee, bldgName=Bâtiment, aEnergy=206.7, extWallConstNorthU=1.63, bldgBecTh=1277.3, hLoad=1034.0, bldgStar=null, REPORT_FORMAT_FACTORY=net.sf.jasperreports.engine.util.DefaultFormatFactory@218828b2, minBecTh=125.0, bldgCategory=Commercial, extWallConstU=1.63, cLoad=243.3}
+aLoad: 1277.3
+bldgSector: Private
+glassType2SC: 0.84
+glassType5U: 
+minClass: Class 5
+IS_IGNORE_PAGINATION: false
+glassType3SC: 
+glassType4SC: 
+glassType5SC: 
+roofConstU: 3.17
+aSrcEnergy: 410.2
+glassType1SC: 0.95
+REPORT_LOCALE: en_US
+aCO2: 228.5
+bldgType: Bureaux
+bldgLoc: TUNIS
+glassType1U: 1.89
+bldgClass: Class 8
+glassType3U: 
+JASPER_REPORTS_CONTEXT: net.sf.jasperreports.engine.DefaultJasperReportsContext@3462f1ee
+bldgName: Bâtiment
+aEnergy: 206.7
+extWallConstNorthU: 1.63
+bldgBecTh: 1277.3
+hLoad: 1034.0
+bldgStar: null
+REPORT_FORMAT_FACTORY: net.sf.jasperreports.engine.util.DefaultFormatFactory@218828b2
+minBecTh: 125.0
+bldgCategory: Commercial
+extWallConstU: 1.63
+cLoad: 243.3
