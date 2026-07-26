@@ -11,13 +11,14 @@ import traceback
 from pathlib import Path
 
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
     QAbstractItemView, QButtonGroup, QComboBox, QDoubleSpinBox, QFileDialog, QFormLayout, QGroupBox,
     QHBoxLayout, QLabel, QLineEdit, QMainWindow, QMessageBox, QPushButton, QRadioButton, QSpinBox,
     QTableWidget, QTableWidgetItem, QTabWidget, QVBoxLayout, QWidget,
 )
 
-from tunbeec.app_paths import DEFAULT_DB_PATH, DOE22_DIR, PROJECT_DIR
+from tunbeec.app_paths import DEFAULT_DB_PATH, DOE22_DIR, IMAGE_DIR, PROJECT_DIR
 from tunbeec.app_state import apply_building_type_defaults, new_building_input, populate_space_rows
 from tunbeec.calc.bldg_info import calc_bldg_geometry
 from tunbeec.calc.performance import generate_bdl, resolve_envelope_info, run_doe22, write_inp
@@ -67,6 +68,9 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("TUNBEEC")
         self.resize(900, 680)
+        icon_path = IMAGE_DIR / "CU.ico"
+        if icon_path.exists():
+            self.setWindowIcon(QIcon(str(icon_path)))
 
         self.ref = ReferenceData(DEFAULT_DB_PATH)
         self.bi: BuildingInput = new_building_input(self.ref)
@@ -737,6 +741,9 @@ class MainWindow(QMainWindow):
 def main():
     from PySide6.QtWidgets import QApplication
     app = QApplication(sys.argv)
+    icon_path = IMAGE_DIR / "CU.ico"
+    if icon_path.exists():
+        app.setWindowIcon(QIcon(str(icon_path)))
     win = MainWindow()
     win.show()
     sys.exit(app.exec())
