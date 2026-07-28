@@ -11,7 +11,7 @@ import traceback
 from pathlib import Path
 
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QIcon
+from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtWidgets import (
     QAbstractItemView, QButtonGroup, QComboBox, QDoubleSpinBox, QFileDialog, QFormLayout, QGroupBox,
     QHBoxLayout, QLabel, QLineEdit, QMainWindow, QMessageBox, QPushButton, QRadioButton, QSpinBox,
@@ -52,6 +52,44 @@ for _s in _POLYGON_SHAPES:
 _HOT_WATER_SYSTEMS = ["Tankless Electric DHW System", "Tank Gas-fired DHW System"]
 _SKYLIGHT_TYPES = ["None", "Flat", "Dome"]
 _FIRST_FLOOR_CONTACTS = ["Ground", "Conditioned Space", "Unconditioned Space"]
+
+# Illustrations bundled from the original Java app (resources/image/) -- shape name -> filename.
+_SHAPE_IMAGE_FILES = {
+    "Rectangular": "Rectangular.jpg",
+    "L-Shape": "L-Shape.jpg",
+    "T-Shape": "T-Shape.jpg",
+    "U-Shape": "U-Shape.jpg",
+    "Hexagon": "Hexagon-Shape.jpg",
+    "Octagon": "Octagon-Shape.jpg",
+    "Decagon": "Decagon-Shape.jpg",
+    "Dodecagon": "Dodecagon-Shape.jpg",
+    "Hexadecagon": "Hexadecagon-Shape.jpg",
+    "Octadecagon": "Octadecagon-Shape.jpg",
+}
+
+# HVAC system name (as stored in the reference DB, see Bldg_System) -> illustration filename.
+_HVAC_SYSTEM_IMAGE_FILES = {
+    "Packaged Variable Air Volume System": "PackagedVAV.jpg",
+    "Split System with Baseboard": "SplitSystem.jpg",
+    "Residential System": "ResidentialSystem.jpg",
+    "Fan Coil System": "FancoilSystem.jpg",
+    "Central Variable Air Volume System": "VavSystem.jpg",
+}
+
+_SHADING_IMAGE_FILE = "fp.jpg"
+
+
+def _set_illustration(label: QLabel, filename: str) -> None:
+    """Load resources/image/<filename> into `label`, scaled to fit while preserving aspect ratio."""
+    path = IMAGE_DIR / filename
+    pixmap = QPixmap(str(path)) if path.exists() else QPixmap()
+    if pixmap.isNull():
+        label.clear()
+        label.setText(f"[missing illustration: {filename}]" if filename else "")
+        return
+    label.setPixmap(pixmap.scaled(
+        260, 220, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation,
+    ))
 
 
 def _float_field(default=0.0, decimals=3, maximum=100000.0) -> QDoubleSpinBox:
@@ -145,7 +183,14 @@ class MainWindow(QMainWindow):
         v.addWidget(gb_use)
 
         gb_shape = QGroupBox("Building Shape")
-        f3 = QFormLayout(gb_shape)
+        gb_shape_row = QHBoxLayout(gb_shape)
+        shape_fields = QWidget()
+        f3 = QFormLayout(shape_fields)
+        gb_shape_row.addWidget(shape_fields, 1)
+        self.lbl_shape_image = QLabel()
+        self.lbl_shape_image.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.lbl_shape_image.setMinimumSize(260, 220)
+        gb_shape_row.addWidget(self.lbl_shape_image)
         self.cmb_bldg_shape = QComboBox()
         self.cmb_bldg_shape.addItems(_SHAPES_10)
         f3.addRow("Shape:", self.cmb_bldg_shape)
@@ -199,6 +244,7 @@ class MainWindow(QMainWindow):
         self.row_x3[1].setVisible(x3)
         self.row_y3[0].setVisible(y3)
         self.row_y3[1].setVisible(y3)
+        _set_illustration(self.lbl_shape_image, _SHAPE_IMAGE_FILES.get(shape, ""))
         self._recompute_floor_area()
 
     def _recompute_floor_area(self):
@@ -300,12 +346,20 @@ class MainWindow(QMainWindow):
         self.tbl_win.horizontalHeader().setStretchLastSection(True)
         vw.addWidget(self.tbl_win)
 
-        overhang_row = QFormLayout()
+        overhang_group = QHBoxLayout()
+        overhang_fields = QWidget()
+        overhang_row = QFormLayout(overhang_fields)
         self.spn_overhang = _float_field(0.0, decimals=2, maximum=10.0)
         self.spn_fp = _float_field(0.0, decimals=2, maximum=5.0)
         overhang_row.addRow("South Overhang Depth (m):", self.spn_overhang)
         overhang_row.addRow("South Projection Factor:", self.spn_fp)
-        vw.addLayout(overhang_row)
+        overhang_group.addWidget(overhang_fields, 1)
+        lbl_shading_image = QLabel()
+        lbl_shading_image.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        lbl_shading_image.setMinimumSize(200, 180)
+        _set_illustration(lbl_shading_image, _SHADING_IMAGE_FILE)
+        overhang_group.addWidget(lbl_shading_image)
+        vw.addLayout(overhang_group)
 
         sky_row = QFormLayout()
         self.cmb_skylight_type = QComboBox()
@@ -353,7 +407,9 @@ class MainWindow(QMainWindow):
         page = QWidget()
         v = QVBoxLayout(page)
         gb = QGroupBox("System")
-        f = QFormLayout(gb)
+        gb_row = QHBoxLayout(gb)
+        fields = QWidget()
+        f = QFormLayout(fields)
         self.cmb_bldg_system = QComboBox()
         self.cmb_bldg_system.addItems(self.ref.bldg_systems)
         self.spn_heat_temp = _float_field(20.0, decimals=1, maximum=40.0)
@@ -361,6 +417,16 @@ class MainWindow(QMainWindow):
         f.addRow("HVAC System:", self.cmb_bldg_system)
         f.addRow("Heating Setpoint (°C):", self.spn_heat_temp)
         f.addRow("Cooling Setpoint (°C):", self.spn_cool_temp)
+        gb_row.addWidget(fields, 1)
+
+        self.lbl_hvac_image = QLabel()
+        self.lbl_hvac_image.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.lbl_hvac_image.setMinimumSize(300, 200)
+        gb_row.addWidget(self.lbl_hvac_image)
+
+        self.cmb_bldg_system.currentTextChanged.connect(
+            lambda text: _set_illustration(self.lbl_hvac_image, _HVAC_SYSTEM_IMAGE_FILES.get(text, ""))
+        )
         v.addWidget(gb)
         v.addStretch(1)
         return page
@@ -428,6 +494,7 @@ class MainWindow(QMainWindow):
         self._set_combo(self.cmb_hot_water, bi.cmbHotWaterSystem)
 
         self._set_combo(self.cmb_bldg_system, bi.cmbBldgSystem)
+        _set_illustration(self.lbl_hvac_image, _HVAC_SYSTEM_IMAGE_FILES.get(bi.cmbBldgSystem, ""))
         self.spn_heat_temp.setValue(bi.txtHeatSetTemp)
         self.spn_cool_temp.setValue(bi.txtCoolSetTemp)
 
@@ -625,6 +692,7 @@ class MainWindow(QMainWindow):
         self._refresh_window_table()
         self._refresh_space_table()
         self._set_combo(self.cmb_bldg_system, self.bi.cmbBldgSystem)
+        _set_illustration(self.lbl_hvac_image, _HVAC_SYSTEM_IMAGE_FILES.get(self.bi.cmbBldgSystem, ""))
         self._update_compliance_buttons()
 
     def _update_compliance_buttons(self):
