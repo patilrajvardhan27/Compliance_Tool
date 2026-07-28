@@ -64,6 +64,18 @@ def run_case(name: str, bi, ref) -> dict:
                 print("    --- last 15 lines ---")
                 for l in text.splitlines()[-15:]:
                     print(f"    {l}")
+            if suffix == ".BDL" and size:
+                text = candidate.read_text(encoding="latin-1", errors="replace")
+                bdl_lines = text.splitlines()
+                flagged = [l for l in bdl_lines if any(
+                    kw in l.upper() for kw in ("ERROR", "FATAL", "WARNING", "ABORT", "SEVERE")
+                )]
+                print(f"    .BDL total lines: {len(bdl_lines)}; flagged lines: {len(flagged)}")
+                for l in flagged[:40]:
+                    print(f"    FLAG: {l}")
+                print("    --- .BDL last 40 lines ---")
+                for l in bdl_lines[-40:]:
+                    print(f"    {l}")
 
     if run_result.sim_path is None:
         return {"name": name, "simulated": False}
