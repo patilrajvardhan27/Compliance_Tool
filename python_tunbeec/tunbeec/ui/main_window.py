@@ -774,19 +774,25 @@ class MainWindow(QMainWindow):
         sim_path = run_result.sim_path
         if sim_path is None:
             candidate = self.current_path.parent / f"{file_stem}.sim"
-            if candidate.exists():
+            if candidate.exists() and candidate.stat().st_size > 0:
                 sim_path = candidate  # reuse a .sim produced by a prior Windows run of RUN22.exe
 
         if sim_path is None:
-            QMessageBox.information(
-                self, "Performance Approach",
-                f"BDL file generated: {inp_path}\n\n"
-                "The DOE-2.2 simulation engine (doe22/RUN22.exe) is a Windows binary and cannot "
-                "be run on this platform. Run this .inp file through the original Windows "
-                f"installation to produce {file_stem}.sim, then re-run this check "
-                "(the .sim file will be detected automatically in the project folder).\n\n"
-                f"Detail: {run_result.message}",
-            )
+            if sys.platform != "win32":
+                QMessageBox.information(
+                    self, "Performance Approach",
+                    f"BDL file generated: {inp_path}\n\n"
+                    "The DOE-2.2 simulation engine (doe22/RUN22.exe) is a Windows binary and cannot "
+                    "be run on this platform. Run this .inp file through the original Windows "
+                    f"installation to produce {file_stem}.sim, then re-run this check "
+                    "(the .sim file will be detected automatically in the project folder).\n\n"
+                    f"Detail: {run_result.message}",
+                )
+            else:
+                QMessageBox.critical(
+                    self, "Performance Approach",
+                    f"DOE-2.2 simulation failed:\n\n{run_result.message}",
+                )
             return
 
         try:
