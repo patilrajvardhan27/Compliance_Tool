@@ -534,10 +534,50 @@ def build_inp_lines(bi: BuildingInput, ref: ReferenceData, geo: BldgGeometry, kv
     return out
 
 
+_BDL_LINE_LIMIT = 80  # DOEBDL.EXE silently truncates any physical line past column 80
+                       # (a legacy 80-column card-image limit), which corrupts the last quoted
+                       # item on a long comma-separated list (MATERIAL=(...), LAYERS=(...), etc.)
+                       # into an unterminated string -- an "ABORT-LEVEL DIAGNOSTIC" that aborts
+                       # BDL translation and leaves DOESIM.EXE never invoked (empty .sim, BecTh=0
+                       # for every project, regardless of the building's actual input values).
+
+
+def _rewrap_long_line(line: str, limit: int = _BDL_LINE_LIMIT) -> list[str]:
+    """Split `line` into <=`limit`-column physical lines, breaking only at a comma that is
+    outside any quoted string, with the continuation indented 4 past the original line's indent.
+    """
+    if len(line) <= limit:
+        return [line]
+    indent = len(line) - len(line.lstrip(" "))
+    cont_prefix = " " * (indent + 4)
+    out: list[str] = []
+    current = line
+    while len(current) > limit:
+        quote_count = 0
+        break_at = None
+        for idx, ch in enumerate(current[:limit]):
+            if ch == '"':
+                quote_count += 1
+            elif ch == "," and quote_count % 2 == 0:
+                break_at = idx + 1
+        if break_at is None:
+            # No safe (outside-quotes) comma to break at within the limit -- leave it long
+            # rather than risk corrupting a quoted string ourselves.
+            out.append(current)
+            current = ""
+            break
+        out.append(current[:break_at].rstrip())
+        current = cont_prefix + current[break_at:].lstrip()
+    if current:
+        out.append(current)
+    return out
+
+
 def write_inp(work_dir: Path, file_name: str, lines: list[str]) -> Path:
     work_dir.mkdir(parents=True, exist_ok=True)
     target = work_dir / f"{file_name}.inp"
-    target.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
+    wrapped = [wrapped_line for line in lines for wrapped_line in _rewrap_long_line(line)]
+    target.write_text("\n".join(wrapped) + "\n", encoding="utf-8", newline="\n")
     return target
 
 
@@ -602,6 +642,15 @@ def run_doe22(doe22_dir: Path, work_dir: Path, file_name: str, bldg_location: st
         return Doe22RunResult(False, f"Failed to launch RUN22.exe: {e}")
 
     sim_path = work_dir / f"{file_name}.sim"
-    if proc.returncode != 0 or not sim_path.exists():
-        return Doe22RunResult(False, f"RUN22.exe exited with code {proc.returncode}.\n{proc.stdout}\n{proc.stderr}")
+    bdl_path = work_dir / f"{file_name}.BDL"
+    if proc.returncode != 0 or not sim_path.exists() or sim_path.stat().st_size == 0:
+        detail = f"RUN22.exe exited with code {proc.returncode}.\n{proc.stdout}\n{proc.stderr}"
+        if sim_path.exists() and sim_path.stat().st_size == 0 and bdl_path.exists():
+            bdl_tail = bdl_path.read_text(encoding="latin-1", errors="replace").splitlines()[-15:]
+            detail = (
+                "DOE-2.2 produced an empty .sim file, which means DOEBDL rejected the generated "
+                ".inp file before the simulation engine ever ran. Last lines of the BDL echo "
+                f"({bdl_path.name}):\n" + "\n".join(bdl_tail)
+            )
+        return Doe22RunResult(False, detail)
     return Doe22RunResult(True, "OK", sim_path)
