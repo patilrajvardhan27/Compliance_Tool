@@ -759,6 +759,19 @@ class MainWindow(QMainWindow):
         if self.current_path is None:
             QMessageBox.warning(self, "Performance Approach", "Please save the project first.")
             return
+        if self.bi.rdbtnWinWwr:
+            for orientation, attr in (("South", "south_percent"), ("North", "north_percent"),
+                                       ("East", "east_percent"), ("West", "west_percent")):
+                total = sum(getattr(row, attr) for row in self.bi.window_rows)
+                if total > 100.0:
+                    QMessageBox.warning(
+                        self, "Performance Approach",
+                        f"The window rows on the {orientation} wall add up to {total:.0f}% of the "
+                        "wall area. The combined Window-to-Wall Ratio per orientation cannot "
+                        "exceed 100% -- DOE-2.2 would reject the building (windows larger than "
+                        "the wall). Please reduce the window percentages.",
+                    )
+                    return
         try:
             geo = calc_bldg_geometry(self.bi, self.ref, self.bi.space_rows)
             envelope = resolve_envelope_info(self.ref, self.bi, geo)
