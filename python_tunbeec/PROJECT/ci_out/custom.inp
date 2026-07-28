@@ -1,0 +1,2276 @@
+INPUT ..
+##def Ground[Name]
+  UNDERGROUND-WALL
+    CONSTRUCTION     = Name  $"Ground Floor"
+    LOCATION         = BOTTOM
+    ..
+##enddef
+##def Condition[Name]
+  INTERIOR-WALL
+    CONSTRUCTION     = Name  $"Conditioned Floor"
+    INT-WALL-TYPE    = ADIABATIC
+    LOCATION         = BOTTOM
+    ..
+##enddef
+##def Uncondition[Name]
+  EXTERIOR-WALL
+    CONSTRUCTION     = Name  $"Unconditioned Floor"
+    LOCATION         = BOTTOM
+    ..
+##enddef
+$ ---------------------------------------------------------
+$              Abort, Diagnostics
+$ ---------------------------------------------------------
+$ ---------------------------------------------------------
+$              Global Parameters
+$ ---------------------------------------------------------
+$ ---------------------------------------------------------
+$              Title, Run Periods, Design Days, Holidays
+$ ---------------------------------------------------------
+TITLE           
+   LINE-1           = *Office_Building*
+   ..
+"Entire Year" = RUN-PERIOD-PD
+   BEGIN-MONTH      = 1
+   BEGIN-DAY        = 1
+   BEGIN-YEAR       = 2026
+   END-MONTH        = 12
+   END-DAY          = 31
+   END-YEAR         = 2026
+   ..
+"TUNISIA" = HOLIDAYS        
+   TYPE             = ALTERNATE
+   MONTHS           = ( 1, 3, 3, 4, 5, 7, 8, 8, 11 )
+   DAYS             = ( 1, 20, 21, 9, 1, 25, 13, 31, 10 )
+   ..
+$ ---------------------------------------------------------
+$              Compliance Data
+$ ---------------------------------------------------------
+$ ---------------------------------------------------------
+$              Site and Building Data
+$ ---------------------------------------------------------
+"Site Data" = SITE-PARAMETERS 
+   ..
+"Building Data" = BUILD-PARAMETERS
+   AZIMUTH          = 0.0
+   HOLIDAYS         = "TUNISIA"
+   ..
+$ ---------------------------------------------------------
+$              Materials / Layers / Constructions
+$ ---------------------------------------------------------
+"polystyrene 2cm" = MATERIAL        
+   TYPE             = PROPERTIES
+   THICKNESS        = 0.0656
+   CONDUCTIVITY     = 0.011556  $0.02
+   DENSITY          = 1.8
+   SPECIFIC-HEAT    = 0.29
+   ..
+"polystyrene 4cm" = MATERIAL        
+   TYPE             = PROPERTIES
+   THICKNESS        = 0.1312
+   CONDUCTIVITY     = 0.011556  $0.02
+   DENSITY          = 1.8
+   SPECIFIC-HEAT    = 0.29
+   ..
+"polystyrene 6cm" = MATERIAL        
+   TYPE             = PROPERTIES
+   THICKNESS        = 0.1968
+   CONDUCTIVITY     = 0.011556  $0.02
+   DENSITY          = 1.8
+   SPECIFIC-HEAT    = 0.29
+   ..
+"Mineral wool R30" = MATERIAL        
+   TYPE             = PROPERTIES
+   THICKNESS        = 0.806
+   CONDUCTIVITY     = 0.025
+   DENSITY          = 0.6
+   SPECIFIC-HEAT    = 0.2
+   ..
+"Earth(Soil)" = MATERIAL        
+   TYPE             = PROPERTIES
+   THICKNESS        = 1.5
+   CONDUCTIVITY     = 0.5
+   DENSITY          = 85
+   SPECIFIC-HEAT    = 0.2
+   ..
+"HW Concrete 12" = MATERIAL        
+   TYPE             = PROPERTIES
+   THICKNESS        = 1
+   CONDUCTIVITY     = 0.3
+   DENSITY          = 100
+   SPECIFIC-HEAT    = 0.2
+   ..
+"Waterproofing 5" = MATERIAL        
+   TYPE             = PROPERTIES
+   THICKNESS        = 0.016
+   CONDUCTIVITY     = 0.405
+   DENSITY          = 131.1
+   SPECIFIC-HEAT    = 0.248
+   ..
+"Exterior Plaster 25" = MATERIAL        
+   TYPE             = PROPERTIES
+   THICKNESS        = 0.082
+   CONDUCTIVITY     = 0.809
+   DENSITY          = 131.1
+   SPECIFIC-HEAT    = 0.258
+   ..
+"Interior Plaster 20" = MATERIAL        
+   TYPE             = PROPERTIES
+   THICKNESS        = 0.065
+   CONDUCTIVITY     = 0.665
+   DENSITY          = 118.6
+   SPECIFIC-HEAT    = 0.258
+   ..
+"Concrete 100" = MATERIAL        
+   TYPE             = PROPERTIES
+   THICKNESS        = 0.328
+   CONDUCTIVITY     = 0.809
+   DENSITY          = 143.6
+   SPECIFIC-HEAT    = 0.229
+   ..
+"Reinforced Concrete 50" = MATERIAL        
+   TYPE             = PROPERTIES
+   THICKNESS        = 0.164
+   CONDUCTIVITY     = 1.012
+   DENSITY          = 149.8
+   SPECIFIC-HEAT    = 0.229
+   ..
+"Brick 12" = MATERIAL        
+   TYPE             = PROPERTIES
+   THICKNESS        = 0.656
+   CONDUCTIVITY     = 0.272
+   DENSITY          = 43.7
+   SPECIFIC-HEAT    = 0.224
+   ..
+"Plaster Brick 65" = MATERIAL        
+   TYPE             = PROPERTIES
+   THICKNESS        = 0.213
+   CONDUCTIVITY     = 0.272
+   DENSITY          = 43.7
+   SPECIFIC-HEAT    = 0.224
+   ..
+"Terracotta Hollow Block" = MATERIAL        
+   TYPE             = PROPERTIES
+   THICKNESS        = 0.525
+   CONDUCTIVITY     = 0.543
+   DENSITY          = 51
+   SPECIFIC-HEAT    = 0.215
+   ..
+"AIR LAYER" = MATERIAL        
+   TYPE             = RESISTANCE
+   RESISTANCE       = 0.026
+   ..
+"Mortar Bed 30" = MATERIAL        
+   TYPE             = PROPERTIES
+   THICKNESS        = 0.098
+   CONDUCTIVITY     = 0.809
+   DENSITY          = 131.1
+   SPECIFIC-HEAT    = 0.258
+   ..
+"Sand Bed" = MATERIAL        
+   TYPE             = PROPERTIES
+   THICKNESS        = 0.164
+   CONDUCTIVITY     = 0.404
+   DENSITY          = 112.37
+   SPECIFIC-HEAT    = 0.191
+   ..
+"Mosaic Tiles" = MATERIAL        
+   TYPE             = PROPERTIES
+   THICKNESS        = 0.065
+   CONDUCTIVITY     = 0.983
+   DENSITY          = 143.58
+   SPECIFIC-HEAT    = 0.229
+   ..
+$ ---------------------------------------------------------
+$              Building Layers
+$ ---------------------------------------------------------
+"EWall Cons Layers-NoInsu" = LAYERS          
+   MATERIAL         = ( "Exterior Plaster 25", "Brick 12",
+          "AIR LAYER", "Plaster Brick 65", "Interior Plaster 20" )
+   ..
+"EWall Cons Layers-Outside-2cm" = LAYERS          
+   MATERIAL         = ( "polystyrene 2cm", "Exterior Plaster 25", "Brick 12", 
+          "AIR LAYER", "Plaster Brick 65", "Interior Plaster 20" )
+   ..
+"EWall Cons Layers-Outside-4cm" = LAYERS          
+   MATERIAL         = ( "polystyrene 4cm", "Exterior Plaster 25", "Brick 12", 
+          "AIR LAYER", "Plaster Brick 65", "Interior Plaster 20" )
+   ..
+"EWall Cons Layers-Outside-6cm" = LAYERS          
+   MATERIAL         = ( "polystyrene 6cm", "Exterior Plaster 25", "Brick 12",
+          "AIR LAYER", "Plaster Brick 65", "Interior Plaster 20" )
+   ..
+"EWall Cons Layers-Middle-2cm" = LAYERS          
+   MATERIAL         = ( "Exterior Plaster 25", "Brick 12", "polystyrene 2cm",
+           "Plaster Brick 65", "Interior Plaster 20" )
+   ..
+"EWall Cons Layers-Middle-4cm" = LAYERS          
+   MATERIAL         = ( "Exterior Plaster 25", "Brick 12", "polystyrene 4cm",
+           "Plaster Brick 65", "Interior Plaster 20" )
+   ..
+"EWall Cons Layers-Middle-6cm" = LAYERS          
+   MATERIAL         = ( "Exterior Plaster 25", "Brick 12", "polystyrene 6cm",
+           "Plaster Brick 65", "Interior Plaster 20" )
+   ..
+"EWall Cons Layers-Inside-2cm" = LAYERS          
+   MATERIAL         = ( "Exterior Plaster 25", "Brick 12", "AIR LAYER",
+           "Plaster Brick 65", "Interior Plaster 20", "polystyrene 2cm" )
+   ..
+"EWall Cons Layers-Inside-4cm" = LAYERS          
+   MATERIAL         = ( "Exterior Plaster 25", "Brick 12", "AIR LAYER", 
+           "Plaster Brick 65", "Interior Plaster 20", "polystyrene 4cm" )
+   ..
+"EWall Cons Layers-Inside-6cm" = LAYERS          
+   MATERIAL         = ( "Exterior Plaster 25", "Brick 12", "AIR LAYER",
+           "Plaster Brick 65", "Interior Plaster 20", "polystyrene 6cm" )
+   ..
+"Roof Cons Layers-NoInsu" = LAYERS          
+   MATERIAL         = ( "Waterproofing 5", "Mortar Bed 30", "Concrete 100",
+           "Reinforced Concrete 50", "Terracotta Hollow Block",
+               "Interior Plaster 20" )
+   ..
+"Roof Cons Layers-Outside-2cm" = LAYERS          
+   MATERIAL         = ( "polystyrene 2cm", "Waterproofing 5", "Mortar Bed 30",
+           "Concrete 100", "Reinforced Concrete 50", "Terracotta Hollow Block",
+           "Interior Plaster 20" )
+   ..
+"Roof Cons Layers-Outside-4cm" = LAYERS          
+   MATERIAL         = ( "polystyrene 4cm", "Waterproofing 5", "Mortar Bed 30",
+           "Concrete 100", "Reinforced Concrete 50", "Terracotta Hollow Block",
+           "Interior Plaster 20" )
+   ..
+"Roof Cons Layers-Outside-6cm" = LAYERS          
+   MATERIAL         = ( "polystyrene 6cm", "Waterproofing 5", "Mortar Bed 30",
+           "Concrete 100", "Reinforced Concrete 50", "Terracotta Hollow Block",
+           "Interior Plaster 20" )
+   ..
+"Roof Cons Layers-Inside-2cm" = LAYERS          
+   MATERIAL         = ( "Waterproofing 5", "Mortar Bed 30", "Concrete 100", 
+           "Reinforced Concrete 50", "Terracotta Hollow Block",
+               "Interior Plaster 20",
+           "polystyrene 2cm" )
+   ..
+"Roof Cons Layers-Inside-4cm" = LAYERS          
+   MATERIAL         = ( "Waterproofing 5", "Mortar Bed 30", "Concrete 100",
+           "Reinforced Concrete 50", "Terracotta Hollow Block",
+               "Interior Plaster 20",
+           "polystyrene 4cm" )
+   ..
+"Roof Cons Layers-Inside-6cm" = LAYERS          
+   MATERIAL         = ( "Waterproofing 5", "Mortar Bed 30", "Concrete 100",
+           "Reinforced Concrete 50", "Terracotta Hollow Block",
+               "Interior Plaster 20",
+           "polystyrene 6cm" )
+   ..
+"Roof Cons Layers-Middle-2cm" = LAYERS          
+   MATERIAL         = ( "Waterproofing 5", "Mortar Bed 30", "Concrete 100", 
+           "polystyrene 2cm", "Reinforced Concrete 50",
+               "Terracotta Hollow Block",
+           "Interior Plaster 20" )
+   ..
+"Roof Cons Layers-Middle-4cm" = LAYERS          
+   MATERIAL         = ( "Waterproofing 5", "Mortar Bed 30", "Concrete 100",
+           "polystyrene 4cm", "Reinforced Concrete 50",
+               "Terracotta Hollow Block",
+           "Interior Plaster 20" )
+   ..
+"Roof Cons Layers-Middle-6cm" = LAYERS          
+   MATERIAL         = ( "Waterproofing 5", "Mortar Bed 30", "Concrete 100",
+           "polystyrene 6cm", "Reinforced Concrete 50",
+               "Terracotta Hollow Block",
+           "Interior Plaster 20" )
+   ..
+"Flr Cons Layers" = LAYERS          
+   MATERIAL         = ( "Interior Plaster 20", "Terracotta Hollow Block", 
+         "Reinforced Concrete 50", "Sand Bed", "Mortar Bed 30", 
+         "Mosaic Tiles" )
+   ..
+"IWall Cons Layers" = LAYERS          
+   MATERIAL         = ( "Interior Plaster 20", "Plaster Brick 65", 
+         "Interior Plaster 20" )
+   ..
+"Underground" = LAYERS          
+   MATERIAL         = ( "Mineral wool R30", "Earth(Soil)", "HW Concrete 12" )
+   ..
+$ ---------------------------------------------------------
+$              Building Constructions
+$ ---------------------------------------------------------
+"Wall, No Insulation" = CONSTRUCTION    
+   TYPE             = LAYERS
+   ABSORPTANCE      = 0.6
+   ROUGHNESS        = 4
+   LAYERS           = "EWall Cons Layers-NoInsu"
+   ..
+"Wall, Exterior Insulation-2cm" = CONSTRUCTION    
+   TYPE             = LAYERS
+   ABSORPTANCE      = 0.6
+   ROUGHNESS        = 4
+   LAYERS           = "EWall Cons Layers-Outside-2cm"
+   ..
+"Wall, Exterior Insulation-4cm" = CONSTRUCTION    
+   TYPE             = LAYERS
+   ABSORPTANCE      = 0.6
+   ROUGHNESS        = 4
+   LAYERS           = "EWall Cons Layers-Outside-4cm"
+   ..
+"Wall, Exterior Insulation-6cm" = CONSTRUCTION    
+   TYPE             = LAYERS
+   ABSORPTANCE      = 0.6
+   ROUGHNESS        = 4
+   LAYERS           = "EWall Cons Layers-Outside-6cm"
+   ..
+"Wall, Interior Insulation-2cm" = CONSTRUCTION    
+   TYPE             = LAYERS
+   ABSORPTANCE      = 0.6
+   ROUGHNESS        = 4
+   LAYERS           = "EWall Cons Layers-Middle-2cm"
+   ..
+"Wall, Interior Insulation-4cm" = CONSTRUCTION    
+   TYPE             = LAYERS
+   ABSORPTANCE      = 0.6
+   ROUGHNESS        = 4
+   LAYERS           = "EWall Cons Layers-Middle-4cm"
+   ..
+"Wall, Interior Insulation-6cm" = CONSTRUCTION    
+   TYPE             = LAYERS
+   ABSORPTANCE      = 0.6
+   ROUGHNESS        = 4
+   LAYERS           = "EWall Cons Layers-Middle-6cm"
+   ..
+"Wall, Mid-Layer Insulation-2cm" = CONSTRUCTION    
+   TYPE             = LAYERS
+   ABSORPTANCE      = 0.6
+   ROUGHNESS        = 4
+   LAYERS           = "EWall Cons Layers-Inside-2cm"
+   ..
+"Wall, Mid-Layer Insulation-4cm" = CONSTRUCTION    
+   TYPE             = LAYERS
+   ABSORPTANCE      = 0.6
+   ROUGHNESS        = 4
+   LAYERS           = "EWall Cons Layers-Inside-4cm"
+   ..
+"Wall, Mid-Layer Insulation-6cm" = CONSTRUCTION    
+   TYPE             = LAYERS
+   ABSORPTANCE      = 0.6
+   ROUGHNESS        = 4
+   LAYERS           = "EWall Cons Layers-Inside-6cm"
+   ..
+"Roof, No Insulation" = CONSTRUCTION    
+   TYPE             = LAYERS
+   ABSORPTANCE      = 0.6
+   ROUGHNESS        = 4
+   LAYERS           = "Roof Cons Layers-NoInsu"
+   ..
+"Roof, Exterior Insulation-2cm" = CONSTRUCTION    
+   TYPE             = LAYERS
+   ABSORPTANCE      = 0.6
+   ROUGHNESS        = 4
+   LAYERS           = "Roof Cons Layers-Outside-2cm"
+   ..
+"Roof, Exterior Insulation-4cm" = CONSTRUCTION    
+   TYPE             = LAYERS
+   ABSORPTANCE      = 0.6
+   ROUGHNESS        = 4
+   LAYERS           = "Roof Cons Layers-Outside-4cm"
+   ..
+"Roof, Exterior Insulation-6cm" = CONSTRUCTION    
+   TYPE             = LAYERS
+   ABSORPTANCE      = 0.6
+   ROUGHNESS        = 4
+   LAYERS           = "Roof Cons Layers-Outside-6cm"
+   ..
+"Roof, Interior Insulation-2cm" = CONSTRUCTION    
+   TYPE             = LAYERS
+   ABSORPTANCE      = 0.6
+   ROUGHNESS        = 4
+   LAYERS           = "Roof Cons Layers-Middle-2cm"
+   ..
+"Roof, Interior Insulation-4cm" = CONSTRUCTION    
+   TYPE             = LAYERS
+   ABSORPTANCE      = 0.6
+   ROUGHNESS        = 4
+   LAYERS           = "Roof Cons Layers-Middle-4cm"
+   ..
+"Roof, Interior Insulation-6cm" = CONSTRUCTION    
+   TYPE             = LAYERS
+   ABSORPTANCE      = 0.6
+   ROUGHNESS        = 4
+   LAYERS           = "Roof Cons Layers-Middle-6cm"
+   ..
+"Roof, Mid-Layer Insulation-2cm" = CONSTRUCTION    
+   TYPE             = LAYERS
+   ABSORPTANCE      = 0.6
+   ROUGHNESS        = 4
+   LAYERS           = "Roof Cons Layers-Inside-2cm"
+   ..
+"Roof, Mid-Layer Insulation-4cm" = CONSTRUCTION    
+   TYPE             = LAYERS
+   ABSORPTANCE      = 0.6
+   ROUGHNESS        = 4
+   LAYERS           = "Roof Cons Layers-Inside-4cm"
+   ..
+"Roof, Mid-Layer Insulation-6cm" = CONSTRUCTION    
+   TYPE             = LAYERS
+   ABSORPTANCE      = 0.6
+   ROUGHNESS        = 4
+   LAYERS           = "Roof Cons Layers-Inside-6cm"
+   ..
+"Flr Construction" = CONSTRUCTION    
+   TYPE             = LAYERS
+   LAYERS           = "Flr Cons Layers"
+   ..
+"Ceilg Construction" = CONSTRUCTION    
+   TYPE             = LAYERS
+   LAYERS           = "Flr Cons Layers"
+   ..
+"IWall Construction" = CONSTRUCTION    
+   TYPE             = LAYERS
+   LAYERS           = "IWall Cons Layers"
+   ..
+$ ---------------------------------------------------------
+$              Building Construction Etc
+$ ---------------------------------------------------------
+"Uncondition" = LAYERS          
+   MATERIAL         = ( "Mineral wool R30", 
+         "Interior Plaster 20", "Terracotta Hollow Block", 
+         "Reinforced Concrete 50", "Sand Bed", "Mortar Bed 30", 
+         "Mosaic Tiles" )
+   ..
+"GroundFloor" = CONSTRUCTION    
+   TYPE             = LAYERS
+   LAYERS           = "Underground"
+   ..
+"First level Floor" = CONSTRUCTION    
+   TYPE             = LAYERS
+  LAYERS           = "Underground"
+   ..
+"ConditionFloor" = CONSTRUCTION    
+   TYPE             = LAYERS
+   LAYERS           = "Flr Cons Layers"
+   ..
+"UnconditionFloor" = CONSTRUCTION    
+   TYPE             = LAYERS
+   LAYERS           = "Uncondition"
+   ..
+$ ---------------------------------------------------------
+$              Building User Mat, Layer, Construction
+$ ---------------------------------------------------------
+$ ---------------------------------------------------------
+$            Default  Glass Type                           
+$ ---------------------------------------------------------
+"Single Clear" = GLASS-TYPE
+   TYPE            = SHADING-COEF
+   SHADING-COEF    = 0.95
+   GLASS-CONDUCT   = 1.0899995144499999
+   VIS-TRANS       = 0.9
+   ..
+"Single Bronze" = GLASS-TYPE
+   TYPE            = SHADING-COEF
+   SHADING-COEF    = 0.71
+   GLASS-CONDUCT   = 1.0899995144499999
+   VIS-TRANS       = 0.9
+   ..
+"Single Low-E" = GLASS-TYPE
+   TYPE            = SHADING-COEF
+   SHADING-COEF    = 0.84
+   GLASS-CONDUCT   = 0.75002829033
+   VIS-TRANS       = 0.9
+   ..
+"Double Clear" = GLASS-TYPE
+   TYPE            = SHADING-COEF
+   SHADING-COEF    = 0.81
+   GLASS-CONDUCT   = 0.5599933895599999
+   VIS-TRANS       = 0.9
+   ..
+"Double Bronze" = GLASS-TYPE
+   TYPE            = SHADING-COEF
+   SHADING-COEF    = 0.57
+   GLASS-CONDUCT   = 0.5599933895599999
+   VIS-TRANS       = 0.9
+   ..
+"Double Low-E" = GLASS-TYPE
+   TYPE            = SHADING-COEF
+   SHADING-COEF    = 0.48
+   GLASS-CONDUCT   = 0.28999244967
+   VIS-TRANS       = 0.9
+   ..
+$ ---------------------------------------------------------
+$             User Glass Type                              
+$ ---------------------------------------------------------
+$ ---------------------------------------------------------
+$             Combined Glass Type                          
+$ ---------------------------------------------------------
+"Combined South Glass" = GLASS-TYPE
+   TYPE            = SHADING-COEF
+   SHADING-COEF    = 0.9499999999999998
+   GLASS-CONDUCT   = 1.0899995144499999
+   VIS-TRANS       = 0.8999999999999999
+   ..
+"Combined North Glass" = GLASS-TYPE
+   TYPE            = SHADING-COEF
+   SHADING-COEF    = 0.84
+   GLASS-CONDUCT   = 0.75002829033
+   VIS-TRANS       = 0.9
+   ..
+"Combined East Glass" = GLASS-TYPE
+   TYPE            = SHADING-COEF
+   SHADING-COEF    = 0.95
+   GLASS-CONDUCT   = 1.0899995144499999
+   VIS-TRANS       = 0.9
+   ..
+"Combined West Glass" = GLASS-TYPE
+   TYPE            = SHADING-COEF
+   SHADING-COEF    = 0.84
+   GLASS-CONDUCT   = 0.75002829033
+   VIS-TRANS       = 0.9
+   ..
+$ ---------------------------------------------------------
+$              Day Schedules
+$ ---------------------------------------------------------
+"Salon Occup S1 WD" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0, &D, &D, &D, &D, &D, 0, 0, 0, 0, 0, 0, 0.5, 0.5, &D, 
+         0, 0, 0, 0.55, 1, 1, 1, 0.5, 0.2 )
+   ..
+"Salon Occup S1 WEH" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.35, 0.35, 0.4, 0.5, 
+         0.5, 0.5, 0.5, 0.5, 0.5, 1 )
+   ..
+"Salon Occup S2 WD" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0.3, 0, &D, &D, &D, &D, &D, &D, &D, 0.3, 0.3, 0.4, 
+         0.4, &D, 0.3, &D, &D, &D, &D, 0.5, 0.5, 0.5, 0.5, 0.3 )
+   ..
+"Salon Lght S1 WD" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0, &D, &D, &D, &D, 0, 0, 0, 0, &D, &D, &D, 0.5, &D, 
+         &D, 0, &D, &D, 0.5, 1, &D, 1, 1, 0 )
+   ..
+"Salon Lght S1 WEH" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.5, &D, &D, 0, 0, 
+         0, 0.5, 1, 1, 1, 1, 1 )
+   ..
+"Salon Lght S2 WD" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0, &D, &D, &D, &D, &D, &D, &D, &D, &D, &D, &D, 0.3, 
+         0.25, 0.2, 0.2, 0.2, &D, 0.25, 0.5, 1 )
+   ..
+"Salon eqp S1 WD" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0, &D, &D, &D, &D, &D, 0, 0, 0, 0, 0, 0, 1, 1, &D, 0, 
+         0, 0, 1, 1, 1, 1, &D, 0 )
+   ..
+"Salon eqp S1 WEH" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 
+         1, 1, 1, 1, 1, 1 )
+   ..
+"Salon eqp S2 WD" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0, &D, &D, &D, &D, &D, &D, &D, &D, &D, &D, &D, &D, &D, 
+         1, 0, &D, &D, &D, 1, &D, &D, &D, 0 )
+   ..
+"DHW Eqp Res W1 WD" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0, &D, &D, &D, &D, 0.2, 0.5, 0.8, 0.5, 0.2, 0.2, &D, 
+         &D, 0.2, 0.05, &D, 0.05, &D, 0.2, 0.5, 0.8, 0.8, 0.2, 0 )
+   ..
+"DHW Eqp Res W2" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0, 0, 0, 0, 0, 0, 0.2, 0.2, 0, 0, 0, 0.2, 0.2, 0.2, 
+         0.2, 0, 0, 0, 0.2, 0.5, 0.8, 0.2, 0, 0 )
+   ..
+"DHW Eqp Res W1 Sun" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0.0806, 0.0537, 0.05, &D, &D, &D, &D, 0.0536, 0.0892, 
+         0.1956, 0.2691, 0.2274, 0.3026, 0.4332, 0.5675, 0.6455, 0.4694, 
+         0.3368, 0.2532, 0.2065, 0.1995, &D, 0.1902, 0.1354 )
+   ..
+"DHW Eqp Res W1 HDD" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0 )
+   ..
+"ZG0-S1 (SUM) P-Inf S1 WD" = DAY-SCHEDULE-PD
+   TYPE             = MULTIPLIER
+   VALUES           = ( 1, &D, &D, &D, &D, 1, 1, 1, 1, 1, &D, &D, &D, &D, &D, 
+         1, 1, 1, 1 )
+   ..
+"ZG0-S1 (SUM) P-Inf S1 WEH" = DAY-SCHEDULE-PD
+   TYPE             = MULTIPLIER
+   VALUES           = ( 1, &D, &D, &D, &D, &D, 1.0038, 1.15, 1.25, 1.145, 1, 
+         &D, &D, &D, 1.145, 1.25, 1.15, 1.0038, 1 )
+   ..
+"ZG0-S1 (SUM) P-Inf S1 HDD" = DAY-SCHEDULE-PD
+   TYPE             = MULTIPLIER
+   VALUES           = ( 1 )
+   ..
+"ZG0-S1 (SUM) C-Inf S1 All" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 1 )
+   ..
+"ClgT Salon S1" = DAY-SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   VALUES           = ( 98 )
+   ..
+"ClgT Salon S2 WD" = DAY-SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   VALUES           = ( 98, &D, &D, &D, &D, &D, &D, &D, &D, &D, &D, &D, 75, 
+         &D, &D, 98, 98, 98, &D, &D, 75 )
+   ..
+"ClgT Salon S2 WEH" = DAY-SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   VALUES           = ( 75, 98, &D, &D, &D, &D, &D, &D, &D, &D, &D, &D, 75, 
+         &D, &D, 98, 98, 98, &D, &D, 75 )
+   ..
+"ClgT BR S1" = DAY-SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   VALUES           = ( 98 )
+   ..
+"ClgT BR S2 WD" = DAY-SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   VALUES           = ( 75, &D, &D, &D, &D, 98, 98, &D, &D, &D, &D, &D, &D, 
+         75, 75, 98, &D, &D, &D, &D, &D, &D, &D, 75 )
+   ..
+"Htg T S S2" = DAY-SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   VALUES           = ( 39 )
+   ..
+"Htg T BR S1" = DAY-SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   VALUES           = ( 39, &D, &D, &D, &D, &D, &D, &D, &D, &D, &D, &D, &D, 
+         &D, 72, 39, &D, &D, 72, &D, &D, 39 )
+   ..
+"Htg T BR S2" = DAY-SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   VALUES           = ( 39 )
+   ..
+"Htg T S S1" = DAY-SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   VALUES           = ( 39, &D, &D, &D, &D, &D, &D, &D, &D, &D, &D, &D, &D, 
+         72, 72, 39, &D, &D, 39, 72, &D, &D, 39 )
+   ..
+"Salon Occup S2 WEH" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0, &D, &D, &D, &D, &D, &D, &D, &D, &D, &D, 0.2, 0.2, 
+         &D, &D, 0.4, &D, 0.3 )
+   ..
+"BR Occup WD" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 1, &D, &D, &D, &D, &D, &D, 0, &D, &D, &D, &D, &D, 0.5, 
+         &D, 0, &D, &D, &D, &D, &D, &D, 1 )
+   ..
+"BR Occup WEH" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 1, &D, &D, &D, &D, &D, &D, 1, 1, 0, &D, &D, &D, 1, 1, 
+         0, &D, &D, &D, &D, &D, &D, 1 )
+   ..
+"Kitchen Occup" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0, &D, &D, &D, &D, &D, &D, &D, &D, &D, &D, &D, 0.5, 
+         &D, 0, &D, &D, &D, 0.5, &D, 0 )
+   ..
+"Other Occup" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0 )
+   ..
+"Lght BR day" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0, &D, &D, &D, &D, &D, &D, 1, 0, &D, &D, &D, &D, &D, 
+         &D, &D, &D, &D, &D, &D, &D, &D, 1, 0 )
+   ..
+"Kitchen eqp day" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 1 )
+   ..
+"Salon eqp S2 WEH" = DAY-SCHEDULE-PD
+   TYPE             = FRACTION
+   VALUES           = ( 0, &D, &D, &D, &D, &D, &D, &D, &D, &D, 1, 1, &D, &D, 
+         0, &D, &D, 1 )
+   ..
+"Cust 1 Elec Seas1 Day" = DAY-SCHEDULE-PD
+   TYPE             = FLAG
+   VALUES           = ( 1 )
+   ..
+"Custom Gas Seas1 Day" = DAY-SCHEDULE-PD
+   TYPE             = FLAG
+   VALUES           = ( 1 )
+   ..
+$ ---------------------------------------------------------
+$              Week Schedules
+$ ---------------------------------------------------------
+"Salon Occup S1 Wk" = WEEK-SCHEDULE-PD
+   TYPE             = FRACTION
+   DAY-SCHEDULES    = ( "Salon Occup S1 WD", &D, &D, &D, &D, 
+         "Salon Occup S1 WEH", &D, &D, "Salon Occup S1 WD", 
+         "Salon Occup S1 WD" )
+   ..
+"Salon Lght S1 Wk" = WEEK-SCHEDULE-PD
+   TYPE             = FRACTION
+   DAY-SCHEDULES    = ( "Salon Lght S1 WD", &D, &D, &D, &D, 
+         "Salon Lght S1 WEH", &D, &D, "Salon Lght S1 WD", "Salon Lght S1 WD" )
+   ..
+"Salon eqp S1 Wk" = WEEK-SCHEDULE-PD
+   TYPE             = FRACTION
+   DAY-SCHEDULES    = ( "Salon eqp S1 WD", &D, &D, &D, &D, "Salon eqp S1 WEH", 
+         &D, &D, "Salon eqp S1 WD", "Salon eqp S1 WD" )
+   ..
+"DHW Eqp Res Wk1" = WEEK-SCHEDULE-PD
+   TYPE             = FRACTION
+   DAY-SCHEDULES    = ( "DHW Eqp Res W1 WD", &D, &D, &D, &D, 
+         "DHW Eqp Res W1 WD", "DHW Eqp Res W1 WD", &D, "DHW Eqp Res W1 WD", 
+         "DHW Eqp Res W1 WD" )
+   ..
+"ZG0-S1 (SUM) P-Inf S1 Wk" = WEEK-SCHEDULE-PD
+   TYPE             = MULTIPLIER
+   DAY-SCHEDULES    = ( "ZG0-S1 (SUM) P-Inf S1 WD", &D, &D, &D, &D, 
+         "ZG0-S1 (SUM) P-Inf S1 WD", &D, &D, "ZG0-S1 (SUM) P-Inf S1 WD", 
+         "ZG0-S1 (SUM) P-Inf S1 WD" )
+   ..
+"ZG0-S1 (SUM) C-Inf S1 Wk" = WEEK-SCHEDULE-PD
+   TYPE             = FRACTION
+   DAY-SCHEDULES    = ( "ZG0-S1 (SUM) C-Inf S1 All" )
+   ..
+"Clg T SS1" = WEEK-SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   DAY-SCHEDULES    = ( "ClgT Salon S1", &D, &D, &D, &D, "ClgT Salon S1" )
+   ..
+"ClgT SS2" = WEEK-SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   DAY-SCHEDULES    = ( "ClgT Salon S2 WD", &D, &D, &D, &D, 
+         "ClgT Salon S2 WEH" )
+   ..
+"Clg T BD S1" = WEEK-SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   DAY-SCHEDULES    = ( "ClgT BR S1", &D, &D, &D, &D, "ClgT BR S1" )
+   ..
+"ClgT BR S2" = WEEK-SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   DAY-SCHEDULES    = ( "ClgT BR S2 WD", &D, &D, &D, &D, "ClgT BR S2 WD" )
+   ..
+"Htg T SALON W2" = WEEK-SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   DAY-SCHEDULES    = ( "Htg T S S2", &D, &D, &D, &D, "Htg T S S2" )
+   ..
+"Htg T BR S1W" = WEEK-SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   DAY-SCHEDULES    = ( "Htg T BR S1", &D, &D, &D, &D, "Htg T BR S1" )
+   ..
+"HtgT BR S2 W" = WEEK-SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   DAY-SCHEDULES    = ( "Htg T BR S2", &D, &D, &D, &D, "Htg T BR S2" )
+   ..
+"Htg T S W1" = WEEK-SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   DAY-SCHEDULES    = ( "Htg T S S1", &D, &D, &D, &D, "Htg T S S1" )
+   ..
+"Salon Occup S2 Wk" = WEEK-SCHEDULE-PD
+   TYPE             = FRACTION
+   DAY-SCHEDULES    = ( "Salon Occup S2 WD", &D, &D, &D, &D, 
+         "Salon Occup S2 WEH" )
+   ..
+"BR Occup" = WEEK-SCHEDULE-PD
+   TYPE             = FRACTION
+   DAY-SCHEDULES    = ( "BR Occup WD", &D, &D, &D, &D, "BR Occup WD", 
+         "BR Occup WEH" )
+   ..
+"KITCHEN OCC" = WEEK-SCHEDULE-PD
+   TYPE             = FRACTION
+   DAY-SCHEDULES    = ( "Kitchen Occup", &D, &D, &D, &D, "Kitchen Occup" )
+   ..
+"Other occup w" = WEEK-SCHEDULE-PD
+   TYPE             = FRACTION
+   DAY-SCHEDULES    = ( "Other Occup", &D, &D, &D, &D, "Other Occup" )
+   ..
+"Lght BR Week" = WEEK-SCHEDULE-PD
+   TYPE             = FRACTION
+   DAY-SCHEDULES    = ( "Lght BR day", &D, &D, &D, &D, "Lght BR day" )
+   ..
+"Salon Lght S2" = WEEK-SCHEDULE-PD
+   TYPE             = FRACTION
+   DAY-SCHEDULES    = ( "Salon Lght S2 WD", &D, &D, &D, &D, 
+         "Salon Lght S2 WD" )
+   ..
+"Kitchen eqp Week" = WEEK-SCHEDULE-PD
+   TYPE             = FRACTION
+   DAY-SCHEDULES    = ( "Kitchen eqp day", &D, &D, &D, &D, "Kitchen eqp day" )
+   ..
+"Salon eqp S2 wk" = WEEK-SCHEDULE-PD
+   TYPE             = FRACTION
+   DAY-SCHEDULES    = ( "Salon eqp S2 WD", &D, &D, &D, &D, "Salon eqp S2 WEH" )
+   ..
+"DHW use week2" = WEEK-SCHEDULE-PD
+   TYPE             = FRACTION
+   DAY-SCHEDULES    = ( "DHW Eqp Res W2", &D, &D, &D, &D, "DHW Eqp Res W2" )
+   ..
+"Cust 1 Elec Seas1 Week" = WEEK-SCHEDULE-PD
+   TYPE             = FLAG
+   DAY-SCHEDULES    = ( "Cust 1 Elec Seas1 Day" )
+   ..
+"Custom Gas Seas1 Week" = WEEK-SCHEDULE-PD
+   TYPE             = FLAG
+   DAY-SCHEDULES    = ( "Custom Gas Seas1 Day" )
+   ..
+$ ---------------------------------------------------------
+$              Annual Schedules
+$ ---------------------------------------------------------
+"Salon Occup Sch" = SCHEDULE-PD
+   TYPE             = FRACTION
+   MONTH            = ( 5, 9, 12 )
+   DAY              = ( 31, 30, 31 )
+   WEEK-SCHEDULES   = ( "Salon Occup S1 Wk", "Salon Occup S2 Wk", 
+         "Salon Occup S1 Wk" )
+   ..
+"Salon Lght Sch" = SCHEDULE-PD
+   TYPE             = FRACTION
+   MONTH            = ( 5, 9, 12 )
+   DAY              = ( 31, 30, 31 )
+   WEEK-SCHEDULES   = ( "Salon Lght S1 Wk", "Salon Lght S2", 
+         "Salon Lght S1 Wk" )
+   ..
+"Salon eqp Sch" = SCHEDULE-PD
+   TYPE             = FRACTION
+   MONTH            = ( 5, 9, 12 )
+   DAY              = ( 31, 30, 31 )
+   WEEK-SCHEDULES   = ( "Salon eqp S1 Wk", "Salon eqp S2 wk", 
+         "Salon eqp S1 Wk" )
+   ..
+"DHW Eqp Res Sch" = SCHEDULE-PD
+   TYPE             = FRACTION
+   MONTH            = ( 5, 9, 12 )
+   DAY              = ( 31, 30, 31 )
+   WEEK-SCHEDULES   = ( "DHW Eqp Res Wk1", "DHW use week2", "DHW Eqp Res Wk1" )
+   ..
+"ZG0-S1 (SUM) P-Inf Sch" = SCHEDULE-PD
+   TYPE             = MULTIPLIER
+   MONTH            = ( 6, 8, 12 )
+   DAY              = ( 30, 31, 31 )
+   WEEK-SCHEDULES   = ( "ZG0-S1 (SUM) P-Inf S1 Wk", 
+         "ZG0-S1 (SUM) P-Inf S1 Wk", "ZG0-S1 (SUM) P-Inf S1 Wk" )
+   ..
+"ZG0-S1 (SUM) C-Inf Sch" = SCHEDULE-PD
+   TYPE             = FRACTION
+   MONTH            = ( 6, 8, 12 )
+   DAY              = ( 30, 31, 31 )
+   WEEK-SCHEDULES   = ( "ZG0-S1 (SUM) C-Inf S1 Wk", 
+         "ZG0-S1 (SUM) C-Inf S1 Wk", "ZG0-S1 (SUM) C-Inf S1 Wk" )
+   ..
+"Clg T Salon sched" = SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   MONTH            = ( 6, 9, 12 )
+   DAY              = ( 15, 15, 31 )
+   WEEK-SCHEDULES   = ( "Clg T SS1", "ClgT SS2", "Clg T SS1" )
+   ..
+"ClgT Bed Room" = SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   MONTH            = ( 6, 9, 12 )
+   DAY              = ( 15, 15, 31 )
+   WEEK-SCHEDULES   = ( "Clg T BD S1", "ClgT BR S2", "Clg T BD S1" )
+   ..
+"Heating T Salon sched" = SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   MONTH            = ( 3, 11, 12 )
+   DAY              = ( 31, 15, 31 )
+   WEEK-SCHEDULES   = ( "Htg T S W1", "Htg T SALON W2", "Htg T S W1" )
+   ..
+"Htg T BR sched" = SCHEDULE-PD
+   TYPE             = TEMPERATURE
+   MONTH            = ( 3, 11, 12 )
+   DAY              = ( 31, 15, 31 )
+   WEEK-SCHEDULES   = ( "Htg T BR S1W", "HtgT BR S2 W", "Htg T BR S1W" )
+   ..
+"BR occup sched" = SCHEDULE-PD
+   TYPE             = FRACTION
+   MONTH            = ( 12 )
+   DAY              = ( 31 )
+   WEEK-SCHEDULES   = ( "BR Occup" )
+   ..
+"Kitchen Occup sched" = SCHEDULE-PD
+   TYPE             = FRACTION
+   MONTH            = ( 12 )
+   DAY              = ( 31 )
+   WEEK-SCHEDULES   = ( "KITCHEN OCC" )
+   ..
+"Other occup Sched" = SCHEDULE-PD
+   TYPE             = FRACTION
+   MONTH            = ( 12 )
+   DAY              = ( 31 )
+   WEEK-SCHEDULES   = ( "Other occup w" )
+   ..
+"Lght BR sched" = SCHEDULE-PD
+   TYPE             = FRACTION
+   MONTH            = ( 12 )
+   DAY              = ( 31 )
+   WEEK-SCHEDULES   = ( "Lght BR Week" )
+   ..
+"Kitchen eqp" = SCHEDULE-PD
+   TYPE             = FRACTION
+   MONTH            = ( 12 )
+   DAY              = ( 31 )
+   WEEK-SCHEDULES   = ( "Kitchen eqp Week" )
+   ..
+"Cust 1 Elec Season Sched" = SCHEDULE-PD
+   TYPE             = FLAG
+   MONTH            = ( 12 )
+   DAY              = ( 31 )
+   WEEK-SCHEDULES   = ( "Cust 1 Elec Seas1 Week" )
+   ..
+"Custom Gas Season Sched" = SCHEDULE-PD
+   TYPE             = FLAG
+   MONTH            = ( 12 )
+   DAY              = ( 31 )
+   WEEK-SCHEDULES   = ( "Custom Gas Seas1 Week" )
+   ..
+"Sys1 (VAVS) Fans D1-1" = DAY-SCHEDULE-PD
+   TYPE              = ON/OFF/FLAG
+   VALUES            = ( 0, &D, &D, &D, &D, &D, &D, 1, &D, &D, &D, &D, &D, &D,
+                        &D, &D, &D, &D, 0 )
+   ..
+"Sys1 (VAVS) Fans D1-2" = DAY-SCHEDULE-PD
+   TYPE              = ON/OFF/FLAG
+   VALUES            = ( 0 )
+   ..
+"Sys1 (VAVS) Fans W1"  = WEEK-SCHEDULE-PD
+   TYPE             = ON/OFF/FLAG
+   DAY-SCHEDULES    = ( "Sys1 (VAVS) Fans D1-1", &D, &D, &D, &D,
+                        "Sys1 (VAVS) Fans D1-2" )
+   ..
+"Sys1 (VAVS) Fan Sch"  = SCHEDULE-PD
+   TYPE             = ON/OFF/FLAG
+   MONTH            = ( 12 )
+   DAY              = ( 31 )
+   WEEK-SCHEDULES   = ( "Sys1 (VAVS) Fans W1" )
+   ..
+$ ---------------------------------------------------------
+$              Polygons                                    
+$ ---------------------------------------------------------
+"Floor Polygon" =  POLYGON
+  V1               = ( 0.0, 0.0 )
+  V2               = ( 31.87435316410362, 0.0 )
+  V3               = ( 31.87435316410362, 16.319668820021054 )
+  V4               = ( 52.78392883975559, 16.319668820021054 )
+  V5               = ( 52.78392883975559, 0.0 )
+  V6               = ( 88.48320438355165, 0.0 )
+  V7               = ( 88.48320438355165, 35.699275543796055 )
+  V8               = ( 88.48320438355165, 67.57362870789967 )
+  V9               = ( 52.78392883975559, 67.57362870789967 )
+  V10               = ( 52.78392883975559, 58.64880982195066 )
+  V11               = ( 31.87435316410362, 58.64880982195066 )
+  V12               = ( 0.0, 58.64880982195066 )
+  ..
+"Space Polygon 1" =  POLYGON
+  V1               = ( 0.0, 0.0 )
+  V2               = ( 8.924818885949014, 0.0 )
+  V3               = ( 31.87435316410362, 0.0 )
+  V4               = ( 31.87435316410362, 35.699275543796055 )
+  V5               = ( 0.0, 35.699275543796055 )
+  ..
+"Space Polygon 2" =  POLYGON
+  V1               = ( 0.0, 0.0 )
+  V2               = ( 20.909575675651972, 0.0 )
+  V3               = ( 20.909575675651972, 22.949534278154605 )
+  V4               = ( 0.0, 22.949534278154605 )
+  ..
+"Space Polygon 3" =  POLYGON
+  V1               = ( 0.0, 0.0 )
+  V2               = ( 31.87435316410362, 0.0 )
+  V3               = ( 31.87435316410362, 33.14932729066776 )
+  V4               = ( 0.0, 33.14932729066776 )
+  V5               = ( 0.0, 22.949534278154605 )
+  ..
+"Space Polygon 4" =  POLYGON
+  V1               = ( 0.0, 0.0 )
+  V2               = ( 16.319668820021054, 0.0 )
+  V3               = ( 16.319668820021054, 35.699275543796055 )
+  V4               = ( -19.379606723774998, 35.699275543796055 )
+  V5               = ( -19.379606723774998, 0.0 )
+  ..
+"Space Polygon 5" =  POLYGON
+  V1               = ( 0.0, 0.0 )
+  V2               = ( 9.179813711261843, 0.0 )
+  V3               = ( 9.179813711261843, 31.87435316410362 )
+  V4               = ( -16.319668820021054, 31.87435316410362 )
+  V5               = ( -16.319668820021054, 0.0 )
+  ..
+"Space Polygon 6" =  POLYGON
+  V1               = ( 0.0, 0.0 )
+  V2               = ( 20.909575675651972, 0.0 )
+  V3               = ( 20.909575675651972, 19.379606723774998 )
+  V4               = ( 0.0, 19.379606723774998 )
+  ..
+"Space Polygon 1 - SMirro" =  POLYGON
+  V1               = ( 0.0, 0.0 )
+  V2               = ( 35.699275543796055, 0.0 )
+  V3               = ( 35.699275543796055, 31.87435316410362 )
+  V4               = ( 0.0, 31.87435316410362 )
+  V5               = ( 0.0, 8.924818885949014 )
+  ..
+"Space Polygon 2 - SMirro" =  POLYGON
+  V1               = ( 0.0, 0.0 )
+  V2               = ( 22.949534278154605, 0.0 )
+  V3               = ( 22.949534278154605, 20.909575675651972 )
+  V4               = ( 0.0, 20.909575675651972 )
+  ..
+"Space Polygon 3 - SMirro" =  POLYGON
+  V1               = ( 0.0, 0.0 )
+  V2               = ( 22.949534278154605, 0.0 )
+  V3               = ( 33.14932729066776, 0.0 )
+  V4               = ( 33.14932729066776, 31.87435316410362 )
+  V5               = ( 0.0, 31.87435316410362 )
+  ..
+"Space Polygon 4 - SMirro" =  POLYGON
+  V1               = ( 0.0, 0.0 )
+  V2               = ( 0.0, -19.379606723774998 )
+  V3               = ( 35.699275543796055, -19.379606723774998 )
+  V4               = ( 35.699275543796055, 16.319668820021054 )
+  V5               = ( 0.0, 16.319668820021054 )
+  ..
+"Space Polygon 5 - SMirro" =  POLYGON
+  V1               = ( 0.0, 0.0 )
+  V2               = ( 0.0, -16.319668820021054 )
+  V3               = ( 31.87435316410362, -16.319668820021054 )
+  V4               = ( 31.87435316410362, 9.179813711261843 )
+  V5               = ( 0.0, 9.179813711261843 )
+  ..
+"Space Polygon 6 - SMirro" =  POLYGON
+  V1               = ( 0.0, 0.0 )
+  V2               = ( 19.379606723774998, 0.0 )
+  V3               = ( 19.379606723774998, 20.909575675651972 )
+  V4               = ( 0.0, 20.909575675651972 )
+  ..
+$ *********************************************************
+$ **                                                     **
+$ **      Floors / Spaces / Walls / Windows / Doors      **
+$ **                                                     **
+$ *********************************************************
+"Ground Flr" = FLOOR           
+   AZIMUTH          = 360
+   POLYGON          = "Floor Polygon"
+   SHAPE            = POLYGON
+   FLOOR-HEIGHT     = 9.84252
+   SPACE-HEIGHT     = 9.84252
+   C-DIAGRAM-DATA   = *Bldg Envelope & Loads 1 Diag Data*
+   ..
+"KITCHEN" = SPACE           
+   SHAPE            = POLYGON
+   ZONE-TYPE        = UNCONDITIONED
+   PEOPLE-SCHEDULE  = "Kitchen Occup sched"
+   LIGHTING-SCHEDUL = ( "Kitchen Occup sched" )
+   EQUIP-SCHEDULE   = ( "Kitchen eqp" )
+   INF-SCHEDULE     = "ZG0-S1 (SUM) P-Inf Sch"
+   LIGHTING-TYPE    = ( INCAND )
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.0586286
+   PEOPLE-HG-LAT    = 155
+   PEOPLE-HG-SENS   = 245
+   EQUIP-LATENT     = ( 0 )
+   EQUIP-SENSIBLE   = ( 1 )
+   LIGHTING-W/AREA  = ( 0.23 )
+   EQUIPMENT-W/AREA = ( 0.366 )
+   AREA/PERSON      = 43
+   POLYGON          = "Space Polygon 1"
+   LOCATION         = FLOOR-V9
+   ..
+"West Wall (G.NNE1.E1)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Wall, No Insulation"
+   WIDTH            = 8.72563829787234
+   LOCATION         = SPACE-V1
+   SHADING-SURFACE  = YES
+   ..
+"KITCHEN West Window" = WINDOW
+   GLASS-TYPE    = "Combined West Glass"
+   MULTIPLIER    = 1.0
+   FRAME-WIDTH   = 0.0
+   X             = 2.983925612609947
+   Y             = 0.250000008
+   HEIGHT        = 9.342519983999999
+   WIDTH         = 2.7577870726524467
+   OVERHANG-D    = 0.9842519999999999
+   FRAME-CONDUCT = 3.079
+   ..
+"East Wall (G.NNE1.E2)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Wall, No Insulation"
+   WIDTH            = 34.90255319148936
+   LOCATION         = SPACE-V4
+   SHADING-SURFACE  = YES
+   ..
+"KITCHEN East Window" = WINDOW
+   GLASS-TYPE    = "Combined East Glass"
+   MULTIPLIER    = 1.0
+   FRAME-WIDTH   = 0.0
+   X             = 11.935702450439788
+   Y             = 0.250000008
+   HEIGHT        = 9.342519983999999
+   WIDTH         = 11.031148290609787
+   OVERHANG-D    = 0.9842519999999999
+   FRAME-CONDUCT = 3.079
+   ..
+"North Wall (G.NNE1.E3)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Wall, No Insulation"
+   WIDTH            = 39.7104553314121
+   LOCATION         = SPACE-V5
+   SHADING-SURFACE  = YES
+   ..
+"KITCHEN North Window" = WINDOW
+   GLASS-TYPE    = "Combined North Glass"
+   MULTIPLIER    = 1.0
+   FRAME-WIDTH   = 0.0
+   X             = 13.57987126061564
+   Y             = 0.250000008
+   HEIGHT        = 9.342519983999999
+   WIDTH         = 12.550712810180817
+   OVERHANG-D    = 0.9842519999999999
+   FRAME-CONDUCT = 3.079
+   ..
+"West Wall (G.NNE1.I1)" = INTERIOR-WALL   
+   NEXT-TO          = "WC1"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V2
+   ..
+"South Wall (G.NNE1.I2)" = INTERIOR-WALL   
+   NEXT-TO          = "SALON"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"Ceiling (G.NNE1.I3)" = INTERIOR-WALL   
+   NEXT-TO          = "Room1"
+   CONSTRUCTION     = "Ceilg Construction"
+   LOCATION         = TOP
+   ..
+"Flr (G.NNE1.U1)" = UNDERGROUND-WALL
+   CONSTRUCTION     = "First level Floor"
+   LOCATION         = BOTTOM
+   ..
+"WC1" = SPACE           
+   SHAPE            = POLYGON
+   ZONE-TYPE        = UNCONDITIONED
+   PEOPLE-SCHEDULE  = "Other occup Sched"
+   LIGHTING-SCHEDUL = ( "Other occup Sched" )
+   INF-SCHEDULE     = "ZG0-S1 (SUM) P-Inf Sch"
+   LIGHTING-TYPE    = ( INCAND )
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.038
+   PEOPLE-HG-LAT    = 155
+   PEOPLE-HG-SENS   = 245
+   EQUIP-LATENT     = ( 0 )
+   EQUIP-SENSIBLE   = ( 1 )
+   LIGHTING-W/AREA  = ( 0.23 )
+   EQUIPMENT-W/AREA = ( 0 )
+   AREA/PERSON      = 600
+   POLYGON          = "Space Polygon 2"
+   LOCATION         = FLOOR-V10
+   C-SUB-SRC-BTUH   = ( 0, 0, 0 )
+   C-SUB-SRC-KW     = ( 0, 0, 0 )
+   C-ACTIVITY-DESC  = *Residential (Multifamily)*
+   ..
+"North Wall (G.N2.E4)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Wall, No Insulation"
+   WIDTH            = 23.258980979827086
+   LOCATION         = SPACE-V1
+   SHADING-SURFACE  = YES
+   ..
+"WC1 North Window" = WINDOW
+   GLASS-TYPE    = "Combined North Glass"
+   MULTIPLIER    = 1.0
+   FRAME-WIDTH   = 0.0
+   X             = 7.953924595503447
+   Y             = 0.250000008
+   HEIGHT        = 9.342519983999999
+   WIDTH         = 7.351131788820192
+   OVERHANG-D    = 0.9842519999999999
+   FRAME-CONDUCT = 3.079
+   ..
+"West Wall (G.N2.I4)" = INTERIOR-WALL   
+   NEXT-TO          = "SEJOUR"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V2
+   ..
+"Ceiling (G.N2.I5)" = INTERIOR-WALL   
+   NEXT-TO          = "WC2"
+   CONSTRUCTION     = "Ceilg Construction"
+   LOCATION         = TOP
+   ..
+"Flr (G.N2.U2)" = UNDERGROUND-WALL
+   CONSTRUCTION     = "First level Floor"
+   LOCATION         = BOTTOM
+   ..
+"SEJOUR" = SPACE           
+   SHAPE            = POLYGON
+   ZONE-TYPE        = CONDITIONED
+   PEOPLE-SCHEDULE  = "Salon Occup Sch"
+   LIGHTING-SCHEDUL = ( "Salon Lght Sch" )
+   EQUIP-SCHEDULE   = ( "Salon eqp Sch" )
+   INF-SCHEDULE     = "ZG0-S1 (SUM) P-Inf Sch"
+   LIGHTING-TYPE    = ( INCAND )
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.0536677
+   PEOPLE-HG-LAT    = 155
+   PEOPLE-HG-SENS   = 245
+   EQUIP-LATENT     = ( 0 )
+   EQUIP-SENSIBLE   = ( 1 )
+   LIGHTING-W/AREA  = ( 0.46 )
+   EQUIPMENT-W/AREA = ( 0.93 )
+   AREA/PERSON      = 40
+   POLYGON          = "Space Polygon 3"
+   LOCATION         = FLOOR-V11
+   C-SUB-SRC-BTUH   = ( 0, 0, 0 )
+   C-SUB-SRC-KW     = ( 0, 0, 0 )
+   C-ACTIVITY-DESC  = *Residential (Multifamily)*
+   ..
+"North Wall (G.NW3.E5)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Wall, No Insulation"
+   WIDTH            = 35.455763688760804
+   LOCATION         = SPACE-V1
+   SHADING-SURFACE  = YES
+   ..
+"SEJOUR North Window" = WINDOW
+   GLASS-TYPE    = "Combined North Glass"
+   MULTIPLIER    = 1.0
+   FRAME-WIDTH   = 0.0
+   X             = 12.124885054121108
+   Y             = 0.250000008
+   HEIGHT        = 9.342519983999999
+   WIDTH         = 11.205993580518586
+   OVERHANG-D    = 0.9842519999999999
+   FRAME-CONDUCT = 3.079
+   ..
+"West Wall (G.NW3.E6)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Wall, No Insulation"
+   WIDTH            = 32.40951367781155
+   LOCATION         = SPACE-V2
+   SHADING-SURFACE  = YES
+   ..
+"SEJOUR West Window" = WINDOW
+   GLASS-TYPE    = "Combined West Glass"
+   MULTIPLIER    = 1.0
+   FRAME-WIDTH   = 0.0
+   X             = 11.083152275408375
+   Y             = 0.250000008
+   HEIGHT        = 9.342519983999999
+   WIDTH         = 10.243209126994802
+   OVERHANG-D    = 0.9842519999999999
+   FRAME-CONDUCT = 3.079
+   ..
+"South Wall (G.NW3.I6)" = INTERIOR-WALL   
+   NEXT-TO          = "1ESC1"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"East Wall (G.NW3.I7)" = INTERIOR-WALL   
+   NEXT-TO          = "HALL1"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V4
+   ..
+"Ceiling (G.NW3.I8)" = INTERIOR-WALL   
+   NEXT-TO          = "Room2"
+   CONSTRUCTION     = "Ceilg Construction"
+   LOCATION         = TOP
+   ..
+"Flr (G.NW3.U3)" = UNDERGROUND-WALL
+   CONSTRUCTION     = "First level Floor"
+   LOCATION         = BOTTOM
+   ..
+"SALON" = SPACE           
+   SHAPE            = POLYGON
+   ZONE-TYPE        = CONDITIONED
+   PEOPLE-SCHEDULE  = "Salon Occup Sch"
+   LIGHTING-SCHEDUL = ( "Salon Lght Sch" )
+   EQUIP-SCHEDULE   = ( "Salon eqp Sch" )
+   INF-SCHEDULE     = "ZG0-S1 (SUM) P-Inf Sch"
+   LIGHTING-TYPE    = ( INCAND )
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.0600245
+   PEOPLE-HG-LAT    = 155
+   PEOPLE-HG-SENS   = 245
+   EQUIP-LATENT     = ( 0 )
+   EQUIP-SENSIBLE   = ( 1 )
+   LIGHTING-W/AREA  = ( 0.46 )
+   EQUIPMENT-W/AREA = ( 0.93 )
+   AREA/PERSON      = 49
+   POLYGON          = "Space Polygon 4"
+   LOCATION         = FLOOR-V4
+   C-SUB-SRC-BTUH   = ( 0, 0, 0 )
+   C-SUB-SRC-KW     = ( 0, 0, 0 )
+   C-ACTIVITY-DESC  = *Residential (Multifamily)*
+   ..
+"West Wall (G.SSE4.E7)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Wall, No Insulation"
+   WIDTH            = 15.955452887537996
+   LOCATION         = SPACE-V1
+   SHADING-SURFACE  = YES
+   ..
+"SALON West Window" = WINDOW
+   GLASS-TYPE    = "Combined West Glass"
+   MULTIPLIER    = 1.0
+   FRAME-WIDTH   = 0.0
+   X             = 5.456321120201046
+   Y             = 0.250000008
+   HEIGHT        = 9.342519983999999
+   WIDTH         = 5.042810647135903
+   OVERHANG-D    = 0.9842519999999999
+   FRAME-CONDUCT = 3.079
+   ..
+"South Wall (G.SSE4.E8)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Wall, No Insulation"
+   WIDTH            = 39.7104553314121
+   LOCATION         = SPACE-V2
+   SHADING-SURFACE  = YES
+   ..
+"SALON South Window" = WINDOW
+   GLASS-TYPE    = "Combined South Glass"
+   MULTIPLIER    = 1.0
+   FRAME-WIDTH   = 0.0
+   X             = 11.488085792252171
+   Y             = 0.250000008
+   HEIGHT        = 9.342519983999999
+   WIDTH         = 16.734283746907757
+   OVERHANG-D    = 0.9842519999999999
+   FRAME-CONDUCT = 3.079
+   ..
+"East Wall (G.SSE4.E9)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Wall, No Insulation"
+   WIDTH            = 31.162993920972646
+   LOCATION         = SPACE-V3
+   SHADING-SURFACE  = YES
+   ..
+"SALON East Window" = WINDOW
+   GLASS-TYPE    = "Combined East Glass"
+   MULTIPLIER    = 1.0
+   FRAME-WIDTH   = 0.0
+   X             = 10.656877187892668
+   Y             = 0.250000008
+   HEIGHT        = 9.342519983999999
+   WIDTH         = 9.84923954518731
+   OVERHANG-D    = 0.9842519999999999
+   FRAME-CONDUCT = 3.079
+   ..
+"West Wall (G.SSE4.I9)" = INTERIOR-WALL   
+   NEXT-TO          = "HALL1"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V5
+   ..
+"Ceiling (G.SSE4.I10)" = INTERIOR-WALL   
+   NEXT-TO          = "Room3"
+   CONSTRUCTION     = "Ceilg Construction"
+   LOCATION         = TOP
+   ..
+"Flr (G.SSE4.U4)" = UNDERGROUND-WALL
+   CONSTRUCTION     = "First level Floor"
+   LOCATION         = BOTTOM
+   ..
+"1ESC1" = SPACE           
+   X                = 31.87435316410362
+   Y                = 16.319668820021054
+   AZIMUTH          = -90
+   SHAPE            = POLYGON
+   ZONE-TYPE        = UNCONDITIONED
+   PEOPLE-SCHEDULE  = "Other occup Sched"
+   LIGHTING-SCHEDUL = ( "Other occup Sched" )
+   INF-SCHEDULE     = "ZG0-S1 (SUM) P-Inf Sch"
+   LIGHTING-TYPE    = ( INCAND )
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.0790704
+   PEOPLE-HG-LAT    = 155
+   PEOPLE-HG-SENS   = 245
+   EQUIP-LATENT     = ( 0 )
+   EQUIP-SENSIBLE   = ( 1 )
+   LIGHTING-W/AREA  = ( 0.23 )
+   EQUIPMENT-W/AREA = ( 0 )
+   AREA/PERSON      = 600
+   POLYGON          = "Space Polygon 5"
+   C-SUB-SRC-BTUH   = ( 0, 0, 0 )
+   C-SUB-SRC-KW     = ( 0, 0, 0 )
+   C-ACTIVITY-DESC  = *Residential (Multifamily)*
+   ..
+"West Wall (G.SSW5.E10)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Wall, No Insulation"
+   WIDTH            = 24.930395136778113
+   LOCATION         = SPACE-V3
+   SHADING-SURFACE  = YES
+   ..
+"1ESC1 West Window" = WINDOW
+   GLASS-TYPE    = "Combined West Glass"
+   MULTIPLIER    = 1.0
+   FRAME-WIDTH   = 0.0
+   X             = 8.525501750314133
+   Y             = 0.250000008
+   HEIGHT        = 9.342519983999999
+   WIDTH         = 7.879391636149847
+   OVERHANG-D    = 0.9842519999999999
+   FRAME-CONDUCT = 3.079
+   ..
+"South Wall (G.SSW5.E11)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Wall, No Insulation"
+   WIDTH            = 35.455763688760804
+   LOCATION         = SPACE-V4
+   SHADING-SURFACE  = YES
+   ..
+"1ESC1 South Window" = WINDOW
+   GLASS-TYPE    = "Combined South Glass"
+   MULTIPLIER    = 1.0
+   FRAME-WIDTH   = 0.0
+   X             = 10.257219457368011
+   Y             = 0.250000008
+   HEIGHT        = 9.342519983999999
+   WIDTH         = 14.941324774024782
+   OVERHANG-D    = 0.9842519999999999
+   FRAME-CONDUCT = 3.079
+   ..
+"East Wall (G.SSW5.E12)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Wall, No Insulation"
+   WIDTH            = 15.955452887537996
+   LOCATION         = SPACE-V5
+   SHADING-SURFACE  = YES
+   ..
+"East Wall (G.SSW5.I11)" = INTERIOR-WALL   
+   NEXT-TO          = "HALL1"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V1
+   ..
+"Ceiling (G.SSW5.I12)" = INTERIOR-WALL   
+   NEXT-TO          = "ESC2"
+   CONSTRUCTION     = "Ceilg Construction"
+   LOCATION         = TOP
+   ..
+"Flr (G.SSW5.U5)" = UNDERGROUND-WALL
+   CONSTRUCTION     = "First level Floor"
+   LOCATION         = BOTTOM
+   ..
+"HALL1" = SPACE           
+   SHAPE            = POLYGON
+   ZONE-TYPE        = UNCONDITIONED
+   PEOPLE-SCHEDULE  = "Other occup Sched"
+   LIGHTING-SCHEDUL = ( "Other occup Sched" )
+   INF-SCHEDULE     = "ZG0-S1 (SUM) P-Inf Sch"
+   LIGHTING-TYPE    = ( INCAND )
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.045
+   PEOPLE-HG-LAT    = 155
+   PEOPLE-HG-SENS   = 245
+   EQUIP-LATENT     = ( 0 )
+   EQUIP-SENSIBLE   = ( 1 )
+   LIGHTING-W/AREA  = ( 0.23 )
+   EQUIPMENT-W/AREA = ( 0 )
+   AREA/PERSON      = 600
+   POLYGON          = "Space Polygon 6"
+   LOCATION         = FLOOR-V3
+   C-SUB-SRC-BTUH   = ( 0, 0, 0 )
+   C-SUB-SRC-KW     = ( 0, 0, 0 )
+   C-ACTIVITY-DESC  = *Residential (Multifamily)*
+   ..
+"South Wall (G.S6.E13)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Wall, No Insulation"
+   WIDTH            = 23.258980979827086
+   LOCATION         = SPACE-V1
+   SHADING-SURFACE  = YES
+   ..
+"HALL1 South Window" = WINDOW
+   GLASS-TYPE    = "Combined South Glass"
+   MULTIPLIER    = 1.0
+   FRAME-WIDTH   = 0.0
+   X             = 6.728735964033414
+   Y             = 0.250000008
+   HEIGHT        = 9.342519983999999
+   WIDTH         = 9.801509051760258
+   OVERHANG-D    = 0.9842519999999999
+   FRAME-CONDUCT = 3.079
+   ..
+"North Wall (G.S6.I13)" = INTERIOR-WALL   
+   NEXT-TO          = "WC1"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"Ceiling (G.S6.I14)" = INTERIOR-WALL   
+   NEXT-TO          = "HALL2"
+   CONSTRUCTION     = "Ceilg Construction"
+   LOCATION         = TOP
+   ..
+"Flr (G.S6.U6)" = UNDERGROUND-WALL
+   CONSTRUCTION     = "First level Floor"
+   LOCATION         = BOTTOM
+   ..
+"Top Flr" = FLOOR           
+   Z                = 9.84252
+   AZIMUTH          = 360
+   POLYGON          = "Floor Polygon"
+   SHAPE            = POLYGON
+   FLOOR-HEIGHT     = 9.84252
+   SPACE-HEIGHT     = 9.84252
+   C-DIAGRAM-DATA   = *Bldg Envelope & Loads 1 Diag Data*
+   ..
+"Room1" = SPACE           
+   SHAPE            = POLYGON
+   ZONE-TYPE        = CONDITIONED
+   PEOPLE-SCHEDULE  = "BR occup sched"
+   LIGHTING-SCHEDUL = ( "Lght BR sched" )
+   INF-SCHEDULE     = "ZG0-S1 (SUM) P-Inf Sch"
+   LIGHTING-TYPE    = ( INCAND )
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.0586286
+   PEOPLE-HG-LAT    = 155
+   PEOPLE-HG-SENS   = 245
+   EQUIP-LATENT     = ( 0 )
+   EQUIP-SENSIBLE   = ( 1 )
+   LIGHTING-W/AREA  = ( 0.46 )
+   EQUIPMENT-W/AREA = ( 0 )
+   AREA/PERSON      = 88
+   POLYGON          = "Space Polygon 1"
+   LOCATION         = FLOOR-V9
+   ..
+"West Wall (T.NNE7.E14)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Wall, No Insulation"
+   WIDTH            = 8.72563829787234
+   LOCATION         = SPACE-V1
+   SHADING-SURFACE  = YES
+   ..
+"Room1 West Window" = WINDOW
+   GLASS-TYPE    = "Combined West Glass"
+   MULTIPLIER    = 1.0
+   FRAME-WIDTH   = 0.0
+   X             = 2.983925612609947
+   Y             = 0.250000008
+   HEIGHT        = 9.342519983999999
+   WIDTH         = 2.7577870726524467
+   OVERHANG-D    = 0.9842519999999999
+   FRAME-CONDUCT = 3.079
+   ..
+"East Wall (T.NNE7.E15)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Wall, No Insulation"
+   WIDTH            = 34.90255319148936
+   LOCATION         = SPACE-V4
+   SHADING-SURFACE  = YES
+   ..
+"Room1 East Window" = WINDOW
+   GLASS-TYPE    = "Combined East Glass"
+   MULTIPLIER    = 1.0
+   FRAME-WIDTH   = 0.0
+   X             = 11.935702450439788
+   Y             = 0.250000008
+   HEIGHT        = 9.342519983999999
+   WIDTH         = 11.031148290609787
+   OVERHANG-D    = 0.9842519999999999
+   FRAME-CONDUCT = 3.079
+   ..
+"North Wall (T.NNE7.E16)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Wall, No Insulation"
+   WIDTH            = 39.7104553314121
+   LOCATION         = SPACE-V5
+   SHADING-SURFACE  = YES
+   ..
+"Room1 North Window" = WINDOW
+   GLASS-TYPE    = "Combined North Glass"
+   MULTIPLIER    = 1.0
+   FRAME-WIDTH   = 0.0
+   X             = 13.57987126061564
+   Y             = 0.250000008
+   HEIGHT        = 9.342519983999999
+   WIDTH         = 12.550712810180817
+   OVERHANG-D    = 0.9842519999999999
+   FRAME-CONDUCT = 3.079
+   ..
+"Roof (T.NNE7.E17)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Roof, No Insulation"
+   LOCATION         = TOP
+   ..
+"West Wall (T.NNE7.I16)" = INTERIOR-WALL   
+   NEXT-TO          = "WC2"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V2
+   ..
+"South Wall (T.NNE7.I17)" = INTERIOR-WALL   
+   NEXT-TO          = "Room3"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"WC2" = SPACE           
+   SHAPE            = POLYGON
+   ZONE-TYPE        = UNCONDITIONED
+   PEOPLE-SCHEDULE  = "Other occup Sched"
+   LIGHTING-SCHEDUL = ( "Other occup Sched" )
+   INF-SCHEDULE     = "ZG0-S1 (SUM) P-Inf Sch"
+   LIGHTING-TYPE    = ( INCAND )
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.038
+   PEOPLE-HG-LAT    = 155
+   PEOPLE-HG-SENS   = 245
+   EQUIP-LATENT     = ( 0 )
+   EQUIP-SENSIBLE   = ( 1 )
+   LIGHTING-W/AREA  = ( 0.23 )
+   EQUIPMENT-W/AREA = ( 0 )
+   AREA/PERSON      = 600
+   POLYGON          = "Space Polygon 2"
+   LOCATION         = FLOOR-V10
+   ..
+"North Wall (T.N8.E18)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Wall, No Insulation"
+   WIDTH            = 23.258980979827086
+   LOCATION         = SPACE-V1
+   SHADING-SURFACE  = YES
+   ..
+"WC2 North Window" = WINDOW
+   GLASS-TYPE    = "Combined North Glass"
+   MULTIPLIER    = 1.0
+   FRAME-WIDTH   = 0.0
+   X             = 7.953924595503447
+   Y             = 0.250000008
+   HEIGHT        = 9.342519983999999
+   WIDTH         = 7.351131788820192
+   OVERHANG-D    = 0.9842519999999999
+   FRAME-CONDUCT = 3.079
+   ..
+"Roof (T.N8.E19)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Roof, No Insulation"
+   LOCATION         = TOP
+   ..
+"West Wall (T.N8.I19)" = INTERIOR-WALL   
+   NEXT-TO          = "Room2"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V2
+   ..
+"Room2" = SPACE           
+   SHAPE            = POLYGON
+   ZONE-TYPE        = CONDITIONED
+   PEOPLE-SCHEDULE  = "BR occup sched"
+   LIGHTING-SCHEDUL = ( "Lght BR sched" )
+   INF-SCHEDULE     = "ZG0-S1 (SUM) P-Inf Sch"
+   LIGHTING-TYPE    = ( INCAND )
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.0536677
+   PEOPLE-HG-LAT    = 155
+   PEOPLE-HG-SENS   = 245
+   EQUIP-LATENT     = ( 0 )
+   EQUIP-SENSIBLE   = ( 1 )
+   LIGHTING-W/AREA  = ( 0.46 )
+   EQUIPMENT-W/AREA = ( 0 )
+   AREA/PERSON      = 82
+   POLYGON          = "Space Polygon 3"
+   LOCATION         = FLOOR-V11
+   ..
+"North Wall (T.NW9.E20)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Wall, No Insulation"
+   WIDTH            = 35.455763688760804
+   LOCATION         = SPACE-V1
+   SHADING-SURFACE  = YES
+   ..
+"Room2 North Window" = WINDOW
+   GLASS-TYPE    = "Combined North Glass"
+   MULTIPLIER    = 1.0
+   FRAME-WIDTH   = 0.0
+   X             = 12.124885054121108
+   Y             = 0.250000008
+   HEIGHT        = 9.342519983999999
+   WIDTH         = 11.205993580518586
+   OVERHANG-D    = 0.9842519999999999
+   FRAME-CONDUCT = 3.079
+   ..
+"West Wall (T.NW9.E21)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Wall, No Insulation"
+   WIDTH            = 32.40951367781155
+   LOCATION         = SPACE-V2
+   SHADING-SURFACE  = YES
+   ..
+"Room2 West Window" = WINDOW
+   GLASS-TYPE    = "Combined West Glass"
+   MULTIPLIER    = 1.0
+   FRAME-WIDTH   = 0.0
+   X             = 11.083152275408375
+   Y             = 0.250000008
+   HEIGHT        = 9.342519983999999
+   WIDTH         = 10.243209126994802
+   OVERHANG-D    = 0.9842519999999999
+   FRAME-CONDUCT = 3.079
+   ..
+"Roof (T.NW9.E22)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Roof, No Insulation"
+   LOCATION         = TOP
+   ..
+"South Wall (T.NW9.I21)" = INTERIOR-WALL   
+   NEXT-TO          = "ESC2"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+"East Wall (T.NW9.I22)" = INTERIOR-WALL   
+   NEXT-TO          = "HALL2"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V4
+   ..
+"Room3" = SPACE           
+   SHAPE            = POLYGON
+   ZONE-TYPE        = CONDITIONED
+   PEOPLE-SCHEDULE  = "BR occup sched"
+   LIGHTING-SCHEDUL = ( "Lght BR sched" )
+   INF-SCHEDULE     = "ZG0-S1 (SUM) P-Inf Sch"
+   LIGHTING-TYPE    = ( INCAND )
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.0600245
+   PEOPLE-HG-LAT    = 155
+   PEOPLE-HG-SENS   = 245
+   EQUIP-LATENT     = ( 0 )
+   EQUIP-SENSIBLE   = ( 1 )
+   LIGHTING-W/AREA  = ( 0.46 )
+   EQUIPMENT-W/AREA = ( 0 )
+   AREA/PERSON      = 95
+   POLYGON          = "Space Polygon 4"
+   LOCATION         = FLOOR-V4
+   ..
+"West Wall (T.SSE10.E23)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Wall, No Insulation"
+   WIDTH            = 15.955452887537996
+   LOCATION         = SPACE-V1
+   SHADING-SURFACE  = YES
+   ..
+"Room3 West Window" = WINDOW
+   GLASS-TYPE    = "Combined West Glass"
+   MULTIPLIER    = 1.0
+   FRAME-WIDTH   = 0.0
+   X             = 5.456321120201046
+   Y             = 0.250000008
+   HEIGHT        = 9.342519983999999
+   WIDTH         = 5.042810647135903
+   OVERHANG-D    = 0.9842519999999999
+   FRAME-CONDUCT = 3.079
+   ..
+"South Wall (T.SSE10.E24)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Wall, No Insulation"
+   WIDTH            = 39.7104553314121
+   LOCATION         = SPACE-V2
+   SHADING-SURFACE  = YES
+   ..
+"Room3 South Window" = WINDOW
+   GLASS-TYPE    = "Combined South Glass"
+   MULTIPLIER    = 1.0
+   FRAME-WIDTH   = 0.0
+   X             = 11.488085792252171
+   Y             = 0.250000008
+   HEIGHT        = 9.342519983999999
+   WIDTH         = 16.734283746907757
+   OVERHANG-D    = 0.9842519999999999
+   FRAME-CONDUCT = 3.079
+   ..
+"East Wall (T.SSE10.E25)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Wall, No Insulation"
+   WIDTH            = 31.162993920972646
+   LOCATION         = SPACE-V3
+   SHADING-SURFACE  = YES
+   ..
+"Room3 East Window" = WINDOW
+   GLASS-TYPE    = "Combined East Glass"
+   MULTIPLIER    = 1.0
+   FRAME-WIDTH   = 0.0
+   X             = 10.656877187892668
+   Y             = 0.250000008
+   HEIGHT        = 9.342519983999999
+   WIDTH         = 9.84923954518731
+   OVERHANG-D    = 0.9842519999999999
+   FRAME-CONDUCT = 3.079
+   ..
+"Roof (T.SSE10.E26)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Roof, No Insulation"
+   LOCATION         = TOP
+   ..
+"West Wall (T.SSE10.I24)" = INTERIOR-WALL   
+   NEXT-TO          = "HALL2"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V5
+   ..
+"ESC2" = SPACE           
+   X                = 31.87435316410362
+   Y                = 16.319668820021054
+   AZIMUTH          = -90
+   SHAPE            = POLYGON
+   ZONE-TYPE        = UNCONDITIONED
+   PEOPLE-SCHEDULE  = "Other occup Sched"
+   LIGHTING-SCHEDUL = ( "Other occup Sched" )
+   INF-SCHEDULE     = "ZG0-S1 (SUM) P-Inf Sch"
+   LIGHTING-TYPE    = ( INCAND )
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.0790704
+   PEOPLE-HG-LAT    = 155
+   PEOPLE-HG-SENS   = 245
+   EQUIP-LATENT     = ( 0 )
+   EQUIP-SENSIBLE   = ( 1 )
+   LIGHTING-W/AREA  = ( 0.23 )
+   EQUIPMENT-W/AREA = ( 0 )
+   AREA/PERSON      = 600
+   POLYGON          = "Space Polygon 5"
+   ..
+"West Wall (T.SSW11.E27)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Wall, No Insulation"
+   WIDTH            = 24.930395136778113
+   LOCATION         = SPACE-V3
+   SHADING-SURFACE  = YES
+   ..
+"ESC2 West Window" = WINDOW
+   GLASS-TYPE    = "Combined West Glass"
+   MULTIPLIER    = 1.0
+   FRAME-WIDTH   = 0.0
+   X             = 8.525501750314133
+   Y             = 0.250000008
+   HEIGHT        = 9.342519983999999
+   WIDTH         = 7.879391636149847
+   OVERHANG-D    = 0.9842519999999999
+   FRAME-CONDUCT = 3.079
+   ..
+"South Wall (T.SSW11.E28)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Wall, No Insulation"
+   WIDTH            = 35.455763688760804
+   LOCATION         = SPACE-V4
+   SHADING-SURFACE  = YES
+   ..
+"ESC2 South Window" = WINDOW
+   GLASS-TYPE    = "Combined South Glass"
+   MULTIPLIER    = 1.0
+   FRAME-WIDTH   = 0.0
+   X             = 10.257219457368011
+   Y             = 0.250000008
+   HEIGHT        = 9.342519983999999
+   WIDTH         = 14.941324774024782
+   OVERHANG-D    = 0.9842519999999999
+   FRAME-CONDUCT = 3.079
+   ..
+"East Wall (T.SSW11.E29)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Wall, No Insulation"
+   WIDTH            = 15.955452887537996
+   LOCATION         = SPACE-V5
+   SHADING-SURFACE  = YES
+   ..
+"Roof (T.SSW11.E30)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Roof, No Insulation"
+   LOCATION         = TOP
+   ..
+"East Wall (T.SSW11.I26)" = INTERIOR-WALL   
+   NEXT-TO          = "HALL2"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V1
+   ..
+"HALL2" = SPACE           
+   SHAPE            = POLYGON
+   ZONE-TYPE        = UNCONDITIONED
+   PEOPLE-SCHEDULE  = "Other occup Sched"
+   LIGHTING-SCHEDUL = ( "Other occup Sched" )
+   INF-SCHEDULE     = "ZG0-S1 (SUM) P-Inf Sch"
+   LIGHTING-TYPE    = ( INCAND )
+   INF-METHOD       = AIR-CHANGE
+   INF-FLOW/AREA    = 0.045
+   PEOPLE-HG-LAT    = 155
+   PEOPLE-HG-SENS   = 245
+   EQUIP-LATENT     = ( 0 )
+   EQUIP-SENSIBLE   = ( 1 )
+   LIGHTING-W/AREA  = ( 0.23 )
+   EQUIPMENT-W/AREA = ( 0 )
+   AREA/PERSON      = 600
+   POLYGON          = "Space Polygon 6"
+   LOCATION         = FLOOR-V3
+   ..
+"South Wall (T.S12.E31)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Wall, No Insulation"
+   WIDTH            = 23.258980979827086
+   LOCATION         = SPACE-V1
+   SHADING-SURFACE  = YES
+   ..
+"HALL2 South Window" = WINDOW
+   GLASS-TYPE    = "Combined South Glass"
+   MULTIPLIER    = 1.0
+   FRAME-WIDTH   = 0.0
+   X             = 6.728735964033414
+   Y             = 0.250000008
+   HEIGHT        = 9.342519983999999
+   WIDTH         = 9.801509051760258
+   OVERHANG-D    = 0.9842519999999999
+   FRAME-CONDUCT = 3.079
+   ..
+"Roof (T.S12.E32)" = EXTERIOR-WALL   
+   CONSTRUCTION     = "Roof, No Insulation"
+   LOCATION         = TOP
+   ..
+"North Wall (T.S12.I28)" = INTERIOR-WALL   
+   NEXT-TO          = "WC2"
+   CONSTRUCTION     = "IWall Construction"
+   LOCATION         = SPACE-V3
+   ..
+$ *********************************************************
+$ **                                                     **
+$ **                Performance Curves                   **
+$ **                                                     **
+$ *********************************************************
+$ *********************************************************
+$ **                                                     **
+$ **              Electric & Fuel Meters                 **
+$ **                                                     **
+$ *********************************************************
+$ ---------------------------------------------------------
+$              Electric Meters
+$ ---------------------------------------------------------
+$ ---------------------------------------------------------
+$              Fuel Meters
+$ ---------------------------------------------------------
+$ ---------------------------------------------------------
+$              Master Meters
+$ ---------------------------------------------------------
+"MASTER-METERS 1" = MASTER-METERS   
+   MSTR-ELEC-METER  = "EM1"
+   MSTR-FUEL-METER  = "FM1"
+   ..
+$ *********************************************************
+$ **                                                     **
+$ **      HVAC Circulation Loops / Plant Equipment       **
+$ **                                                     **
+$ *********************************************************
+$ ---------------------------------------------------------
+$              Pumps
+$ ---------------------------------------------------------
+"DEFAULT-HW-PUMP" = PUMP            
+   LIBRARY-ENTRY "DEFAULT-HW-PUMP"
+   ..
+$ ---------------------------------------------------------
+$              Heat Exchangers
+$ ---------------------------------------------------------
+$ ---------------------------------------------------------
+$              Circulation Loops
+$ ---------------------------------------------------------
+"DHW Plant 1 Res Loop (1)" = CIRCULATION-LOOP
+   TYPE             = DHW
+   DESIGN-HEAT-T    = 110
+   PROCESS-FLOW     = ( 0.14982 )
+   PROCESS-SCH      = ( "DHW Eqp Res Sch" )
+   PROCESS-T        = ( 110 )
+   ..
+"Circulation Loop 2" = CIRCULATION-LOOP
+   TYPE             = HW
+   ..
+$ ---------------------------------------------------------
+$              Chillers
+$ ---------------------------------------------------------
+$ ---------------------------------------------------------
+$              Boilers
+$ ---------------------------------------------------------
+"Boiler 1" = BOILER          
+   TYPE             = HW-BOILER
+   HW-LOOP          = "Circulation Loop 2"
+   HW-PUMP          = "DEFAULT-HW-PUMP"
+   ..
+$ ---------------------------------------------------------
+$              Domestic Water Heaters
+$ ---------------------------------------------------------
+"DHW Plant 1 Res Wtr Htr (1)" = DW-HEATER       
+   TYPE             = GAS
+   CAPACITY         = 0.0315471
+   HEAT-INPUT-RATIO = 0.3
+   HIR-FPLR         = "DW-Gas-Pilotless-HIR-fPLR"
+   LOCATION         = ZONE
+   ZONE-NAME        = "N Zone (fG.z2)"
+   DHW-LOOP         = "DHW Plant 1 Res Loop (1)"
+   C-ENERGY-FACTOR  = 0.62
+   ..
+$ ---------------------------------------------------------
+$              Heat Rejection
+$ ---------------------------------------------------------
+$ ---------------------------------------------------------
+$              Tower Free Cooling
+$ ---------------------------------------------------------
+$ ---------------------------------------------------------
+$              Photovoltaic Modules
+$ ---------------------------------------------------------
+$ ---------------------------------------------------------
+$              Electric Generators
+$ ---------------------------------------------------------
+$ ---------------------------------------------------------
+$              Thermal Storage
+$ ---------------------------------------------------------
+$ ---------------------------------------------------------
+$              Ground Loop Heat Exchangers
+$ ---------------------------------------------------------
+$ ---------------------------------------------------------
+$              Compliance DHW (residential dwelling units)
+$ ---------------------------------------------------------
+$ *********************************************************
+$ **                                                     **
+$ **            Steam & Chilled Water Meters             **
+$ **                                                     **
+$ *********************************************************
+$ ---------------------------------------------------------
+$              Steam Meters
+$ ---------------------------------------------------------
+$ ---------------------------------------------------------
+$              Chilled Water Meters
+$ ---------------------------------------------------------
+$ *********************************************************
+$ **                                                     **
+$ **               HVAC Systems / Zones                  **
+$ **                                                     **
+$ *********************************************************
+"Sys1 (SUM)" = SYSTEM          
+   TYPE             = SUM
+   HEAT-SOURCE      = NONE
+   SYSTEM-REPORTS   = NO
+   ..
+"NNE Zone (fG.z1)" = ZONE            
+   TYPE             = UNCONDITIONED
+   DESIGN-HEAT-T    = 72
+   DESIGN-COOL-T    = 75
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "KITCHEN"
+   ..
+"N Zone (fG.z2)" = ZONE            
+   TYPE             = UNCONDITIONED
+   DESIGN-HEAT-T    = 72
+   DESIGN-COOL-T    = 75
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "WC1"
+   ..
+"SSW Zone (fG.z5)" = ZONE            
+   TYPE             = UNCONDITIONED
+   DESIGN-HEAT-T    = 72
+   DESIGN-COOL-T    = 75
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "1ESC1"
+   ..
+"S Zone (fG.z6)" = ZONE            
+   TYPE             = UNCONDITIONED
+   DESIGN-HEAT-T    = 72
+   DESIGN-COOL-T    = 75
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "HALL1"
+   ..
+"N Zone (fT.z2)" = ZONE            
+   TYPE             = UNCONDITIONED
+   DESIGN-HEAT-T    = 72
+   DESIGN-COOL-T    = 75
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "WC2"
+   ..
+"SSW Zone (fT.z5)" = ZONE            
+   TYPE             = UNCONDITIONED
+   DESIGN-HEAT-T    = 72
+   DESIGN-COOL-T    = 75
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "ESC2"
+   ..
+"S Zone (fT.z6)" = ZONE            
+   TYPE             = UNCONDITIONED
+   DESIGN-HEAT-T    = 72
+   DESIGN-COOL-T    = 75
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "HALL2"
+   ..
+"HVAC System 2" = SYSTEM          
+   TYPE             = RESYS
+   HEAT-SOURCE      = NONE
+   BASEBOARD-SOURCE = HOT-WATER
+   VENT-METHOD      = S-G
+   NATURAL-VENT-SCH = "Hourly Report Schedule"
+   FAN-CONTROL      = CONSTANT-VOLUME
+   BBRD-LOOP        = "Circulation Loop 2"
+   COOLING-EIR      = 0.3846
+   COIL-BF          = 0.1
+   CONTROL-ZONE     = "NW Zone (fG.z3)"
+   ..
+"NW Zone (fG.z3)" = ZONE            
+   TYPE             = CONDITIONED
+   DESIGN-HEAT-T    = 72
+   HEAT-TEMP-SCH    = "Heating T Salon sched"
+   DESIGN-COOL-T    = 75
+   COOL-TEMP-SCH    = "Clg T Salon sched"
+   BASEBOARD-CTRL   = THERMOSTATIC
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "SEJOUR"
+   ..
+"SSE Zone (fG.z4)" = ZONE            
+   TYPE             = CONDITIONED
+   DESIGN-HEAT-T    = 72
+   HEAT-TEMP-SCH    = "Heating T Salon sched"
+   DESIGN-COOL-T    = 75
+   COOL-TEMP-SCH    = "Clg T Salon sched"
+   BASEBOARD-CTRL   = THERMOSTATIC
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "SALON"
+   ..
+"NNE Zone (fT.z1)" = ZONE            
+   TYPE             = CONDITIONED
+   DESIGN-HEAT-T    = 72
+   HEAT-TEMP-SCH    = "Htg T BR sched"
+   DESIGN-COOL-T    = 75
+   COOL-TEMP-SCH    = "ClgT Bed Room"
+   BASEBOARD-CTRL   = THERMOSTATIC
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "Room1"
+   ..
+"NW Zone (fT.z3)" = ZONE            
+   TYPE             = CONDITIONED
+   DESIGN-HEAT-T    = 72
+   HEAT-TEMP-SCH    = "Htg T BR sched"
+   DESIGN-COOL-T    = 75
+   COOL-TEMP-SCH    = "ClgT Bed Room"
+   BASEBOARD-CTRL   = THERMOSTATIC
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "Room2"
+   ..
+"SSE Zone (fT.z4)" = ZONE            
+   TYPE             = CONDITIONED
+   DESIGN-HEAT-T    = 72
+   HEAT-TEMP-SCH    = "Htg T BR sched"
+   DESIGN-COOL-T    = 75
+   COOL-TEMP-SCH    = "ClgT Bed Room"
+   BASEBOARD-CTRL   = THERMOSTATIC
+   SIZING-OPTION    = ADJUST-LOADS
+   SPACE            = "Room3"
+   ..
+$ *********************************************************
+$ **                                                     **
+$ **                Metering & Misc HVAC                 **
+$ **                                                     **
+$ *********************************************************
+$ ---------------------------------------------------------
+$              Equipment Controls
+$ ---------------------------------------------------------
+"Equipment Control 1" = EQUIP-CTRL      
+   TYPE             = HEATING
+   CIRCULATION-LOOP = "Circulation Loop 2"
+   BOILERS-1        = ( "Boiler 1" )
+   ..
+$ ---------------------------------------------------------
+$              Load Management
+$ ---------------------------------------------------------
+$ *********************************************************
+$ **                                                     **
+$ **                    Utility Rates                    **
+$ **                                                     **
+$ *********************************************************
+$ ---------------------------------------------------------
+$              Ratchets
+$ ---------------------------------------------------------
+$ ---------------------------------------------------------
+$              Block Charges
+$ ---------------------------------------------------------
+$ ---------------------------------------------------------
+$              Utility Rates
+$ ---------------------------------------------------------
+$ *********************************************************
+$ **                                                     **
+$ **                 Output Reporting                    **
+$ **                                                     **
+$ *********************************************************
+$ ---------------------------------------------------------
+$              Loads Non-Hourly Reporting
+$ ---------------------------------------------------------
+LOADS-REPORT    
+   VERIFICATION     = ( ALL-VERIFICATION )
+   SUMMARY          = ( ALL-SUMMARY )
+   ..
+$ ---------------------------------------------------------
+$              Systems Non-Hourly Reporting
+$ ---------------------------------------------------------
+SYSTEMS-REPORT  
+   VERIFICATION     = ( ALL-VERIFICATION )
+   SUMMARY          = ( ALL-SUMMARY )
+   ..
+$ ---------------------------------------------------------
+$              Plant Non-Hourly Reporting
+$ ---------------------------------------------------------
+PLANT-REPORT    
+   VERIFICATION     = ( ALL-VERIFICATION )
+   SUMMARY          = ( ALL-SUMMARY )
+   ..
+$ ---------------------------------------------------------
+$              Economics Non-Hourly Reporting
+$ ---------------------------------------------------------
+ECONOMICS-REPORT
+   VERIFICATION     = ( ALL-VERIFICATION )
+   SUMMARY          = ( ALL-SUMMARY )
+   ..
+$ ---------------------------------------------------------
+$              Hourly Reporting
+$ ---------------------------------------------------------
+"Hourly Report" = HOURLY-REPORT   
+   LIBRARY-ENTRY "Hourly Report"
+   ..
+$ ---------------------------------------------------------
+$              THE END
+$ ---------------------------------------------------------
+END ..
+COMPUTE ..
+STOP ..
+$ *********************************************************
+$ **                                                     **
+$ **                    Utility Rates                    **
+$ **                                                     **
+$ *********************************************************
+$ ---------------------------------------------------------
+$              Ratchets
+$ ---------------------------------------------------------
+$ ---------------------------------------------------------
+$              Block Charges
+$ ---------------------------------------------------------
+"Cust 1 Elec Energy Blk1" = BLOCK-CHARGE    
+   BLOCK-SCH        = "Cust 1 Elec Season Sched"
+   SCH-FLAG         = 1
+   BLOCKS-ARE       = INCREMENTAL
+   BLOCK1-TYPE      = ENERGY
+   BLOCKS-1         = ( 1 )
+   COSTS-1          = ( 1 )
+   ..
+"Custom Gas Energy Blk1" = BLOCK-CHARGE    
+   BLOCK-SCH        = "Custom Gas Season Sched"
+   SCH-FLAG         = 1
+   BLOCKS-ARE       = INCREMENTAL
+   BLOCK1-TYPE      = ENERGY
+   BLOCKS-1         = ( 1 )
+   COSTS-1          = ( 0.094 )
+   ..
+$ ---------------------------------------------------------
+$              Utility Rates
+$ ---------------------------------------------------------
+"Custom Elec Rate" = UTILITY-RATE    
+   TYPE             = ELECTRICITY
+   BLOCK-CHARGES    = ( "Cust 1 Elec Energy Blk1" )
+   ..
+"Custom Gas Rate" = UTILITY-RATE    
+   TYPE             = NATURAL-GAS
+   BLOCK-CHARGES    = ( "Custom Gas Energy Blk1" )
+   ..
+$ *********************************************************
+$ **                                                     **
+$ **                 Output Reporting                    **
+$ **                                                     **
+$ *********************************************************
+$ ---------------------------------------------------------
+$              Loads Non-Hourly Reporting
+$ ---------------------------------------------------------
+LOADS-REPORT    
+   VERIFICATION     = ( ALL-VERIFICATION )
+   SUMMARY          = ( ALL-SUMMARY )
+   ..
+$ ---------------------------------------------------------
+$              Systems Non-Hourly Reporting
+$ ---------------------------------------------------------
+SYSTEMS-REPORT  
+   VERIFICATION     = ( ALL-VERIFICATION )
+   SUMMARY          = ( ALL-SUMMARY )
+   ..
+$ ---------------------------------------------------------
+$              Plant Non-Hourly Reporting
+$ ---------------------------------------------------------
+PLANT-REPORT    
+   VERIFICATION     = ( ALL-VERIFICATION )
+   SUMMARY          = ( ALL-SUMMARY )
+   ..
+$ ---------------------------------------------------------
+$              Economics Non-Hourly Reporting
+$ ---------------------------------------------------------
+ECONOMICS-REPORT
+   VERIFICATION     = ( ALL-VERIFICATION )
+   SUMMARY          = ( ALL-SUMMARY )
+   ..
+$ ---------------------------------------------------------
+$              Hourly Reporting
+$ ---------------------------------------------------------
+"Hourly Report" = HOURLY-REPORT   
+   LIBRARY-ENTRY "Hourly Report"
+   ..
+$ ---------------------------------------------------------
+$              THE END
+$ ---------------------------------------------------------
+END ..
+COMPUTE ..
+STOP ..
