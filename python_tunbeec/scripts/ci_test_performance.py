@@ -115,8 +115,12 @@ def main() -> int:
     bi_custom.txtCoolSetTemp = 27.0
     from tunbeec.app_state import apply_building_type_defaults
     apply_building_type_defaults(bi_custom, ref)
-    for row in bi_custom.window_rows:
-        row.south_percent = min(80.0, row.south_percent + 20.0)
+    # Bump the first window row's south WWR a little. (Bumping EVERY row makes the rows'
+    # summed WWR exceed 100% of the south wall, which DOE-2.2 rejects with a "negative net
+    # area" abort -- a physically impossible building, not a tool failure.)
+    if bi_custom.window_rows:
+        first = bi_custom.window_rows[0]
+        first.south_percent = min(60.0, first.south_percent + 10.0)
 
     results = [run_case("default", bi_default, ref), run_case("custom", bi_custom, ref)]
 
