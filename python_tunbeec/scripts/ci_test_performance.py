@@ -48,6 +48,22 @@ def run_case(name: str, bi, ref) -> dict:
     run_result = run_doe22(DOE22_DIR, work_dir, name, bi.cmbBldgLocation)
     print(f"  run_doe22: success={run_result.success} sim_path={run_result.sim_path}")
     print(f"  message: {run_result.message}")
+    print(f"  work_dir contents: {sorted(p.name for p in work_dir.iterdir())}")
+    for suffix in (".sim", ".msg", ".BDL", ".err", ".ERR"):
+        candidate = work_dir / f"{name}{suffix}"
+        if candidate.exists():
+            size = candidate.stat().st_size
+            print(f"  {candidate.name}: {size} bytes")
+            if suffix in (".sim", ".msg") and size:
+                text = candidate.read_text(encoding="latin-1", errors="replace")
+                markers = {m: (m in text) for m in ("SS-D", "SS-E", "BEPS", "EM1", "FM1", "FATAL", "ERROR")}
+                print(f"    markers: {markers}")
+                print("    --- first 15 lines ---")
+                for l in text.splitlines()[:15]:
+                    print(f"    {l}")
+                print("    --- last 15 lines ---")
+                for l in text.splitlines()[-15:]:
+                    print(f"    {l}")
 
     if run_result.sim_path is None:
         return {"name": name, "simulated": False}
