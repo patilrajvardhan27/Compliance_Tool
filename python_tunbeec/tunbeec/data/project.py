@@ -29,7 +29,7 @@ _INT_FIELDS = {"txtBldgNumFloor"}
 _FLOAT_FIELDS = {
     "txtBldgCondArea", "txtLengX1", "txtLengY1", "txtLengX2", "txtLengY2", "txtLengX3", "txtLengY3",
     "txtBldgAzi", "txtFloorHeight", "txtFloorArea", "txtWinSouthOverhang", "txtWinSouthFp",
-    "txtHeatSetTemp", "txtCoolSetTemp", "txtSkyltCvr",
+    "txtHeatSetTemp", "txtCoolSetTemp", "txtSkyltCvr", "txtCoolCOP", "txtHeatEff",
 }
 
 _CONST_COLS = '"UserName", "TYPE", "ABSORPTANCE", "ROUGHNESS", "LAYERS", "UVALUE"'
@@ -130,6 +130,7 @@ def save_project(path: Path, bi: BuildingInput) -> None:
             "cmbEastWall", "cmbWestWall", "cmbRoof", "cmbFirstFloorContact", "rdbtnWinWwr",
             "txtWinSouthOverhang", "txtWinSouthFp", "cmbHotWaterSystem", "cmbBldgSystem",
             "txtHeatSetTemp", "txtCoolSetTemp", "txtSkyltType", "txtSkyltCvr",
+            "txtCoolCOP", "txtHeatEff",
         ]
         for name in simple_fields:
             value = getattr(bi, name)

@@ -43,6 +43,8 @@ def new_building_input(ref: ReferenceData) -> BuildingInput:
     bi.cmbHotWaterSystem = d.get("cmbHotWaterSystem", "")
     bi.txtHeatSetTemp = float(d.get("txtHeatSetTemp", 20))
     bi.txtCoolSetTemp = float(d.get("txtCoolSetTemp", 24))
+    bi.txtCoolCOP = float(d.get("txtCoolCOP", 2.6))
+    bi.txtHeatEff = float(d.get("txtHeatEff", 75))
     bi.txtSkyltType = d.get("txtSkyltType", "None")
     bi.txtSkyltCvr = float(d.get("txtSkyltCvr", 0))
 

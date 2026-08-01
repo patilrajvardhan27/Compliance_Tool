@@ -115,12 +115,17 @@ class BuildingInput:
 
     # Tab 3 - Spaces
     space_rows: list[SpaceConditionRow] = field(default_factory=list)
-    cmbHotWaterSystem: str = ""
 
     # Tab 4 - HVAC System
     cmbBldgSystem: str = ""
     txtHeatSetTemp: float = 20.0
     txtCoolSetTemp: float = 24.0
+    # HVAC energy efficiency (new in the Python port -- the BDL templates hardcode
+    # COOLING-EIR/ELEC-INPUT-RATIO = 0.3846 (COP 2.6) and HEAT-INPUT-RATIO/FURNACE-HIR
+    # = 1.3333 (75% efficiency); these fields let the user override those defaults).
+    txtCoolCOP: float = 2.6     # cooling COP -> COOLING-EIR / chiller ELEC-INPUT-RATIO = 1/COP
+    txtHeatEff: float = 75.0    # heating efficiency % -> HEAT-INPUT-RATIO / FURNACE-HIR = 100/eff
+    cmbHotWaterSystem: str = ""
 
     # User-defined library entries created in this project (GuiConst/GuiGlass/GuiMaterial "-Create-")
     user_constructions_wall: list[ConstructionEntry] = field(default_factory=list)

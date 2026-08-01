@@ -1,8 +1,9 @@
 """Main application window -- Python/PySide6 port of gui.GuiMain.
 
-4 tabs (General Information / Envelope / Spaces / HVAC System) plus a top button strip
-(New/Open/Save/Save As/Prescriptive Approach/Performance Approach),
-matching the structure documented from the decompiled Java in gui_inventory.md.
+5 tabs (General Information / Envelope / Windows / Spaces / HVAC System) plus a top button
+strip (New/Open/Save/Save As/Prescriptive Approach/Performance Approach). The original Java
+app had 4 tabs; the window/skylight inputs were split out of Envelope into their own tab so
+everything fits on screen, and Domestic Hot Water moved from Spaces to the HVAC tab.
 """
 from __future__ import annotations
 
@@ -146,6 +147,7 @@ class MainWindow(QMainWindow):
         self.tabs = QTabWidget()
         self.tabs.addTab(self._build_tab_general(), "General Information")
         self.tabs.addTab(self._build_tab_envelope(), "Envelope")
+        self.tabs.addTab(self._build_tab_windows(), "Windows")
         self.tabs.addTab(self._build_tab_spaces(), "Spaces")
         self.tabs.addTab(self._build_tab_hvac(), "HVAC System")
         layout.addWidget(self.tabs)
@@ -313,6 +315,13 @@ class MainWindow(QMainWindow):
         self.cmb_first_floor_contact.addItems(_FIRST_FLOOR_CONTACTS)
         f.addRow("First Floor Exposure:", self.cmb_first_floor_contact)
         v.addWidget(gb_const)
+        v.addStretch(1)
+        return page
+
+    # -- Tab 3: Windows (split out of the original Envelope tab, which overflowed the screen) --
+    def _build_tab_windows(self) -> QWidget:
+        page = QWidget()
+        v = QVBoxLayout(page)
 
         gb_win = QGroupBox("Windows — conditioned zones only")
         vw = QVBoxLayout(gb_win)
@@ -373,7 +382,7 @@ class MainWindow(QMainWindow):
         v.addStretch(1)
         return page
 
-    # -- Tab 3: Spaces -------------------------------------------------------------------------
+    # -- Tab 4: Spaces -------------------------------------------------------------------------
     def _build_tab_spaces(self) -> QWidget:
         page = QWidget()
         v = QVBoxLayout(page)
@@ -392,17 +401,10 @@ class MainWindow(QMainWindow):
         self.lbl_space_sum = QLabel("Total: 0%")
         vb.addWidget(self.lbl_space_sum)
         v.addWidget(gb)
-
-        gb_dhw = QGroupBox("Domestic Hot Water")
-        f = QFormLayout(gb_dhw)
-        self.cmb_hot_water = QComboBox()
-        self.cmb_hot_water.addItems(_HOT_WATER_SYSTEMS)
-        f.addRow("System:", self.cmb_hot_water)
-        v.addWidget(gb_dhw)
         v.addStretch(1)
         return page
 
-    # -- Tab 4: HVAC System ---------------------------------------------------------------------
+    # -- Tab 5: HVAC System ---------------------------------------------------------------------
     def _build_tab_hvac(self) -> QWidget:
         page = QWidget()
         v = QVBoxLayout(page)
@@ -428,6 +430,26 @@ class MainWindow(QMainWindow):
             lambda text: _set_illustration(self.lbl_hvac_image, _HVAC_SYSTEM_IMAGE_FILES.get(text, ""))
         )
         v.addWidget(gb)
+
+        gb_eff = QGroupBox("Energy Efficiency")
+        f_eff = QFormLayout(gb_eff)
+        self.spn_cool_cop = _float_field(2.6, decimals=2, maximum=10.0)
+        self.spn_cool_cop.setMinimum(0.5)
+        self.spn_heat_eff = _float_field(75.0, decimals=1, maximum=500.0)
+        self.spn_heat_eff.setMinimum(10.0)
+        f_eff.addRow("Cooling Efficiency — COP:", self.spn_cool_cop)
+        f_eff.addRow("Heating Efficiency (%):", self.spn_heat_eff)
+        f_eff.addRow(QLabel(
+            "<i>Defaults match the reference systems (COP 2.6, 75%). "
+            "Heating efficiency above 100% represents a heat pump.</i>"))
+        v.addWidget(gb_eff)
+
+        gb_dhw = QGroupBox("Domestic Hot Water")
+        f_dhw = QFormLayout(gb_dhw)
+        self.cmb_hot_water = QComboBox()
+        self.cmb_hot_water.addItems(_HOT_WATER_SYSTEMS)
+        f_dhw.addRow("System:", self.cmb_hot_water)
+        v.addWidget(gb_dhw)
         v.addStretch(1)
         return page
 
@@ -497,6 +519,8 @@ class MainWindow(QMainWindow):
         _set_illustration(self.lbl_hvac_image, _HVAC_SYSTEM_IMAGE_FILES.get(bi.cmbBldgSystem, ""))
         self.spn_heat_temp.setValue(bi.txtHeatSetTemp)
         self.spn_cool_temp.setValue(bi.txtCoolSetTemp)
+        self.spn_cool_cop.setValue(bi.txtCoolCOP)
+        self.spn_heat_eff.setValue(bi.txtHeatEff)
 
         self._update_compliance_buttons()
 
@@ -630,6 +654,8 @@ class MainWindow(QMainWindow):
         bi.cmbBldgSystem = self.cmb_bldg_system.currentText()
         bi.txtHeatSetTemp = self.spn_heat_temp.value()
         bi.txtCoolSetTemp = self.spn_cool_temp.value()
+        bi.txtCoolCOP = self.spn_cool_cop.value()
+        bi.txtHeatEff = self.spn_heat_eff.value()
 
     # -- construction/glass "-Create-" library editing -------------------------------------------
     def _create_construction(self, kind: str, combos: tuple[QComboBox, ...]):
