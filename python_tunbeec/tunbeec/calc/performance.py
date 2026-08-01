@@ -13,6 +13,7 @@ exactly like the original did (see run_doe22()).
 from __future__ import annotations
 
 import math
+import re
 import subprocess
 import sys
 from dataclasses import dataclass, field
@@ -534,6 +535,46 @@ def build_inp_lines(bi: BuildingInput, ref: ReferenceData, geo: BldgGeometry, kv
     return out
 
 
+# The BDL templates hardcode every system/plant efficiency: COOLING-EIR and the chiller
+# ELEC-INPUT-RATIO are always 0.3846 (= COP 2.6), HEAT-INPUT-RATIO / FURNACE-HIR are 1.3333
+# (= 75% efficiency; the villa boiler alone uses 0.3). The GUI now exposes those as inputs
+# (txtCoolCOP / txtHeatEff), applied here as a value rewrite on the generated lines.
+_COOL_EIR_RE = re.compile(r"^(\s*(?:COOLING-EIR|ELEC-INPUT-RATIO)\s*=\s*)[0-9.]+(\s*)$")
+_HEAT_HIR_RE = re.compile(r"^(\s*(?:HEAT-INPUT-RATIO|FURNACE-HIR)\s*=\s*)[0-9.]+(\s*)$")
+
+_DEFAULT_COOL_COP = 2.6
+_DEFAULT_HEAT_EFF = 75.0
+
+
+def apply_hvac_efficiency(lines: list[str], cool_cop: float, heat_eff_pct: float) -> list[str]:
+    """Rewrite the hardcoded template efficiencies with the user's HVAC-tab values.
+
+    When a value is still at its default (COP 2.6 / 75%), the corresponding lines are left
+    byte-identical to the DB templates (including the villa boiler's special 0.3 HIR) so the
+    generated .inp matches the original app's output exactly in the untouched case.
+    """
+    rewrite_cool = cool_cop > 0 and abs(cool_cop - _DEFAULT_COOL_COP) > 1e-9
+    rewrite_heat = heat_eff_pct > 0 and abs(heat_eff_pct - _DEFAULT_HEAT_EFF) > 1e-9
+    if not rewrite_cool and not rewrite_heat:
+        return lines
+    eir = f"{1.0 / cool_cop:.5f}"
+    hir = f"{100.0 / heat_eff_pct:.5f}"
+    out = []
+    for line in lines:
+        if rewrite_cool:
+            m = _COOL_EIR_RE.match(line)
+            if m:
+                out.append(f"{m.group(1)}{eir}")
+                continue
+        if rewrite_heat:
+            m = _HEAT_HIR_RE.match(line)
+            if m:
+                out.append(f"{m.group(1)}{hir}")
+                continue
+        out.append(line)
+    return out
+
+
 _BDL_LINE_LIMIT = 80  # DOEBDL.EXE silently truncates any physical line past column 80
                        # (a legacy 80-column card-image limit), which corrupts the last quoted
                        # item on a long comma-separated list (MATERIAL=(...), LAYERS=(...), etc.)
@@ -609,6 +650,7 @@ def generate_bdl(bi: BuildingInput, ref: ReferenceData, geo: BldgGeometry) -> tu
         "utility_output": fill_variables(ref.line_table("Inp_Utility_Output"), kv),
     }
     lines = build_inp_lines(bi, ref, geo, kv, template_lists)
+    lines = apply_hvac_efficiency(lines, bi.txtCoolCOP, bi.txtHeatEff)
     return lines, area
 
 
