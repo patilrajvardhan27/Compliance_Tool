@@ -679,6 +679,7 @@ def run_doe22(doe22_dir: Path, work_dir: Path, file_name: str, bldg_location: st
         proc = subprocess.run(
             [str(run22), str(work_dir), file_name, str(weather_dir), bldg_location, str(exent_dir)],
             capture_output=True, text=True, cwd=str(doe22_dir),
+            creationflags=subprocess.CREATE_NO_WINDOW,  # RUN22.exe is a console binary; suppress its flashing console window
         )
     except OSError as e:
         return Doe22RunResult(False, f"Failed to launch RUN22.exe: {e}")

@@ -14,9 +14,9 @@ from pathlib import Path
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtWidgets import (
-    QAbstractItemView, QButtonGroup, QComboBox, QDoubleSpinBox, QFileDialog, QFormLayout, QGroupBox,
-    QHBoxLayout, QLabel, QLineEdit, QMainWindow, QMessageBox, QPushButton, QRadioButton, QSpinBox,
-    QTableWidget, QTableWidgetItem, QTabWidget, QVBoxLayout, QWidget,
+    QAbstractItemView, QApplication, QButtonGroup, QComboBox, QDoubleSpinBox, QFileDialog, QFormLayout,
+    QGroupBox, QHBoxLayout, QLabel, QLineEdit, QMainWindow, QMessageBox, QProgressDialog, QPushButton,
+    QRadioButton, QSpinBox, QTableWidget, QTableWidgetItem, QTabWidget, QVBoxLayout, QWidget,
 )
 
 from tunbeec.app_paths import DEFAULT_DB_PATH, DOE22_DIR, IMAGE_DIR, PROJECT_DIR
@@ -809,7 +809,17 @@ class MainWindow(QMainWindow):
             QMessageBox.critical(self, "Error", f"BDL file generation failed:\n{e}")
             return
 
-        run_result = run_doe22(DOE22_DIR, self.current_path.parent, file_stem, self.bi.cmbBldgLocation)
+        wait_dlg = QProgressDialog("Running DOE-2.2 simulation, please wait...", "", 0, 0, self)
+        wait_dlg.setWindowTitle("Performance Approach")
+        wait_dlg.setCancelButton(None)
+        wait_dlg.setWindowModality(Qt.WindowModal)
+        wait_dlg.setMinimumDuration(0)
+        wait_dlg.show()
+        QApplication.processEvents()
+        try:
+            run_result = run_doe22(DOE22_DIR, self.current_path.parent, file_stem, self.bi.cmbBldgLocation)
+        finally:
+            wait_dlg.close()
         sim_path = run_result.sim_path
         if sim_path is None:
             candidate = self.current_path.parent / f"{file_stem}.sim"
