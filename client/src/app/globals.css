@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+/*
+ * TUNBEEC web client — visual language.
+ * Whitewash-and-cobalt palette (Sidi Bou Said plaster + door blue) over a drafting-sheet
+ * layout: quiet neutral surfaces, one saturated working blue, numerals in Geist Mono.
+ */
+:root {
+  --background: #f6f6f4;
+  --foreground: #1c2733;
+  --cobalt: #1e46b8;
+  --cobalt-deep: #16368f;
+  --sand: #c9a86a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0b1220;
+    --foreground: #e7eaee;
+    --cobalt: #4a6de0;
+    --cobalt-deep: #3557c9;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+/* Numeric inputs read as instrument data. */
+input[type="number"] {
+  font-variant-numeric: tabular-nums;
+}
