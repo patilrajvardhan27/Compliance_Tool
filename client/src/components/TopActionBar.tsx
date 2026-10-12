@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { Button } from "@/components/ui/Field";
 
 export function TopActionBar({
@@ -48,7 +50,16 @@ export function TopActionBar({
           </div>
         </div>
 
-        <div className="flex items-center gap-1.5 border-l border-slate-200 pl-5 dark:border-slate-700">
+        <div className="flex flex-wrap items-center gap-1.5 border-l border-slate-200 pl-5 dark:border-slate-700">
+          <Link
+            href="/"
+            onClick={(e) => {
+              if (dirty && !confirm("Leave the tool? Unsaved changes will be lost.")) e.preventDefault();
+            }}
+            className="rounded-md px-3 py-1.5 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cobalt)] dark:text-slate-300 dark:hover:bg-slate-800"
+          >
+            Home
+          </Link>
           <Button variant="ghost" onClick={onNew}>
             New
           </Button>
