@@ -1,5 +1,10 @@
 "use client";
 
+import { SearchSelect } from "./SearchSelect";
+
+/** Lists this long or longer get a search box. */
+const SEARCH_FROM = 10;
+
 export function Section({
   title,
   hint,
@@ -106,6 +111,25 @@ export function SelectField({
   disabled?: boolean;
 }) {
   const blank = value === "" && !disabled;
+  const choices = options.filter((opt) => opt !== "");
+
+  // Long lists get a search box; short ones keep the native control.
+  if (choices.length + (createOption ? 1 : 0) >= SEARCH_FROM) {
+    return (
+      <SearchSelect
+        value={value}
+        disabled={disabled}
+        placeholder={placeholder}
+        options={createOption ? [createOption, ...choices] : choices}
+        onChange={(next) => {
+          if (createOption && next === createOption) onCreate?.();
+          else onChange(next);
+        }}
+        className={`${blank ? blankBorder : filledBorder} ${className}`}
+      />
+    );
+  }
+
   return (
     <select
       value={value}
@@ -126,13 +150,11 @@ export function SelectField({
         </option>
       )}
       {createOption && <option value={createOption}>{createOption}</option>}
-      {options
-        .filter((opt) => opt !== "")
-        .map((opt) => (
-          <option key={opt} value={opt}>
-            {opt}
-          </option>
-        ))}
+      {choices.map((opt) => (
+        <option key={opt} value={opt}>
+          {opt}
+        </option>
+      ))}
     </select>
   );
 }
