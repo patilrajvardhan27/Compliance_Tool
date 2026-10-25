@@ -158,9 +158,9 @@ export function ConstructionDialog({
               <FieldRow label="Layer Name:">
                 <TextInput value={layerName} onChange={(e) => setLayerName(e.target.value)} />
               </FieldRow>
-              <div className="overflow-x-auto rounded-md border border-slate-200 dark:border-slate-700">
+              <div className="overflow-x-auto rounded-chip border border-hairline">
                 <table className="w-full min-w-[640px] text-xs">
-                  <thead className="bg-slate-50 text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                  <thead className="bg-mist text-muted">
                     <tr>
                       {["Material", "Thickness(m)", "Conductivity(W/m.K)", "Density(kg/m3)", "Specific Heat(J/kg.K)", "R Value(m2.K/W)"].map(
                         (h) => (
@@ -175,7 +175,7 @@ export function ConstructionDialog({
                     {rows.map((row, i) => {
                       const mat = row.material ? allMaterials[row.material] : undefined;
                       return (
-                        <tr key={i} className="border-t border-slate-100 dark:border-slate-800">
+                        <tr key={i} className="border-t border-divider">
                           <td className="px-2 py-1">
                             <SelectField
                               value={row.material}
@@ -186,18 +186,18 @@ export function ConstructionDialog({
                               onCreate={() => setMaterialDialogRow(i)}
                             />
                           </td>
-                          <td className="px-2 py-1 text-slate-600 dark:text-slate-300">{mat?.thickness ?? ""}</td>
-                          <td className="px-2 py-1 text-slate-600 dark:text-slate-300">{mat?.conductivity ?? ""}</td>
-                          <td className="px-2 py-1 text-slate-600 dark:text-slate-300">{mat?.density ?? ""}</td>
-                          <td className="px-2 py-1 text-slate-600 dark:text-slate-300">{mat?.spec_heat ?? ""}</td>
-                          <td className="px-2 py-1 text-slate-600 dark:text-slate-300">{mat ? mat.resistance : ""}</td>
+                          <td className="px-2 py-1 text-muted">{mat?.thickness ?? ""}</td>
+                          <td className="px-2 py-1 text-muted">{mat?.conductivity ?? ""}</td>
+                          <td className="px-2 py-1 text-muted">{mat?.density ?? ""}</td>
+                          <td className="px-2 py-1 text-muted">{mat?.spec_heat ?? ""}</td>
+                          <td className="px-2 py-1 text-muted">{mat ? mat.resistance : ""}</td>
                         </tr>
                       );
                     })}
                   </tbody>
                 </table>
               </div>
-              <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
+              <p className="text-sm font-medium text-body">
                 Calculated U: {calculatedU !== null ? calculatedU.toFixed(3) : "-"}
               </p>
             </>
@@ -207,7 +207,7 @@ export function ConstructionDialog({
             </FieldRow>
           )}
 
-          {error && <p className="text-sm text-red-600">{error}</p>}
+          {error && <p className="text-sm text-error">{error}</p>}
 
           <div className="mt-2 flex justify-end gap-2">
             <Button onClick={onClose}>Cancel</Button>

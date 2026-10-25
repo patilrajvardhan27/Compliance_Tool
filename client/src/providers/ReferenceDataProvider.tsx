@@ -17,7 +17,7 @@ export function ReferenceDataProvider({ children }: { children: React.ReactNode 
 
   if (isLoading) {
     return (
-      <div className="flex h-screen items-center justify-center text-sm text-slate-500">
+      <div className="flex h-screen items-center justify-center text-[14px] text-muted">
         Loading reference data…
       </div>
     );

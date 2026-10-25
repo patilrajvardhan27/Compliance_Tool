@@ -1,41 +1,380 @@
 @import "tailwindcss";
 
 /*
- * TUNBEEC web client — visual language.
- * Whitewash-and-cobalt palette (Sidi Bou Said plaster + door blue) over a drafting-sheet
- * layout: quiet neutral surfaces, one saturated working blue, numerals in Geist Mono.
- */
-:root {
-  --background: #f6f6f4;
-  --foreground: #1c2733;
-  --cobalt: #1e46b8;
-  --cobalt-deep: #16368f;
-  --sand: #c9a86a;
+  BEST Center design system — see DESIGN.md at the repo root.
+  Colours and type come from best-iucrc.org (Work Sans, forest green);
+  layout and motion follow a quiet, content-first gallery style.
+*/
+@theme {
+  /* Action */
+  --color-primary: #007a40;
+  --color-primary-hover: #006837;
+  --color-brand: #00964f;
+  --color-leaf: #3fc380;
+
+  /* Text */
+  --color-ink: #0c3d00;
+  --color-body: #161616;
+  --color-muted: #4a5246;
+  --color-faint: #767171;
+
+  /* Surfaces */
+  --color-canvas: #ffffff;
+  --color-mist: #f4f7f2;
+  --color-pearl: #fafcf9;
+  --color-canopy: #061b00;
+  --color-canopy-2: #0a2304;
+  --color-canopy-3: #041300;
+  --color-charcoal: #161616;
+  --color-mint: #b9deb8;
+  --color-mint-wash: #eaf4e9;
+  --color-chip: #d3ddd0;
+
+  /* Lines */
+  --color-divider: #eef2ec;
+  --color-hairline: #dde3da;
+  --color-hairline-strong: #c5cec1;
+
+  /* Status */
+  --color-error: #b42318;
+  --color-error-wash: #fef3f2;
+  --color-warning: #96650c;
+  --color-warning-wash: #fbf5ea;
+
+  /* Charts only */
+  --color-data-1: #00964f;
+  --color-data-2: #327674;
+  --color-data-3: #785a7b;
+  --color-data-4: #96650c;
+  --color-data-5: #0c3d00;
+  --color-data-6: #767171;
+
+  --font-sans: var(--font-work-sans), system-ui, -apple-system, sans-serif;
+
+  --radius-field: 8px;
+  --radius-chip: 11px;
+  --radius-card: 18px;
+
+  --shadow-render: 3px 5px 30px 0 rgb(0 0 0 / 0.22);
+
+  --ease-standard: cubic-bezier(0.28, 0.11, 0.32, 1);
+  --ease-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0b1220;
-    --foreground: #e7eaee;
-    --cobalt: #4a6de0;
-    --cobalt-deep: #3557c9;
+  body {
+    background: var(--color-mist);
+    color: var(--color-body);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.45;
+    letter-spacing: -0.006em;
+  }
+
+  h1,
+  h2,
+  h3 {
+    color: var(--color-ink);
+    font-weight: 600;
+    letter-spacing: -0.012em;
+    text-wrap: balance;
+  }
+
+  ::selection {
+    background: var(--color-mint);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 2px;
+  }
+
+  input[type="number"],
+  .nums {
+    font-variant-numeric: tabular-nums;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
+@layer components {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    padding: 11px 22px;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+    transition:
+      background-color 200ms var(--ease-standard),
+      color 200ms var(--ease-standard),
+      border-color 200ms var(--ease-standard),
+      transform 120ms var(--ease-standard);
+  }
+  .btn:active:not(:disabled) {
+    transform: scale(0.95);
+  }
+  .btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
+  }
+  .btn-primary {
+    background: var(--color-primary);
+    color: #fff;
+  }
+  .btn-primary:hover:not(:disabled) {
+    background: var(--color-primary-hover);
+  }
+  .btn-secondary {
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary);
+  }
+  .btn-secondary:hover:not(:disabled) {
+    background: var(--color-mint-wash);
+  }
+  .btn-on-dark {
+    background: #fff;
+    color: var(--color-ink);
+  }
+  .btn-on-dark:hover {
+    background: var(--color-mint);
+  }
+  .btn-sm {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  .card {
+    background: var(--color-canvas);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-card);
+  }
+
+  .chip {
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-chip);
+    background: var(--color-canvas);
+    transition:
+      background-color 200ms var(--ease-standard),
+      border-color 200ms var(--ease-standard),
+      transform 120ms var(--ease-standard);
+  }
+  .chip:hover {
+    border-color: var(--color-hairline-strong);
+  }
+  .chip:active {
+    transform: scale(0.95);
+  }
+  .chip[aria-pressed="true"],
+  .chip.is-selected {
+    border-color: var(--color-brand);
+    background: var(--color-mint-wash);
+    box-shadow: inset 0 0 0 1px var(--color-brand);
+    color: var(--color-ink);
+  }
+
+  .field {
+    border: 1px solid var(--color-hairline-strong);
+    border-radius: var(--radius-field);
+    background: var(--color-canvas);
+    transition:
+      border-color 200ms var(--ease-standard),
+      box-shadow 200ms var(--ease-standard);
+  }
+  .field:focus {
+    border-color: var(--color-brand);
+    box-shadow: 0 0 0 3px rgb(0 150 79 / 0.18);
+    outline: none;
+  }
+  .field[aria-invalid="true"] {
+    border-color: var(--color-error);
+  }
+  .field[aria-invalid="true"]:focus {
+    box-shadow: 0 0 0 3px rgb(180 35 24 / 0.15);
+  }
+
+  .frosted {
+    background: rgb(255 255 255 / 0.72);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    backdrop-filter: saturate(180%) blur(20px);
+  }
+
+  /* Canopy and charcoal surfaces: white text, headings follow. */
+  .on-dark {
+    color: #fff;
+  }
+  .on-dark :where(h1, h2, h3) {
+    color: inherit;
+  }
+
+  .link {
+    color: var(--color-primary);
+    text-underline-offset: 3px;
+  }
+  .link:hover {
+    text-decoration: underline;
+  }
+
+  /* Segmented control: a mist track and a white thumb that slides. */
+  .segmented {
+    position: relative;
+    display: inline-flex;
+    border-radius: 9999px;
+    background: var(--color-divider);
+    padding: 3px;
+  }
+  .segmented-item {
+    position: relative;
+    z-index: 1;
+    border-radius: 9999px;
+    padding: 7px 16px;
+    font-size: 14px;
+    color: var(--color-muted);
+    transition:
+      color 200ms var(--ease-standard),
+      transform 120ms var(--ease-standard);
+  }
+  .segmented-item:hover {
+    color: var(--color-body);
+  }
+  .segmented-item:active {
+    transform: scale(0.95);
+  }
+  .segmented-item[aria-current="page"],
+  .segmented-item[aria-selected="true"] {
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+  .segmented-thumb {
+    position: absolute;
+    top: 3px;
+    bottom: 3px;
+    left: 0;
+    border-radius: 9999px;
+    background: var(--color-canvas);
+    border: 1px solid var(--color-hairline);
+    transition:
+      transform 360ms var(--ease-standard),
+      width 360ms var(--ease-standard);
+  }
 }
 
-/* Numeric inputs read as instrument data. */
-input[type="number"] {
-  font-variant-numeric: tabular-nums;
+/* ---------- Motion ---------- */
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes settle {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes grow-x {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.animate-enter {
+  animation: enter 600ms var(--ease-emphasized) both;
+}
+.animate-settle {
+  animation: settle 360ms var(--ease-emphasized) both;
+}
+.animate-fade {
+  animation: fade 400ms var(--ease-standard) both;
+}
+.animate-scale-in {
+  animation: scale-in 360ms var(--ease-emphasized) both;
+}
+.animate-grow-x {
+  transform-origin: left center;
+  animation: grow-x 800ms var(--ease-emphasized) both;
+}
+
+/* Children enter one after another. */
+.stagger > * {
+  animation: enter 600ms var(--ease-emphasized) both;
+  animation-delay: calc(var(--i, 0) * 70ms);
+}
+.stagger > :nth-child(2) { --i: 1; }
+.stagger > :nth-child(3) { --i: 2; }
+.stagger > :nth-child(4) { --i: 3; }
+.stagger > :nth-child(5) { --i: 4; }
+.stagger > :nth-child(6) { --i: 5; }
+.stagger > :nth-child(7) { --i: 6; }
+.stagger > :nth-child(8) { --i: 7; }
+.stagger > :nth-child(9) { --i: 8; }
+.stagger > :nth-child(n + 10) { --i: 9; }
+
+/* Scroll reveal. Hidden only once RevealObserver has marked the page ready,
+   so content stays visible without JavaScript. */
+.reveal-ready [data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 800ms var(--ease-emphasized),
+    transform 800ms var(--ease-emphasized);
+  transition-delay: var(--d, 0ms);
+}
+.reveal-ready [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 1ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
 }

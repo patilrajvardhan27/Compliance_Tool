@@ -12,14 +12,10 @@ export function Section({
   className?: string;
 }) {
   return (
-    <section
-      className={`rounded-lg border border-slate-200 bg-white p-5 shadow-[0_1px_2px_rgba(20,30,45,0.05)] dark:border-slate-800 dark:bg-slate-900 ${className}`}
-    >
-      <header className="mb-4 border-b border-slate-100 pb-2.5 dark:border-slate-800">
-        <h2 className="text-[13px] font-semibold uppercase tracking-[0.08em] text-slate-700 dark:text-slate-200">
-          {title}
-        </h2>
-        {hint && <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">{hint}</p>}
+    <section className={`card p-6 max-sm:p-5 ${className}`}>
+      <header className="mb-5">
+        <h2 className="text-[21px] leading-[1.19] tracking-[-0.2px]">{title}</h2>
+        {hint && <p className="mt-1 text-[13px] text-muted">{hint}</p>}
       </header>
       <div className="flex flex-col gap-3">{children}</div>
     </section>
@@ -36,26 +32,25 @@ export function FieldRow({
   // The whole row is a <label> so the text is announced for (and click-focuses) the control
   // inside it without needing explicit id/htmlFor pairs.
   return (
-    <label className="grid grid-cols-[minmax(160px,220px)_1fr] items-center gap-3">
-      <span className="text-sm text-slate-600 dark:text-slate-300">{label}</span>
+    <label className="grid grid-cols-[minmax(160px,220px)_1fr] items-center gap-3 max-sm:grid-cols-1 max-sm:gap-1.5">
+      <span className="text-[14px] text-muted">{label}</span>
       <div>{children}</div>
     </label>
   );
 }
 
 const inputClass =
-  "w-full rounded-md border bg-white px-2.5 py-1.5 text-sm text-slate-900 shadow-sm transition-colors focus:border-[var(--cobalt)] focus:outline-none focus:ring-1 focus:ring-[var(--cobalt)] disabled:bg-slate-100 disabled:text-slate-500 dark:bg-slate-800 dark:text-slate-100 dark:disabled:bg-slate-800/60";
+  "field w-full px-3 py-2 text-[15px] text-body disabled:bg-mist disabled:text-faint max-sm:text-base";
 
-/** Empty required-style fields get a quiet amber cast: enter a value, nothing is assumed. */
-const filledBorder = "border-slate-300 dark:border-slate-600";
-const blankBorder =
-  "border-amber-400/70 bg-amber-50/40 dark:border-amber-500/50 dark:bg-amber-950/20";
+/** Empty required-style fields get a quiet ochre cast: enter a value, nothing is assumed. */
+const filledBorder = "";
+const blankBorder = "border-warning/50 bg-warning-wash";
 
 export function TextInput({
   required,
   ...props
 }: React.InputHTMLAttributes<HTMLInputElement>) {
-  // The amber "enter a value" cast only applies to required fields left blank.
+  // The "enter a value" cast only applies to required fields left blank.
   const blank = required && props.value === "" && !props.disabled && !props.readOnly;
   return (
     <input
@@ -85,7 +80,7 @@ export function NumberInput({
         const n = e.target.valueAsNumber;
         onChange(Number.isFinite(n) ? n : null);
       }}
-      className={`${inputClass} font-mono ${blank ? blankBorder : filledBorder} ${rest.className ?? ""}`}
+      className={`${inputClass} nums ${blank ? blankBorder : filledBorder} ${rest.className ?? ""}`}
     />
   );
 }
@@ -123,7 +118,7 @@ export function SelectField({
         }
         onChange(next);
       }}
-      className={`${inputClass} ${blank ? `${blankBorder} text-slate-500` : filledBorder} ${className}`}
+      className={`${inputClass} ${blank ? `${blankBorder} text-muted` : filledBorder} ${className}`}
     >
       {value === "" && (
         <option value="" disabled>
@@ -154,18 +149,20 @@ export function RadioGroup({
   onChange: (value: string) => void;
 }) {
   return (
-    <div className="flex gap-5">
+    <div className="flex flex-wrap gap-2">
       {options.map((opt) => (
         <label
           key={opt.value}
-          className="flex items-center gap-1.5 text-sm text-slate-700 dark:text-slate-200"
+          className={`chip flex cursor-pointer items-center gap-2 px-3.5 py-2 text-[14px] text-body ${
+            value === opt.value ? "is-selected" : ""
+          }`}
         >
           <input
             type="radio"
             name={name}
             checked={value === opt.value}
             onChange={() => onChange(opt.value)}
-            className="h-3.5 w-3.5 accent-[var(--cobalt)]"
+            className="h-3.5 w-3.5 accent-[var(--color-primary)]"
           />
           {opt.label}
         </label>
@@ -182,18 +179,11 @@ export function Button({
   variant?: "primary" | "secondary" | "danger" | "ghost";
 }) {
   const variants: Record<string, string> = {
-    primary:
-      "bg-[var(--cobalt)] text-white hover:bg-[var(--cobalt-deep)] disabled:bg-slate-300 dark:disabled:bg-slate-700",
-    secondary:
-      "bg-white text-slate-700 border border-slate-300 hover:border-slate-400 hover:bg-slate-50 disabled:text-slate-400 dark:bg-slate-800 dark:text-slate-100 dark:border-slate-600 dark:hover:bg-slate-700",
-    danger: "bg-red-600 text-white hover:bg-red-700 disabled:bg-red-300",
+    primary: "btn btn-primary btn-sm",
+    secondary: "btn btn-secondary btn-sm",
+    danger: "btn btn-sm bg-error text-white hover:bg-error/90",
     ghost:
-      "text-slate-600 hover:bg-slate-100 hover:text-slate-800 dark:text-slate-300 dark:hover:bg-slate-800",
+      "btn btn-sm rounded-field px-3 text-muted hover:bg-mist hover:text-body",
   };
-  return (
-    <button
-      {...rest}
-      className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cobalt)] disabled:cursor-not-allowed ${variants[variant]} ${className}`}
-    />
-  );
+  return <button {...rest} className={`${variants[variant]} ${className}`} />;
 }

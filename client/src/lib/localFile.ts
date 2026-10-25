@@ -15,11 +15,6 @@ const TCT_TYPE: FilePickerAcceptType = {
   accept: { "application/octet-stream": [".tct"] },
 };
 
-/** True when Save can write back to the originally opened file without re-prompting. */
-export function supportsFilePickers(): boolean {
-  return typeof window !== "undefined" && !!window.showOpenFilePicker && !!window.showSaveFilePicker;
-}
-
 /** Returns null when the user cancels the picker. */
 export async function openLocalTct(): Promise<OpenedLocalFile | null> {
   if (window.showOpenFilePicker) {

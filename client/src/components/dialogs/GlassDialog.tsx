@@ -50,7 +50,7 @@ export function GlassDialog({
         <FieldRow label="Visible Transmittance (VT):">
           <NumberInput value={vt} onChange={(v) => setVt(v ?? 0)} step="0.001" min={0} max={1} />
         </FieldRow>
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {error && <p className="text-sm text-error">{error}</p>}
         <div className="mt-2 flex justify-end gap-2">
           <Button onClick={onClose}>Cancel</Button>
           <Button variant="primary" onClick={handleSave}>

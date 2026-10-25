@@ -81,10 +81,11 @@ export const SYSTEM_ENABLEMENT: Record<string, number[]> = {
   Office: [1, 2, 3],
 };
 
+/** BEST Center palette (see DESIGN.md). Charts use the data colours only. */
 export const REPORT_COLORS = {
-  bannerBlue: "#2929d4",
-  compliantGreen: "#1d8a2c",
-  nonCompliantRed: "#d02020",
-  complianceBarRed: "#e8635c",
-  buildingBarBlue: "#3f51d8",
+  banner: "#061b00",
+  compliant: "#007a40",
+  nonCompliant: "#b42318",
+  thresholdBar: "#96650c",
+  buildingBar: "#00964f",
 };
