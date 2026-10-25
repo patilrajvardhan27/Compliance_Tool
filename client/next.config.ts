@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
   // the server -- that Oryx build was blowing past Kudu's ~230s synchronous deploy timeout on the
   // B1 plan and leaving the container crash-looping with a half-built `.next`.
   output: "standalone",
+  agentRules: false,
 };
 
 export default nextConfig;

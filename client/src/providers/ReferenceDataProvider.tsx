@@ -24,7 +24,7 @@ export function ReferenceDataProvider({ children }: { children: React.ReactNode 
   }
   if (error || !data) {
     return (
-      <div className="flex h-screen items-center justify-center text-sm text-red-600">
+      <div className="flex h-screen items-center justify-center text-[14px] text-error">
         Failed to load reference data from the API: {(error as Error)?.message ?? "unknown error"}
       </div>
     );

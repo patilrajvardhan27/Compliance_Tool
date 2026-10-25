@@ -87,17 +87,17 @@ export function PerformanceReportModal({
               </tr>
             </thead>
             <tbody>
-              <tr className="border-t border-divider">
+              <tr className="border-t border-hairline">
                 <td className="px-3 py-2">Thermal loads (BECth) for conditioned space [kWh/m2.year]</td>
                 <td className="px-3 py-2 text-center">{report.min_bec_th.toFixed(1)}</td>
                 <td className="px-3 py-2 text-center">{report.bldg_bec_th.toFixed(1)}</td>
               </tr>
-              <tr className="border-t border-divider">
+              <tr className="border-t border-hairline">
                 <td className="px-3 py-2 font-semibold">CLASS</td>
                 <td className="px-3 py-2 text-center">{report.min_class}</td>
                 <td className="px-3 py-2 text-center">{report.bldg_class}</td>
               </tr>
-              <tr className="border-t border-divider">
+              <tr className="border-t border-hairline">
                 <td
                   className="px-3 py-2 font-bold"
                   style={{ color: REPORT_COLORS.nonCompliant }}

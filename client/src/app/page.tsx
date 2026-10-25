@@ -69,7 +69,7 @@ export default function Landing() {
                 style={{ "--d": `${i * 90}ms` } as React.CSSProperties}
                 className="card p-7"
               >
-                <span className="nums flex h-9 w-9 items-center justify-center rounded-full bg-mint-wash text-[15px] font-semibold text-primary">
+                <span className="nums flex h-9 w-9 items-center justify-center rounded-full bg-mint text-[15px] font-semibold text-primary">
                   {i + 1}
                 </span>
                 <h3 className="mt-5 text-[21px] leading-[1.19] tracking-[-0.2px]">{step.title}</h3>

@@ -35,7 +35,7 @@ flowchart LR
 
     subgraph RG["Azure resource group: tunbeec-rc (West US 3)"]
         subgraph PLAN["App Service plan: tunbeec-plan (B1 Linux)"]
-            FE["tunbeec-frontend<br/>Node 20, Next.js standalone bundle"]
+            FE["tunbeec-frontend<br/>Node 22, Next.js standalone bundle"]
             OLD["tunbeec-api (Linux, earlier backend)<br/>prescriptive only, not used by the site"]
         end
         subgraph VM["Windows Server 2022 VM: tunbeec-api-vm (Standard_B2s_v2)"]
@@ -181,7 +181,8 @@ source venv/bin/activate   # venv already has fastapi/uvicorn installed
 uvicorn api.main:app --reload --port 8000
 ```
 
-Frontend (needs `client/.env.local` with `NEXT_PUBLIC_API_BASE=http://localhost:8000`):
+Frontend (needs `client/.env.development.local` with `NEXT_PUBLIC_API_BASE=http://localhost:8000`; do not
+use `.env.local`, which `next build` also reads and which overrides `.env.production`):
 ```bash
 cd client
 npm run dev
@@ -193,14 +194,14 @@ npm run dev
 > The front end points at the Windows VM (`client/.env.production`), set up as described in
 > [python_tunbeec/deploy/windows-vm/README.md](python_tunbeec/deploy/windows-vm/README.md). The
 > steps below still apply to the front end, and to the Linux backend if a prescriptive-only
-> deployment is ever wanted again. The front end is now built as a standalone bundle
-> (`output: "standalone"` in `client/next.config.ts`), so check that file's note before using the
-> source-zip commands in step 2.
+> deployment is ever wanted again. The front end is built locally as a standalone bundle
+> (`output: "standalone"` in `client/next.config.ts`); step 2 and "Frontend changed" below show
+> how to deploy it.
 
 Both `client/` and `python_tunbeec/api/` deploy as plain **Azure App Service (Linux)** web apps
 sharing one App Service Plan — fully managed, deploy by pushing code, nothing to RDP/SSH into.
 
-- **Frontend** (`client/`) → App Service, Linux, Node 20 — `next build && next start`.
+- **Frontend** (`client/`) → App Service, Linux, Node 22 — prebuilt standalone bundle, `node server.js`.
 - **Backend** (`python_tunbeec/api/`) → App Service, Linux, Python 3.11 — `uvicorn`.
 
 **Trade-off**: the "Approche Performencielle" step shells out to `resources/doe22/RUN22.exe`, a
@@ -284,31 +285,32 @@ curl https://tunbeec-api.azurewebsites.net/api/health
 # {"status":"ok"}
 ```
 
-### 2. Frontend — `client/` on Node 20
+### 2. Frontend — `client/` on Node 22 (prebuilt standalone bundle)
 
-```bash
-az webapp create --resource-group tunbeec-rc --plan tunbeec-plan --name tunbeec-frontend --runtime "NODE:20-lts"
-```
-```bash
-az webapp config set --resource-group tunbeec-rc --name tunbeec-frontend --startup-file "npm run start"
-```
+Live settings on `tunbeec-frontend` as of 2026-10-25: runtime `NODE|22-lts`, startup command
+`node server.js`, `SCM_DO_BUILD_DURING_DEPLOYMENT=false`, `WEBSITES_PORT=8080`, Always On.
 
-`NEXT_PUBLIC_API_BASE` gets baked into the JS bundle **at build time**, so set it before the first
-build runs — Oryx picks up App Settings as build-time env vars:
-```bash
-az webapp config appsettings set --resource-group tunbeec-rc --name tunbeec-frontend --settings NEXT_PUBLIC_API_BASE=https://tunbeec-api.azurewebsites.net SCM_DO_BUILD_DURING_DEPLOYMENT=true
-```
+The site is built on your machine (`output: "standalone"` in `client/next.config.ts`) and the
+finished bundle is uploaded, so Azure never runs `npm install` or `next build`. A server-side
+build was blowing past the ~230 s deploy timeout on B1.
 
-Deploy the source (zip-deploy triggers the Oryx build server-side, so `node_modules`/`.next`
-don't need to be in the zip):
+Create the app (only needed once):
 ```bash
-cd client && zip -r ../client.zip . -x "node_modules/*" ".next/*" && cd ..
+az webapp create --resource-group tunbeec-rc --plan tunbeec-plan --name tunbeec-frontend --runtime "NODE:22-lts"
 ```
 ```bash
-az webapp deploy --resource-group tunbeec-rc --name tunbeec-frontend --src-path client.zip --type zip
+az webapp config set --resource-group tunbeec-rc --name tunbeec-frontend --startup-file "node server.js" --always-on true
+```
+```bash
+az webapp config appsettings set --resource-group tunbeec-rc --name tunbeec-frontend --settings SCM_DO_BUILD_DURING_DEPLOYMENT=false WEBSITES_PORT=8080
 ```
 
-Your app is live at `https://tunbeec-frontend.azurewebsites.net`.
+`NEXT_PUBLIC_API_BASE` is baked into the JS bundle **at build time** from `client/.env.production`
+(currently the Windows VM, `https://tunbeec-api-vm.westus3.cloudapp.azure.com`). The app setting of
+the same name on `tunbeec-frontend` is not read, because the build no longer runs on Azure.
+
+Then build and deploy as in **Frontend changed** below. The app is live at
+`https://tunbeec-frontend.azurewebsites.net`.
 
 ### Redeploying after code changes
 
@@ -337,15 +339,23 @@ az webapp deploy --resource-group tunbeec-rc --name tunbeec-api --src-path /tmp/
 curl https://tunbeec-api.azurewebsites.net/api/health   # {"status":"ok"} once the restart finishes
 ```
 
-**Frontend changed** (anything under `client/`):
+**Frontend changed** (anything under `client/`). Build the standalone bundle, copy in the two
+folders Next.js leaves out of it, then zip the bundle's contents:
 ```bash
-cd client && rm -f ../client.zip && zip -r ../client.zip . -x "node_modules/*" ".next/*" && cd ..
+cd client && npm ci && npm run build
 ```
 ```bash
-az webapp deploy --resource-group tunbeec-rc --name tunbeec-frontend --src-path client.zip --type zip
+cp -R public .next/standalone/public && mkdir -p .next/standalone/.next && cp -R .next/static .next/standalone/.next/static
+```
+```bash
+cd .next/standalone && rm -f /tmp/tunbeec-frontend.zip && zip -qr /tmp/tunbeec-frontend.zip . && cd ../../..
+```
+```bash
+az webapp deploy --resource-group tunbeec-rc --name tunbeec-frontend --src-path /tmp/tunbeec-frontend.zip --type zip
 ```
 
-Both deploys trigger an Oryx build server-side and take 1-3 minutes; watch progress with
+The backend deploy triggers an Oryx build server-side; the frontend deploy just unpacks the bundle
+and restarts. Both take 1-3 minutes; watch progress with
 `az webapp log tail --resource-group tunbeec-rc --name <tunbeec-api|tunbeec-frontend>` if a deploy
 seems stuck or the app 500s after redeploying. If a change touched **both** sides in a way that
 changes the wire contract between them (new/renamed API route, new required field), deploy the

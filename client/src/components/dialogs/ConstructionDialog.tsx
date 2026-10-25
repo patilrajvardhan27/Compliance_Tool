@@ -175,7 +175,7 @@ export function ConstructionDialog({
                     {rows.map((row, i) => {
                       const mat = row.material ? allMaterials[row.material] : undefined;
                       return (
-                        <tr key={i} className="border-t border-divider">
+                        <tr key={i} className="border-t border-hairline">
                           <td className="px-2 py-1">
                             <SelectField
                               value={row.material}

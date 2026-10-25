@@ -111,7 +111,7 @@ export function Workspace() {
   }
   if (error || !bi) {
     return (
-      <div className="flex h-screen items-center justify-center text-sm text-red-600">
+      <div className="flex h-screen items-center justify-center text-[14px] text-error">
         Failed to initialize: {error ?? "unknown error"}
       </div>
     );
@@ -224,7 +224,7 @@ export function Workspace() {
         <div
           role={notice.kind === "error" ? "alert" : "status"}
           className={`animate-settle mx-auto mt-4 flex w-[calc(100%-2rem)] max-w-5xl items-start justify-between gap-4 rounded-chip px-4 py-3 text-[14px] ${
-            notice.kind === "error" ? "bg-error-wash text-error" : "bg-mint-wash text-ink"
+            notice.kind === "error" ? "bg-mist text-error" : "bg-mint text-ink"
           }`}
         >
           <div>

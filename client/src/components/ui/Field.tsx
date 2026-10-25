@@ -44,7 +44,7 @@ const inputClass =
 
 /** Empty required-style fields get a quiet ochre cast: enter a value, nothing is assumed. */
 const filledBorder = "";
-const blankBorder = "border-warning/50 bg-warning-wash";
+const blankBorder = "border-warning/50 bg-mist";
 
 export function TextInput({
   required,

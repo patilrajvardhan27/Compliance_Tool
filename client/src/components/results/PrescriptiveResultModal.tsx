@@ -58,7 +58,7 @@ export function PrescriptiveResultModal({
         <Banner>Envelope Requirements</Banner>
         {result.needs_performance_path ? (
           <p
-            className="animate-scale-in rounded-chip bg-error-wash p-4 text-center text-[17px] font-semibold"
+            className="animate-scale-in rounded-chip bg-mist p-4 text-center text-[17px] font-semibold"
             style={{ color: REPORT_COLORS.nonCompliant }}
           >
             The glazing ratio exceeds the range covered by the prescriptive approach.
@@ -80,7 +80,7 @@ export function PrescriptiveResultModal({
                 </thead>
                 <tbody>
                   {result.rows.map((row) => (
-                    <tr key={row.item} className="border-t border-divider">
+                    <tr key={row.item} className="border-t border-hairline">
                       <td className="px-3 py-2">
                         {row.item} {row.unit}
                       </td>

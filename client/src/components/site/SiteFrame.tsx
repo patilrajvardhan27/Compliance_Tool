@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { BestLogo } from "@/components/BestLogo";
 import { SITE, SITE_LINKS } from "@/lib/site";
 
 /** Global nav: frosted, sticky, with the BEST green rule along the bottom. */
@@ -7,10 +8,14 @@ function SiteNav() {
   return (
     <header className="frosted sticky top-0 z-40 border-b-2 border-brand">
       <div className="mx-auto flex h-[52px] max-w-[1200px] items-center justify-between gap-4 px-6 max-sm:px-4">
-        <Link href="/" className="flex min-w-0 items-baseline gap-2">
-          <span className="text-[17px] font-semibold tracking-[-0.01em] text-ink">{SITE.name}</span>
-          <span className="truncate text-[13px] text-muted max-md:hidden">{SITE.tagline}</span>
-        </Link>
+        <div className="flex min-w-0 items-center gap-3">
+          <BestLogo height={30} />
+          <span aria-hidden className="h-6 w-px shrink-0 bg-hairline max-sm:hidden" />
+          <Link href="/" className="flex min-w-0 items-baseline gap-2 max-sm:hidden">
+            <span className="text-[17px] font-semibold tracking-[-0.01em] text-ink">{SITE.name}</span>
+            <span className="truncate text-[13px] text-muted max-lg:hidden">{SITE.tagline}</span>
+          </Link>
+        </div>
         <nav aria-label="Site" className="flex items-center gap-6 max-sm:gap-3">
           {SITE_LINKS.map((link) => (
             <Link
@@ -32,17 +37,21 @@ function SiteNav() {
 
 function SiteFooter() {
   return (
-    <footer className="on-dark border-t-4 border-brand bg-charcoal">
-      <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-4 px-6 py-10 text-[12px] max-sm:px-4">
-        <div>
-          <p className="text-[14px] font-semibold text-white">{SITE.name}</p>
-          <p className="mt-1 text-mint">
-            © <span className="nums">{SITE.year}</span> {SITE.owner}
-          </p>
+    <footer className="border-t-4 border-brand bg-mint text-ink">
+      <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-6 px-6 py-10 text-[12px] max-sm:px-4">
+        <div className="flex flex-wrap items-center gap-4">
+          <BestLogo height={40} />
+          <span aria-hidden className="h-8 w-px bg-ink max-sm:hidden" />
+          <div>
+            <p className="text-[14px] font-semibold">{SITE.name}</p>
+            <p className="mt-1">
+              © <span className="nums">{SITE.year}</span> {SITE.owner}
+            </p>
+          </div>
         </div>
         <nav aria-label="Legal" className="flex gap-6">
           {SITE_LINKS.map((link) => (
-            <Link key={link.href} href={link.href} className="text-mint transition-colors hover:text-white">
+            <Link key={link.href} href={link.href} className="underline-offset-2 hover:underline">
               {link.label}
             </Link>
           ))}

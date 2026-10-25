@@ -1,53 +1,33 @@
 @import "tailwindcss";
 
-/*
-  BEST Center design system — see DESIGN.md at the repo root.
-  Colours and type come from best-iucrc.org (Work Sans, forest green);
-  layout and motion follow a quiet, content-first gallery style.
-*/
+/* BEST Center design system: see DESIGN.md. Colours and type match best-iucrc.org. */
 @theme {
+  /* Every colour below comes from best-iucrc.org. */
+
   /* Action */
-  --color-primary: #007a40;
-  --color-primary-hover: #006837;
+  --color-primary: #126000;
   --color-brand: #00964f;
-  --color-leaf: #3fc380;
 
   /* Text */
   --color-ink: #0c3d00;
   --color-body: #161616;
-  --color-muted: #4a5246;
-  --color-faint: #767171;
+  --color-muted: #767171;
+  --color-faint: #7a7a7a;
 
   /* Surfaces */
   --color-canvas: #ffffff;
-  --color-mist: #f4f7f2;
-  --color-pearl: #fafcf9;
+  --color-mist: #fafafa;
   --color-canopy: #061b00;
-  --color-canopy-2: #0a2304;
-  --color-canopy-3: #041300;
-  --color-charcoal: #161616;
   --color-mint: #b9deb8;
-  --color-mint-wash: #eaf4e9;
-  --color-chip: #d3ddd0;
+  --color-selection: #154412;
 
   /* Lines */
-  --color-divider: #eef2ec;
-  --color-hairline: #dde3da;
-  --color-hairline-strong: #c5cec1;
+  --color-hairline: #c8c8c8;
+  --color-hairline-strong: #919191;
 
-  /* Status */
-  --color-error: #b42318;
-  --color-error-wash: #fef3f2;
+  /* Attention (warnings and errors) */
+  --color-error: #96650c;
   --color-warning: #96650c;
-  --color-warning-wash: #fbf5ea;
-
-  /* Charts only */
-  --color-data-1: #00964f;
-  --color-data-2: #327674;
-  --color-data-3: #785a7b;
-  --color-data-4: #96650c;
-  --color-data-5: #0c3d00;
-  --color-data-6: #767171;
 
   --font-sans: var(--font-work-sans), system-ui, -apple-system, sans-serif;
 
@@ -86,8 +66,8 @@
   }
 
   ::selection {
-    background: var(--color-mint);
-    color: var(--color-ink);
+    background: var(--color-selection);
+    color: #fff;
   }
 
   :focus-visible {
@@ -131,14 +111,14 @@
     color: #fff;
   }
   .btn-primary:hover:not(:disabled) {
-    background: var(--color-primary-hover);
+    background: var(--color-ink);
   }
   .btn-secondary {
     border: 1px solid var(--color-primary);
     color: var(--color-primary);
   }
   .btn-secondary:hover:not(:disabled) {
-    background: var(--color-mint-wash);
+    background: var(--color-mint);
   }
   .btn-on-dark {
     background: #fff;
@@ -176,7 +156,7 @@
   .chip[aria-pressed="true"],
   .chip.is-selected {
     border-color: var(--color-brand);
-    background: var(--color-mint-wash);
+    background: var(--color-mint);
     box-shadow: inset 0 0 0 1px var(--color-brand);
     color: var(--color-ink);
   }
@@ -191,14 +171,14 @@
   }
   .field:focus {
     border-color: var(--color-brand);
-    box-shadow: 0 0 0 3px rgb(0 150 79 / 0.18);
+    box-shadow: 0 0 0 1px var(--color-brand);
     outline: none;
   }
   .field[aria-invalid="true"] {
     border-color: var(--color-error);
   }
   .field[aria-invalid="true"]:focus {
-    box-shadow: 0 0 0 3px rgb(180 35 24 / 0.15);
+    box-shadow: 0 0 0 1px var(--color-error);
   }
 
   .frosted {
@@ -228,7 +208,8 @@
     position: relative;
     display: inline-flex;
     border-radius: 9999px;
-    background: var(--color-divider);
+    background: var(--color-mist);
+    border: 1px solid var(--color-hairline);
     padding: 3px;
   }
   .segmented-item {
@@ -311,14 +292,6 @@
   }
 }
 
-@keyframes grow-x {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
-}
 
 .animate-enter {
   animation: enter 600ms var(--ease-emphasized) both;
@@ -331,10 +304,6 @@
 }
 .animate-scale-in {
   animation: scale-in 360ms var(--ease-emphasized) both;
-}
-.animate-grow-x {
-  transform-origin: left center;
-  animation: grow-x 800ms var(--ease-emphasized) both;
 }
 
 /* Children enter one after another. */
