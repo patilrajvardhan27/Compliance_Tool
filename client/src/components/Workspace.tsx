@@ -106,7 +106,7 @@ export function Workspace() {
 
   if (reloading) {
     return (
-      <div className="flex h-screen items-center justify-center text-sm text-slate-500">Loading…</div>
+      <div className="flex h-screen items-center justify-center text-[14px] text-muted">Loading…</div>
     );
   }
   if (error || !bi) {
@@ -203,7 +203,7 @@ export function Workspace() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-[var(--background)]">
+    <div className="flex min-h-screen flex-col bg-mist">
       <TopActionBar
         fileName={fileName}
         dirty={dirty}
@@ -223,10 +223,8 @@ export function Workspace() {
       {notice && (
         <div
           role={notice.kind === "error" ? "alert" : "status"}
-          className={`mx-4 mt-3 flex items-start justify-between gap-4 rounded-md border px-3.5 py-2.5 text-sm ${
-            notice.kind === "error"
-              ? "border-red-200 bg-red-50 text-red-700 dark:border-red-900 dark:bg-red-950/40 dark:text-red-300"
-              : "border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-900 dark:bg-blue-950/40 dark:text-blue-300"
+          className={`animate-settle mx-auto mt-4 flex w-[calc(100%-2rem)] max-w-5xl items-start justify-between gap-4 rounded-chip px-4 py-3 text-[14px] ${
+            notice.kind === "error" ? "bg-error-wash text-error" : "bg-mint-wash text-ink"
           }`}
         >
           <div>
@@ -241,14 +239,14 @@ export function Workspace() {
           </div>
           <button
             onClick={() => setNotice(null)}
-            className="shrink-0 font-medium opacity-70 hover:opacity-100"
+            className="shrink-0 font-medium opacity-70 transition-opacity hover:opacity-100"
           >
             Dismiss
           </button>
         </div>
       )}
 
-      <main className="mx-auto w-full max-w-5xl flex-1 p-4">
+      <main key={activeTab} className="animate-enter mx-auto w-full max-w-5xl flex-1 px-4 py-6">
         {activeTab === "General Information" && <GeneralTab />}
         {activeTab === "Envelope" && <EnvelopeTab />}
         {activeTab === "Windows" && <WindowsTab />}

@@ -214,8 +214,3 @@ export interface PerformanceRunResponse {
   inp_path: string | null;
   report: PerformanceReport | null;
 }
-
-export interface ProjectSummary {
-  name: string;
-  modified: string;
-}

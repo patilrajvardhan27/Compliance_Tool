@@ -189,7 +189,7 @@ export function GeneralTab() {
                 placeholder="Computed from the dimensions"
                 readOnly
                 disabled
-                className="font-mono"
+                className="nums"
               />
             </FieldRow>
             <FieldRow label="Orientation (deg):">
@@ -211,7 +211,7 @@ export function GeneralTab() {
               />
             </FieldRow>
           </div>
-          <div className="flex w-64 shrink-0 items-center justify-center rounded-md border border-slate-200 bg-slate-50 p-2 dark:border-slate-700 dark:bg-slate-800">
+          <div className="flex w-64 shrink-0 items-center justify-center rounded-chip border border-hairline bg-mist p-2">
             {bi.cmbBldgShape && SHAPE_IMAGE_FILES[bi.cmbBldgShape] ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -220,7 +220,7 @@ export function GeneralTab() {
                 className="max-h-52 max-w-full object-contain"
               />
             ) : (
-              <span className="px-4 text-center text-xs text-slate-400">
+              <span className="px-4 text-center text-xs text-faint">
                 Pick a shape to see its dimension diagram
               </span>
             )}

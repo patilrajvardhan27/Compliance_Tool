@@ -28,7 +28,7 @@ export function SpacesTab() {
   if (bi.space_rows.length === 0) {
     return (
       <Section title="Space Conditioning">
-        <p className="py-6 text-center text-sm text-slate-500 dark:text-slate-400">
+        <p className="py-6 text-center text-sm text-muted">
           Select a building type on the General Information tab — the code-mandated space
           conditions for that category will appear here for review and adjustment.
         </p>
@@ -46,9 +46,9 @@ export function SpacesTab() {
 
   return (
     <Section title="Space Conditioning">
-      <div className="overflow-x-auto rounded-md border border-slate-200 dark:border-slate-700">
+      <div className="overflow-x-auto rounded-chip border border-hairline">
         <table className="w-full min-w-[820px] text-xs">
-          <thead className="bg-slate-50 text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+          <thead className="bg-mist text-muted">
             <tr>
               {[
                 "Space Type",
@@ -68,7 +68,7 @@ export function SpacesTab() {
           </thead>
           <tbody>
             {rows.map((row, i) => (
-              <tr key={i} className="border-t border-slate-100 dark:border-slate-800">
+              <tr key={i} className="border-t border-divider">
                 <td className="px-2 py-1">
                   <TextInput value={row.area_type} onChange={(e) => commit(i, { area_type: e.target.value })} />
                 </td>
@@ -112,7 +112,7 @@ export function SpacesTab() {
           </tbody>
         </table>
       </div>
-      <p className="text-sm font-medium text-slate-700 dark:text-slate-200">Total: {total.toFixed(0)}%</p>
+      <p className="text-sm font-medium text-body">Total: {total.toFixed(0)}%</p>
     </Section>
   );
 }

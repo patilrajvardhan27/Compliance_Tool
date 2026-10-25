@@ -58,7 +58,7 @@ export function HvacTab() {
               />
             </FieldRow>
           </div>
-          <div className="flex w-72 shrink-0 items-center justify-center rounded-md border border-slate-200 bg-slate-50 p-2 dark:border-slate-700 dark:bg-slate-800">
+          <div className="flex w-72 shrink-0 items-center justify-center rounded-chip border border-hairline bg-mist p-2">
             {illustration ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -67,7 +67,7 @@ export function HvacTab() {
                 className="max-h-48 max-w-full object-contain"
               />
             ) : (
-              <span className="px-4 text-center text-xs text-slate-400">
+              <span className="px-4 text-center text-xs text-faint">
                 Pick a system to see its schematic
               </span>
             )}

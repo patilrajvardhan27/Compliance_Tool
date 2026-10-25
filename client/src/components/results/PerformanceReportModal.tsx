@@ -77,30 +77,30 @@ export function PerformanceReportModal({
         />
 
         <Banner>Performance Analysis</Banner>
-        <div className="overflow-x-auto rounded-md border border-slate-200 dark:border-slate-700">
-          <table className="w-full text-sm">
+        <div className="overflow-x-auto rounded-chip border border-hairline">
+          <table className="nums w-full text-[14px]">
             <thead>
-              <tr className="text-slate-600 dark:text-slate-300">
+              <tr className="text-muted">
                 <th className="px-3 py-2 text-left font-semibold" />
                 <th className="px-3 py-2 text-center font-semibold">Compliance</th>
                 <th className="px-3 py-2 text-center font-semibold">Building</th>
               </tr>
             </thead>
             <tbody>
-              <tr className="border-t border-slate-100 dark:border-slate-800">
+              <tr className="border-t border-divider">
                 <td className="px-3 py-2">Thermal loads (BECth) for conditioned space [kWh/m2.year]</td>
                 <td className="px-3 py-2 text-center">{report.min_bec_th.toFixed(1)}</td>
                 <td className="px-3 py-2 text-center">{report.bldg_bec_th.toFixed(1)}</td>
               </tr>
-              <tr className="border-t border-slate-100 dark:border-slate-800">
+              <tr className="border-t border-divider">
                 <td className="px-3 py-2 font-semibold">CLASS</td>
                 <td className="px-3 py-2 text-center">{report.min_class}</td>
                 <td className="px-3 py-2 text-center">{report.bldg_class}</td>
               </tr>
-              <tr className="border-t border-slate-100 dark:border-slate-800">
+              <tr className="border-t border-divider">
                 <td
                   className="px-3 py-2 font-bold"
-                  style={{ color: REPORT_COLORS.nonCompliantRed }}
+                  style={{ color: REPORT_COLORS.nonCompliant }}
                 >
                   Performance Compliance Result
                 </td>
@@ -110,8 +110,8 @@ export function PerformanceReportModal({
                   style={{
                     color:
                       report.result === "Compliant"
-                        ? REPORT_COLORS.compliantGreen
-                        : REPORT_COLORS.nonCompliantRed,
+                        ? REPORT_COLORS.compliant
+                        : REPORT_COLORS.nonCompliant,
                   }}
                 >
                   {report.result}
@@ -139,8 +139,8 @@ export function PerformanceReportModal({
 
         <BecThChart classRows={report.class_rows} bldgBecTh={report.bldg_bec_th} />
 
-        <div className="mt-1 flex items-center justify-end gap-3 border-t border-slate-200 pt-3 dark:border-slate-700">
-          {saveMessage && <span className="text-xs text-slate-500 dark:text-slate-400">{saveMessage}</span>}
+        <div className="mt-1 flex items-center justify-end gap-3 border-t border-hairline pt-3">
+          {saveMessage && <span className="text-xs text-muted">{saveMessage}</span>}
           <Button onClick={onClose}>Close</Button>
           <Button variant="primary" onClick={handleSaveReport}>
             Save report to my computer

@@ -2,65 +2,63 @@ import Link from "next/link";
 
 import { SITE, SITE_LINKS } from "@/lib/site";
 
-const FOCUS =
-  "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cobalt)]";
+/** Global nav: frosted, sticky, with the BEST green rule along the bottom. */
+function SiteNav() {
+  return (
+    <header className="frosted sticky top-0 z-40 border-b-2 border-brand">
+      <div className="mx-auto flex h-[52px] max-w-[1200px] items-center justify-between gap-4 px-6 max-sm:px-4">
+        <Link href="/" className="flex min-w-0 items-baseline gap-2">
+          <span className="text-[17px] font-semibold tracking-[-0.01em] text-ink">{SITE.name}</span>
+          <span className="truncate text-[13px] text-muted max-md:hidden">{SITE.tagline}</span>
+        </Link>
+        <nav aria-label="Site" className="flex items-center gap-6 max-sm:gap-3">
+          {SITE_LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="text-[13px] text-muted transition-colors hover:text-body max-sm:hidden"
+            >
+              {link.label}
+            </Link>
+          ))}
+          <Link href="/tool" className="btn btn-primary btn-sm">
+            Open the tool
+          </Link>
+        </nav>
+      </div>
+    </header>
+  );
+}
 
-export const PRIMARY_LINK = `rounded-md bg-[var(--cobalt)] font-medium text-white transition-colors hover:bg-[var(--cobalt-deep)] ${FOCUS}`;
+function SiteFooter() {
+  return (
+    <footer className="on-dark border-t-4 border-brand bg-charcoal">
+      <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-4 px-6 py-10 text-[12px] max-sm:px-4">
+        <div>
+          <p className="text-[14px] font-semibold text-white">{SITE.name}</p>
+          <p className="mt-1 text-mint">
+            © <span className="nums">{SITE.year}</span> {SITE.owner}
+          </p>
+        </div>
+        <nav aria-label="Legal" className="flex gap-6">
+          {SITE_LINKS.map((link) => (
+            <Link key={link.href} href={link.href} className="text-mint transition-colors hover:text-white">
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+      </div>
+    </footer>
+  );
+}
 
-/** Header and footer shared by the landing page and the legal pages. */
+/** Shared frame for the landing page and the legal pages. */
 export function SiteFrame({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-screen flex-col bg-[var(--background)]">
-      <header className="border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
-        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-6 gap-y-2 px-4 py-2.5">
-          <Link href="/" className={`flex items-center gap-2.5 rounded-md ${FOCUS}`}>
-            <span
-              aria-hidden
-              className="flex h-8 w-8 items-center justify-center rounded-md bg-[var(--cobalt)] font-mono text-sm font-bold text-white"
-            >
-              TB
-            </span>
-            <span className="leading-tight">
-              <span className="block font-mono text-sm font-bold tracking-[0.14em] text-slate-800 dark:text-slate-100">
-                {SITE.name}
-              </span>
-              <span className="block text-[11px] text-slate-500 dark:text-slate-400">{SITE.tagline}</span>
-            </span>
-          </Link>
-
-          <nav aria-label="Site" className="flex items-center gap-1">
-            {SITE_LINKS.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`rounded-md px-3 py-1.5 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-800 dark:text-slate-300 dark:hover:bg-slate-800 max-sm:px-2 ${FOCUS}`}
-              >
-                {link.label}
-              </Link>
-            ))}
-            <Link href="/tool" className={`ml-2 px-3 py-1.5 text-sm ${PRIMARY_LINK}`}>
-              Get started
-            </Link>
-          </nav>
-        </div>
-      </header>
-
-      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-10 max-sm:py-6">{children}</main>
-
-      <footer className="border-t border-slate-200 dark:border-slate-800">
-        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-4 py-4 text-xs text-slate-500 dark:text-slate-400">
-          <p>
-            © {SITE.year} {SITE.owner}
-          </p>
-          <nav aria-label="Legal" className="flex gap-4">
-            {SITE_LINKS.map((link) => (
-              <Link key={link.href} href={link.href} className={`rounded hover:text-slate-800 dark:hover:text-slate-100 ${FOCUS}`}>
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-        </div>
-      </footer>
+    <div className="flex min-h-screen flex-col bg-canvas">
+      <SiteNav />
+      <main className="flex-1">{children}</main>
+      <SiteFooter />
     </div>
   );
 }
@@ -77,12 +75,15 @@ export function SiteDocument({
 }) {
   return (
     <SiteFrame>
-      <article className="mx-auto max-w-2xl">
-        <h1 className="text-3xl font-semibold tracking-tight text-slate-900 dark:text-slate-50 max-sm:text-2xl">
-          {title}
-        </h1>
-        <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{summary}</p>
-        <div className="mt-6 flex flex-col gap-4">{children}</div>
+      <article className="bg-mist">
+        <div className="mx-auto max-w-[760px] px-6 pb-20 pt-16 max-sm:px-4 max-sm:pt-10">
+          <div className="animate-enter">
+            <p className="text-[14px] font-semibold text-primary">{SITE.name}</p>
+            <h1 className="mt-2 text-[40px] leading-[1.1] tracking-[-0.5px] max-sm:text-[30px]">{title}</h1>
+            <p className="mt-4 text-[21px] font-light leading-[1.5] text-muted max-sm:text-[17px]">{summary}</p>
+          </div>
+          <div className="stagger mt-12 flex flex-col gap-4">{children}</div>
+        </div>
       </article>
     </SiteFrame>
   );
@@ -90,11 +91,9 @@ export function SiteDocument({
 
 export function DocumentSection({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-[0_1px_2px_rgba(20,30,45,0.05)] dark:border-slate-800 dark:bg-slate-900">
-      <h2 className="border-b border-slate-100 pb-2.5 text-[13px] font-semibold uppercase tracking-[0.08em] text-slate-700 dark:border-slate-800 dark:text-slate-200">
-        {title}
-      </h2>
-      <div className="mt-3 space-y-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300 [&_a]:text-[var(--cobalt)] [&_a]:underline [&_a]:underline-offset-2 [&_li]:ml-5 [&_li]:list-disc [&_strong]:font-semibold [&_strong]:text-slate-800 dark:[&_strong]:text-slate-100 [&_ul]:space-y-1.5">
+    <section className="card p-6 max-sm:p-5">
+      <h2 className="text-[21px] tracking-[-0.2px]">{title}</h2>
+      <div className="mt-3 space-y-3 text-[17px] leading-[1.47] text-muted [&_a]:text-primary [&_a]:underline-offset-2 hover:[&_a]:underline [&_li]:ml-5 [&_li]:list-disc [&_strong]:font-semibold [&_strong]:text-body [&_ul]:space-y-1.5">
         {children}
       </div>
     </section>

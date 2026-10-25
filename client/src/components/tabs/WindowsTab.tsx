@@ -57,9 +57,9 @@ export function WindowsTab() {
           ]}
         />
 
-        <div className="overflow-x-auto rounded-md border border-slate-200 dark:border-slate-700">
+        <div className="overflow-x-auto rounded-chip border border-hairline">
           <table className="w-full min-w-[720px] text-xs">
-            <thead className="bg-slate-50 text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+            <thead className="bg-mist text-muted">
               <tr>
                 <th className="px-2 py-1.5 text-left font-medium">#</th>
                 {ORIENTATIONS.map((o) => (
@@ -73,8 +73,8 @@ export function WindowsTab() {
             </thead>
             <tbody>
               {bi.window_rows.map((row, i) => (
-                <tr key={i} className="border-t border-slate-100 dark:border-slate-800">
-                  <td className="px-2 py-1 text-slate-500">#{i + 1}</td>
+                <tr key={i} className="border-t border-divider">
+                  <td className="px-2 py-1 text-muted">#{i + 1}</td>
                   {ORIENTATIONS.map((o) => (
                     <td key={o.key} className="px-2 py-1">
                       <NumberInput
@@ -113,7 +113,7 @@ export function WindowsTab() {
             </tbody>
           </table>
         </div>
-        <p className="text-xs text-slate-500">Values entered above are treated as {unitLabel}.</p>
+        <p className="text-xs text-muted">Values entered above are treated as {unitLabel}.</p>
 
         <div className="flex gap-6">
           <div className="flex flex-1 flex-col gap-3">
@@ -124,7 +124,7 @@ export function WindowsTab() {
               <NumberInput value={bi.txtWinSouthFp} onChange={(v) => updateBi({ txtWinSouthFp: v })} step="0.01" min={0} max={5} />
             </FieldRow>
           </div>
-          <div className="flex w-52 shrink-0 items-center justify-center rounded-md border border-slate-200 bg-slate-50 p-2 dark:border-slate-700 dark:bg-slate-800">
+          <div className="flex w-52 shrink-0 items-center justify-center rounded-chip border border-hairline bg-mist p-2">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={imageUrl(SHADING_IMAGE_FILE)} alt="Shading" className="max-h-40 max-w-full object-contain" />
           </div>

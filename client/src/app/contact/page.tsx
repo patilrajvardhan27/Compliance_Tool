@@ -28,7 +28,7 @@ export default function Contact() {
               {line}
             </span>
           ))}
-          <a href={`tel:+1-${SITE.lab.phone}`} className="mt-2 block font-mono">
+          <a href={`tel:+1-${SITE.lab.phone}`} className="nums mt-2 block">
             {SITE.lab.phone}
           </a>
         </address>

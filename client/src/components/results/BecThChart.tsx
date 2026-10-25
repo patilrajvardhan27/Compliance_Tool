@@ -26,30 +26,30 @@ export function BecThChart({ classRows, bldgBecTh }: { classRows: ClassRow[]; bl
 
   return (
     <div>
-      <p className="mb-1 text-center text-xs font-semibold text-slate-500 dark:text-slate-400">
+      <p className="mb-1 text-center text-xs font-semibold text-muted">
         [kWh/m2.year]
       </p>
       <ResponsiveContainer width="100%" height={360}>
         <BarChart data={data} layout="vertical" margin={{ top: 8, right: 48, bottom: 8, left: 8 }} barGap={2}>
-          <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="currentColor" className="text-slate-200 dark:text-slate-700" />
-          <XAxis type="number" domain={[0, maxVal]} tick={{ fontSize: 11 }} stroke="currentColor" className="text-slate-500" />
-          <YAxis type="category" dataKey="name" tick={{ fontSize: 11 }} width={56} stroke="currentColor" className="text-slate-500" />
+          <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="currentColor" className="text-hairline" />
+          <XAxis type="number" domain={[0, maxVal]} tick={{ fontSize: 11 }} stroke="currentColor" className="text-muted" />
+          <YAxis type="category" dataKey="name" tick={{ fontSize: 11 }} width={56} stroke="currentColor" className="text-muted" />
           <Tooltip
             formatter={(value) => (typeof value === "number" ? value.toFixed(1) : "—")}
-            contentStyle={{ fontSize: 12, borderRadius: 6 }}
+            contentStyle={{ fontSize: 12, borderRadius: 11, border: "1px solid var(--color-hairline)" }}
           />
           <Legend wrapperStyle={{ fontSize: 12 }} />
           <Bar
             dataKey="Compliance"
-            fill={REPORT_COLORS.complianceBarRed}
-            radius={[0, 4, 4, 0]}
+            fill={REPORT_COLORS.thresholdBar}
+            radius={[0, 9, 9, 0]}
             barSize={14}
             label={{ position: "right", fontSize: 10, fill: "currentColor", formatter: (v: unknown) => (typeof v === "number" ? v.toFixed(1) : "") }}
           />
           <Bar
             dataKey="Building"
-            fill={REPORT_COLORS.buildingBarBlue}
-            radius={[0, 4, 4, 0]}
+            fill={REPORT_COLORS.buildingBar}
+            radius={[0, 9, 9, 0]}
             barSize={14}
             label={{ position: "right", fontSize: 10, fill: "currentColor", formatter: (v: unknown) => (typeof v === "number" ? v.toFixed(1) : "") }}
           />

@@ -58,8 +58,8 @@ export function PrescriptiveResultModal({
         <Banner>Envelope Requirements</Banner>
         {result.needs_performance_path ? (
           <p
-            className="rounded p-4 text-center text-base font-bold"
-            style={{ color: REPORT_COLORS.nonCompliantRed }}
+            className="animate-scale-in rounded-chip bg-error-wash p-4 text-center text-[17px] font-semibold"
+            style={{ color: REPORT_COLORS.nonCompliant }}
           >
             The glazing ratio exceeds the range covered by the prescriptive approach.
             <br />
@@ -67,9 +67,9 @@ export function PrescriptiveResultModal({
           </p>
         ) : (
           <>
-            <div className="overflow-x-auto rounded-md border border-slate-200 dark:border-slate-700">
-              <table className="w-full text-sm">
-                <thead style={{ background: REPORT_COLORS.bannerBlue }} className="text-white">
+            <div className="overflow-x-auto rounded-chip border border-hairline">
+              <table className="nums w-full text-[14px]">
+                <thead style={{ background: REPORT_COLORS.banner }} className="text-white">
                   <tr>
                     {["Element", "Building Value", "Limit Value", "Result"].map((h) => (
                       <th key={h} className="px-3 py-2 text-left font-semibold">
@@ -79,11 +79,8 @@ export function PrescriptiveResultModal({
                   </tr>
                 </thead>
                 <tbody>
-                  {result.rows.map((row, i) => (
-                    <tr
-                      key={row.item}
-                      className={i % 2 === 1 ? "bg-slate-50 dark:bg-slate-800/50" : ""}
-                    >
+                  {result.rows.map((row) => (
+                    <tr key={row.item} className="border-t border-divider">
                       <td className="px-3 py-2">
                         {row.item} {row.unit}
                       </td>
@@ -92,7 +89,7 @@ export function PrescriptiveResultModal({
                       <td
                         className="px-3 py-2 text-center font-bold"
                         style={{
-                          color: row.compliant ? REPORT_COLORS.compliantGreen : REPORT_COLORS.nonCompliantRed,
+                          color: row.compliant ? REPORT_COLORS.compliant : REPORT_COLORS.nonCompliant,
                         }}
                       >
                         {row.compliant ? "Compliant" : "Non-Compliant"}
@@ -108,8 +105,8 @@ export function PrescriptiveResultModal({
           </>
         )}
 
-        <div className="mt-1 flex items-center justify-end gap-3 border-t border-slate-200 pt-3 dark:border-slate-700">
-          {saveMessage && <span className="text-xs text-slate-500 dark:text-slate-400">{saveMessage}</span>}
+        <div className="mt-1 flex items-center justify-end gap-3 border-t border-hairline pt-3">
+          {saveMessage && <span className="text-xs text-muted">{saveMessage}</span>}
           <Button onClick={onClose}>Close</Button>
           <Button variant="primary" onClick={handleSaveReport}>
             Save report to my computer

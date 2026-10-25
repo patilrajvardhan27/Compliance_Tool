@@ -56,7 +56,7 @@ export default function Privacy() {
           If the tool starts handling data differently, this page will be updated first. Questions go to the lab
           through the <Link href="/contact">contact page</Link>.
         </p>
-        <p className="font-mono text-xs">Last updated October 2026</p>
+        <p className="nums text-[13px]">Last updated October 2026</p>
       </DocumentSection>
     </SiteDocument>
   );

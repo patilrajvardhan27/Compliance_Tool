@@ -31,32 +31,20 @@ export function TopActionBar({
   performanceLoading: boolean;
 }) {
   return (
-    <header className="border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
-      <div className="flex flex-wrap items-center gap-x-6 gap-y-2 px-4 py-2.5">
-        <div className="flex items-center gap-2.5">
-          <span
-            aria-hidden
-            className="flex h-8 w-8 items-center justify-center rounded-md bg-[var(--cobalt)] font-mono text-sm font-bold text-white"
-          >
-            TB
-          </span>
-          <div className="leading-tight">
-            <p className="font-mono text-sm font-bold tracking-[0.14em] text-slate-800 dark:text-slate-100">
-              TUNBEEC
-            </p>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400">
-              Tunisian Building Energy Efficiency Code
-            </p>
-          </div>
+    <header className="frosted sticky top-0 z-40 border-b-2 border-brand">
+      <div className="flex flex-wrap items-center gap-x-6 gap-y-2 px-4 py-2">
+        <div className="flex items-baseline gap-2">
+          <p className="text-[17px] font-semibold tracking-[-0.01em] text-ink">TUNBEEC</p>
+          <p className="text-[13px] text-muted max-lg:hidden">Tunisian Building Energy Efficiency Code</p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-1.5 border-l border-slate-200 pl-5 dark:border-slate-700">
+        <div className="flex flex-wrap items-center gap-1 border-l border-hairline pl-4">
           <Link
             href="/"
             onClick={(e) => {
               if (dirty && !confirm("Leave the tool? Unsaved changes will be lost.")) e.preventDefault();
             }}
-            className="rounded-md px-3 py-1.5 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--cobalt)] dark:text-slate-300 dark:hover:bg-slate-800"
+            className="btn btn-sm rounded-field px-3 text-muted hover:bg-mist hover:text-body"
           >
             Home
           </Link>
@@ -72,11 +60,13 @@ export function TopActionBar({
           <Button variant="ghost" onClick={onSaveAs}>
             Save As…
           </Button>
-          <span className="ml-2 max-w-[260px] truncate text-xs text-slate-500 dark:text-slate-400">
+          <span className="ml-2 max-w-[260px] truncate text-[13px] text-muted">
             {fileName ? (
               <>
-                <span className="font-mono">{fileName}</span>
-                {dirty && <span title="Unsaved changes"> •</span>}
+                <span className="font-medium text-body">{fileName}</span>
+                {dirty && (
+                  <span title="Unsaved changes" className="ml-1.5 inline-block h-1.5 w-1.5 rounded-full bg-warning align-middle" />
+                )}
               </>
             ) : (
               "Not saved to a file yet"
@@ -84,9 +74,9 @@ export function TopActionBar({
           </span>
         </div>
 
-        <div className="ml-auto flex gap-2">
+        <div className="ml-auto flex flex-wrap gap-2">
           <Button
-            variant="primary"
+            variant="secondary"
             onClick={onPrescriptive}
             disabled={prescriptiveDisabled || prescriptiveLoading}
             title={
