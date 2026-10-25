@@ -73,7 +73,7 @@ export function WindowsTab() {
             </thead>
             <tbody>
               {bi.window_rows.map((row, i) => (
-                <tr key={i} className="border-t border-divider">
+                <tr key={i} className="border-t border-hairline">
                   <td className="px-2 py-1 text-muted">#{i + 1}</td>
                   {ORIENTATIONS.map((o) => (
                     <td key={o.key} className="px-2 py-1">

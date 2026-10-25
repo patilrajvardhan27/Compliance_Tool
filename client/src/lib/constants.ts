@@ -84,8 +84,8 @@ export const SYSTEM_ENABLEMENT: Record<string, number[]> = {
 /** BEST Center palette (see DESIGN.md). Charts use the data colours only. */
 export const REPORT_COLORS = {
   banner: "#061b00",
-  compliant: "#007a40",
-  nonCompliant: "#b42318",
+  compliant: "#126000",
+  nonCompliant: "#96650c",
   thresholdBar: "#96650c",
   buildingBar: "#00964f",
 };

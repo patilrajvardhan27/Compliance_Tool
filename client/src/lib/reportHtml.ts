@@ -19,19 +19,19 @@ function page(title: string, body: string): string {
 <style>
   :root { color-scheme: light; }
   body { font-family: "Work Sans", system-ui, -apple-system, sans-serif; color: #161616; margin: 0;
-         background: #f4f7f2; }
+         background: #fafafa; }
   .sheet { max-width: 760px; margin: 24px auto; background: #fff; padding: 40px 48px;
-           border: 1px solid #dde3da; border-radius: 18px; }
+           border: 1px solid #c8c8c8; border-radius: 18px; }
   h1 { font-size: 24px; font-weight: 600; color: #0c3d00; text-align: center; margin: 0 0 4px; letter-spacing: -0.01em; }
   .stamp { text-align: center; font-size: 11px; color: #767171; margin-bottom: 24px; }
   .banner { background: ${REPORT_COLORS.banner}; color: #fff; font-size: 13px; font-weight: 600;
             padding: 8px 14px; border-radius: 11px; margin: 20px 0 10px; }
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  th, td { padding: 6px 10px; text-align: left; border-bottom: 1px solid #eef2ec; }
-  th { background: #f4f7f2; font-weight: 600; color: #4a5246; }
+  th, td { padding: 6px 10px; text-align: left; border-bottom: 1px solid #c8c8c8; }
+  th { background: #fafafa; font-weight: 600; color: #767171; }
   td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
   .kv { display: grid; grid-template-columns: max-content 1fr; gap: 4px 24px; font-size: 13px; }
-  .kv b { font-weight: 600; color: #4a5246; }
+  .kv b { font-weight: 600; color: #767171; }
   .ok { color: ${REPORT_COLORS.compliant}; font-weight: 700; }
   .bad { color: ${REPORT_COLORS.nonCompliant}; font-weight: 700; }
   .verdict { border-radius: 11px; color: #fff; font-weight: 700; text-align: center;
@@ -103,7 +103,7 @@ function classChartSvg(classRows: ClassRow[], bldgBecTh: number): string {
           ? `<rect x="${labelW}" y="${y + 13}" width="${scale(bldg).toFixed(1)}" height="11" rx="2" fill="${REPORT_COLORS.buildingBar}"/>
              <text x="${(labelW + scale(bldg) + 4).toFixed(1)}" y="${y + 22}" font-size="9" fill="#767171">${bldg.toFixed(1)}</text>`
           : "";
-      return `<text x="${labelW - 8}" y="${y + 14}" font-size="11" text-anchor="end" fill="#4a5246">${esc(row.class_name)}</text>${threshold}${building}`;
+      return `<text x="${labelW - 8}" y="${y + 14}" font-size="11" text-anchor="end" fill="#767171">${esc(row.class_name)}</text>${threshold}${building}`;
     })
     .join("\n");
 
@@ -111,9 +111,9 @@ function classChartSvg(classRows: ClassRow[], bldgBecTh: number): string {
   return `<svg viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">
     ${bars}
     <rect x="${labelW}" y="${legendY - 9}" width="10" height="10" fill="${REPORT_COLORS.thresholdBar}"/>
-    <text x="${labelW + 14}" y="${legendY}" font-size="10" fill="#4a5246">Compliance threshold</text>
+    <text x="${labelW + 14}" y="${legendY}" font-size="10" fill="#767171">Compliance threshold</text>
     <rect x="${labelW + 150}" y="${legendY - 9}" width="10" height="10" fill="${REPORT_COLORS.buildingBar}"/>
-    <text x="${labelW + 164}" y="${legendY}" font-size="10" fill="#4a5246">Building</text>
+    <text x="${labelW + 164}" y="${legendY}" font-size="10" fill="#767171">Building</text>
   </svg>`;
 }
 

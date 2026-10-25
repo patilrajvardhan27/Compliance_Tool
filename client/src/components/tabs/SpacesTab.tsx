@@ -68,7 +68,7 @@ export function SpacesTab() {
           </thead>
           <tbody>
             {rows.map((row, i) => (
-              <tr key={i} className="border-t border-divider">
+              <tr key={i} className="border-t border-hairline">
                 <td className="px-2 py-1">
                   <TextInput value={row.area_type} onChange={(e) => commit(i, { area_type: e.target.value })} />
                 </td>

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 
+import { BestLogo } from "@/components/BestLogo";
 import { Button } from "@/components/ui/Field";
 
 export function TopActionBar({
@@ -33,9 +34,11 @@ export function TopActionBar({
   return (
     <header className="frosted sticky top-0 z-40 border-b-2 border-brand">
       <div className="flex flex-wrap items-center gap-x-6 gap-y-2 px-4 py-2">
-        <div className="flex items-baseline gap-2">
+        <div className="flex items-center gap-3">
+          <BestLogo height={30} />
+          <span aria-hidden className="h-6 w-px bg-hairline" />
           <p className="text-[17px] font-semibold tracking-[-0.01em] text-ink">TUNBEEC</p>
-          <p className="text-[13px] text-muted max-lg:hidden">Tunisian Building Energy Efficiency Code</p>
+          <p className="text-[13px] text-muted max-xl:hidden">Tunisian Building Energy Efficiency Code</p>
         </div>
 
         <div className="flex flex-wrap items-center gap-1 border-l border-hairline pl-4">
