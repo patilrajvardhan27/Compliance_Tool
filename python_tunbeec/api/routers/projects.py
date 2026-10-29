@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import tempfile
 from pathlib import Path
 
@@ -12,6 +13,8 @@ from tunbeec.data.project import load_project, save_project
 from tunbeec.data.reference import ReferenceData
 
 router = APIRouter(prefix="/api/projects", tags=["projects"])
+log = logging.getLogger("tunbeec.api")
+MAX_PROJECT_BYTES = 20 * 1024 * 1024
 
 
 # The .tct file lives on the user's machine (browser file pickers); the server only converts
@@ -35,6 +38,8 @@ async def parse_project(
     data = await request.body()
     if not data:
         raise HTTPException(status_code=400, detail="Empty file.")
+    if len(data) > MAX_PROJECT_BYTES:
+        raise HTTPException(status_code=413, detail="File is too large (20 MB max).")
     with tempfile.TemporaryDirectory() as tmp:
         path = Path(tmp) / "project.tct"
         path.write_bytes(data)
@@ -42,5 +47,8 @@ async def parse_project(
             bi = load_project(path)
             populate_space_rows(bi, ref)  # tblSpaceCond is never persisted; re-derive on open
         except Exception as e:
-            raise HTTPException(status_code=400, detail=f"Unable to open file: {e}") from e
+            log.exception("Could not open uploaded .tct file")
+            raise HTTPException(
+                status_code=400, detail="Unable to open this file. Make sure it is a TUNBEEC .tct project."
+            ) from e
     return convert.schema_from_building_input(bi)
