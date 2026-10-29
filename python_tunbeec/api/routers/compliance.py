@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+import logging
 import re
 import sys
-import traceback
 
 from fastapi import APIRouter, Depends, HTTPException
 
@@ -17,6 +17,16 @@ from tunbeec.calc.sim_parser import parse_bec_th, parse_bldg_energy
 from tunbeec.data.reference import ReferenceData
 
 router = APIRouter(prefix="/api/compliance", tags=["compliance"])
+log = logging.getLogger("tunbeec.api")
+
+
+def _user_error(e: Exception, what: str) -> HTTPException:
+    """Our own ValueErrors describe bad input (e.g. "Unknown location") and are safe to show;
+    anything else is logged on the server and replaced with a plain message."""
+    log.exception("%s failed", what)
+    if isinstance(e, ValueError):
+        return HTTPException(status_code=400, detail=f"{what} failed: {e}")
+    return HTTPException(status_code=400, detail=f"{what} failed. Please check your inputs and try again.")
 
 
 def _wwr_violations(building_input: schemas.BuildingInputSchema) -> list[str]:
@@ -48,8 +58,7 @@ def run_prescriptive_check(
         geo = calc_bldg_geometry(bi, ref, bi.space_rows)
         result = run_prescriptive(bi, ref, geo)
     except Exception as e:
-        traceback.print_exc()
-        raise HTTPException(status_code=400, detail=f"Calculation failed: {e}") from e
+        raise _user_error(e, "Calculation") from e
     return convert.prescriptive_result_schema(result)
 
 
@@ -75,8 +84,7 @@ def run_performance_check(
         file_stem = re.sub(r"[^A-Za-z0-9 _\-]", "", req.project_name).strip() or "building"
         inp_path = write_inp(work_dir, file_stem, lines)
     except Exception as e:
-        traceback.print_exc()
-        raise HTTPException(status_code=400, detail=f"BDL file generation failed: {e}") from e
+        raise _user_error(e, "BDL file generation") from e
 
     run_result = run_doe22(DOE22_DIR, work_dir, file_stem, bi.cmbBldgLocation)
     sim_path = run_result.sim_path
@@ -86,22 +94,24 @@ def run_performance_check(
             sim_path = candidate  # reuse a .sim produced by a prior Windows run of RUN22.exe
 
     if sim_path is None:
+        # run_result.message can hold server paths and process output: log it, don't send it.
+        log.warning("DOE-2.2 run did not produce a .sim: %s", run_result.message)
         if sys.platform != "win32":
             return schemas.PerformanceRunResponse(
                 status="simulation_unavailable",
                 message=(
-                    f"BDL file generated: {inp_path}. The DOE-2.2 simulation engine "
+                    f"BDL file generated: {inp_path.name}. The DOE-2.2 simulation engine "
                     "(doe22/RUN22.exe) is a Windows binary and cannot be run on this platform. "
                     "Run this .inp file through a Windows deployment of this backend to produce "
                     f"{file_stem}.sim, then re-run this check (the .sim file will be detected "
-                    f"automatically). Detail: {run_result.message}"
+                    "automatically)."
                 ),
-                inp_path=str(inp_path),
+                inp_path=inp_path.name,
             )
         return schemas.PerformanceRunResponse(
             status="simulation_failed",
-            message=f"DOE-2.2 simulation failed: {run_result.message}",
-            inp_path=str(inp_path),
+            message="The DOE-2.2 simulation did not finish. Please check your inputs and try again.",
+            inp_path=inp_path.name,
         )
 
     try:
@@ -116,9 +126,8 @@ def run_performance_check(
         )
         report.bldg_loc = bi.cmbBldgLocation
     except Exception as e:
-        traceback.print_exc()
-        raise HTTPException(status_code=400, detail=f"Simulation result analysis failed: {e}") from e
+        raise _user_error(e, "Simulation result analysis") from e
 
     return schemas.PerformanceRunResponse(
-        status="ok", inp_path=str(inp_path), report=convert.performance_report_schema(report),
+        status="ok", inp_path=inp_path.name, report=convert.performance_report_schema(report),
     )
