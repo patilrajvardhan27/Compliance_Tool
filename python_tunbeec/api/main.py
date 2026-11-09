@@ -11,14 +11,17 @@ from __future__ import annotations
 
 import logging
 import os
+import sys
+import tempfile
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 
+from api.deps import get_reference
 from api.routers import building, compliance, projects, reference
-from tunbeec.app_paths import IMAGE_DIR
+from tunbeec.app_paths import DOE22_DIR, IMAGE_DIR, PROJECT_DIR
 
 # API docs are only served when ENABLE_DOCS=1 (local dev), not in production.
 _docs = os.environ.get("ENABLE_DOCS") == "1"
@@ -65,6 +68,37 @@ app.include_router(compliance.router)
 app.include_router(projects.router)
 
 
+def _project_dir_writable() -> bool:
+    PROJECT_DIR.mkdir(parents=True, exist_ok=True)
+    with tempfile.NamedTemporaryFile(dir=PROJECT_DIR):
+        return True
+
+
 @app.get("/api/health")
-def health() -> dict[str, str]:
-    return {"status": "ok"}
+def health(response: Response) -> dict:
+    """Checks the reference library, scratch space and, on Windows, the DOE-2.2 engine.
+
+    Returns 503 when any check fails so uptime monitors raise an alert.
+    """
+    checks: dict[str, str] = {}
+
+    try:
+        checks["reference_library"] = "ok" if get_reference().bldg_locations else "fail"
+    except Exception:
+        log.exception("Health check: reference library failed to load")
+        checks["reference_library"] = "fail"
+
+    try:
+        checks["project_storage"] = "ok" if _project_dir_writable() else "fail"
+    except Exception:
+        log.exception("Health check: project directory is not writable")
+        checks["project_storage"] = "fail"
+
+    # RUN22.exe only runs on Windows, so the simulation engine is only checked there.
+    if sys.platform == "win32":
+        checks["simulation_engine"] = "ok" if (DOE22_DIR / "RUN22.exe").is_file() else "fail"
+
+    healthy = all(v == "ok" for v in checks.values())
+    if not healthy:
+        response.status_code = 503
+    return {"status": "ok" if healthy else "degraded", "checks": checks}

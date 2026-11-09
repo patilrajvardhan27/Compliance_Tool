@@ -1,6 +1,8 @@
 import Link from "next/link";
 
 import { BestLogo } from "@/components/BestLogo";
+import { SystemStatus } from "@/components/SystemStatus";
+import { HEALTH_URL } from "@/lib/api";
 import { SITE, SITE_LINKS } from "@/lib/site";
 
 /** Global nav: frosted, sticky, with the BEST green rule along the bottom. */
@@ -17,6 +19,7 @@ function SiteNav() {
           </Link>
         </div>
         <nav aria-label="Site" className="flex items-center gap-6 max-sm:gap-3">
+          <SystemStatus url={HEALTH_URL} className="text-muted" />
           {SITE_LINKS.map((link) => (
             <Link
               key={link.href}
