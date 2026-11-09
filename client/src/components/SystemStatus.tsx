@@ -7,11 +7,11 @@ type Status = "checking" | "operational" | "degraded" | "down";
 const POLL_INTERVAL_MS = 60_000;
 const REQUEST_TIMEOUT_MS = 10_000;
 
-const DISPLAY: Record<Status, { label: string; dot: string }> = {
-  checking: { label: "Checking status", dot: "bg-[#9ca3af]" },
-  operational: { label: "All systems operational", dot: "bg-[#00964f]" },
-  degraded: { label: "Some services degraded", dot: "bg-[#d97706]" },
-  down: { label: "Service unavailable", dot: "bg-[#dc2626]" },
+const DISPLAY: Record<Status, { label: string; color: string }> = {
+  checking: { label: "Checking system status", color: "#9ca3af" },
+  operational: { label: "All systems operational", color: "#00964f" },
+  degraded: { label: "Some services degraded", color: "#d97706" },
+  down: { label: "Service unavailable", color: "#dc2626" },
 };
 
 async function checkHealth(url: string): Promise<Status> {
@@ -53,22 +53,25 @@ export function SystemStatus({ url, className = "" }: { url: string; className?:
     };
   }, [url]);
 
-  const { label, dot } = DISPLAY[status];
+  const { label, color } = DISPLAY[status];
 
   return (
     <p
       role="status"
       aria-live="polite"
-      title={checkedAt ? `${label} (checked ${checkedAt})` : label}
-      className={`flex shrink-0 items-center gap-2 text-[13px] ${className}`}
+      title={checkedAt ? `Last checked ${checkedAt}` : undefined}
+      className={`inline-flex w-fit items-center gap-2.5 rounded-full border border-black/10 bg-white/70 py-1.5 pl-3 pr-3.5 text-[12px] font-medium leading-none ${className}`}
     >
-      <span aria-hidden className="relative flex h-2.5 w-2.5">
-        {status === "operational" && (
-          <span className={`absolute inline-flex h-full w-full rounded-full opacity-75 motion-safe:animate-ping ${dot}`} />
+      <span aria-hidden className="relative flex h-2 w-2">
+        {status !== "checking" && (
+          <span
+            className="absolute -inset-[3px] rounded-full motion-safe:animate-pulse"
+            style={{ backgroundColor: `${color}40` }}
+          />
         )}
-        <span className={`relative inline-flex h-2.5 w-2.5 rounded-full ${dot}`} />
+        <span className="relative h-2 w-2 rounded-full" style={{ backgroundColor: color }} />
       </span>
-      <span className="max-lg:sr-only">{label}</span>
+      {label}
     </p>
   );
 }

@@ -19,7 +19,6 @@ function SiteNav() {
           </Link>
         </div>
         <nav aria-label="Site" className="flex items-center gap-6 max-sm:gap-3">
-          <SystemStatus url={HEALTH_URL} className="text-muted" />
           {SITE_LINKS.map((link) => (
             <Link
               key={link.href}
@@ -42,15 +41,18 @@ function SiteFooter() {
   return (
     <footer className="border-t-4 border-brand bg-mint text-ink">
       <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-6 px-6 py-10 text-[12px] max-sm:px-4">
-        <div className="flex flex-wrap items-center gap-4">
-          <BestLogo height={40} />
-          <span aria-hidden className="h-8 w-px bg-ink max-sm:hidden" />
-          <div>
-            <p className="text-[14px] font-semibold">{SITE.name}</p>
-            <p className="mt-1">
-              © <span className="nums">{SITE.year}</span> {SITE.owner}
-            </p>
+        <div className="flex flex-col gap-5">
+          <div className="flex flex-wrap items-center gap-4">
+            <BestLogo height={40} />
+            <span aria-hidden className="h-8 w-px bg-ink max-sm:hidden" />
+            <div>
+              <p className="text-[14px] font-semibold">{SITE.name}</p>
+              <p className="mt-1">
+                © <span className="nums">{SITE.year}</span> {SITE.owner}
+              </p>
+            </div>
           </div>
+          <SystemStatus url={HEALTH_URL} />
         </div>
         <nav aria-label="Legal" className="flex gap-6">
           {SITE_LINKS.map((link) => (

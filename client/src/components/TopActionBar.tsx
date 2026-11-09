@@ -3,9 +3,7 @@
 import Link from "next/link";
 
 import { BestLogo } from "@/components/BestLogo";
-import { SystemStatus } from "@/components/SystemStatus";
 import { Button } from "@/components/ui/Field";
-import { HEALTH_URL } from "@/lib/api";
 
 export function TopActionBar({
   fileName,
@@ -79,8 +77,7 @@ export function TopActionBar({
           </span>
         </div>
 
-        <div className="ml-auto flex flex-wrap items-center gap-2">
-          <SystemStatus url={HEALTH_URL} className="mr-2 text-muted" />
+        <div className="ml-auto flex flex-wrap gap-2">
           <Button
             variant="secondary"
             onClick={onPrescriptive}
